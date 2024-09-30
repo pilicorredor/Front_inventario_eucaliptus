@@ -5,21 +5,24 @@ import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
 import Navbar from './Components/SideNavbar/Navbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
 
 function App() {
+  const [login, setLogin] = useState(false)
+
+  const handleLogin = () => {
+    console.log('click')
+    setLogin(true)
+  }
+
   return (
-    // <div>
-    //   <LoginForm/>
-    // </div>
-    // <div>
-    // <HomePage />
-    // </div>
     <>
       <Router>
-        <Navbar />
+        {login && <Navbar login={login} handleLogin={handleLogin}/>}
         <Routes>
-          <Route path='/inicio' exact Component={HomePage} />
-          <Route path='/personal' exact Component={Personal} />
+          <Route path='/' exact element={<LoginForm login={login} handleLogin={handleLogin} />} />
+          <Route path='/inicio' exact element={<HomePage />} />
+          <Route path='/personal' exact element={<Personal />} />
         </Routes>
       </Router>
     </>
