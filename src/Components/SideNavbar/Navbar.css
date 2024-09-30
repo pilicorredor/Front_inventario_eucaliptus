@@ -1,0 +1,151 @@
+.sidebar {
+  background-color: #dcf8dd;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2rem 3rem;
+  width: 300px;
+  height: 100vh;
+  border-radius: 4%;
+
+  .user-image {
+    display: flex;
+    justify-content: center;
+    /* Centrar horizontalmente */
+    align-items: center;
+    /* Centrar verticalmente */
+    height: 15%;
+    /* Ajusta según lo que necesites */
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+  }
+
+  .user-profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .username {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .user-role {
+    font-size: 18px;
+    color: #666;
+  }
+
+  .divider {
+    width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+  }
+
+
+  .closeContainer {
+    content: '';
+    background-color: #a2c7a3;
+    position: absolute;
+    right: -17px;
+    top: calc(9rem / 1.15);
+    width: 35px;
+    height: 35px;
+    border-radius: 2rem;
+    z-index: 1;
+
+    .closeTrigger {
+      content: '';
+      width: 35px;
+      height: 35px;
+      background-color: red;
+      cursor: pointer;
+      z-index: 2;
+      opacity: 0;
+    }
+
+    .closeMenu {
+      content: '';
+      background-color: #a2c7a3;
+      position: relative;
+      z-index: 1;
+      width: 20px;
+      height: 3px;
+      border-radius: 2rem;
+      bottom: calc(35px / 2);
+      left: 0.45rem;
+    }
+
+
+    .closeMenu::after {
+      content: '';
+      background-color: #f5f5f5;
+      position: absolute;
+      width: 20px;
+      height: 3px;
+      border-radius: 2rem;
+      top: 0.4rem;
+      transform: translateY(-0.4rem) rotate(45deg);
+    }
+
+    .closeMenu::before {
+      content: '';
+      background-color: #f5f5f5;
+      position: absolute;
+      width: 20px;
+      height: 3px;
+      border-radius: 2rem;
+      top: -0.4rem;
+      transform: translateY(0.4rem) rotate(-45deg);
+
+    }
+  }
+
+
+  span {
+    margin-left: 16px;
+  }
+
+  .nav-text {
+    height: 40px;
+    list-style: none;
+  }
+
+ 
+  .nav-text a {
+    text-decoration: none;
+    color: #161a16;
+    font-size: 20px;
+    width: 95%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    border-radius: 4px;
+  }
+ 
+  .nav-text a:hover {
+    background-color: #a2c7a3;
+  }
+
+  .nav-item-bottom a {
+    text-decoration: none;
+    color: #161a16;
+    font-size: 20px;
+    width: 95%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 4px;
+    margin-top: 70px;
+  }
+
+}
