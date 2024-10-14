@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,10 +11,27 @@ import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CustomModal from "../../Modales/CustomModal";
+import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";
 
-const CustomTable = ({ data, customColumns, onEdit, onDelete }) => {
+const CustomTable = ({ data, customColumns, onDelete, role }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const [entity, setEntity] = useState("proveedor");
+  const [action, setAction] = useState("registrar");
+
+  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
+    setEntity(selectedEntity);
+    setAction(selectedAction);
+    setOpenModal(true);
+  };
+
+  const handleModalClose = () => {
+    //Acá se llamaría el servicio de eliminar
+    setOpenModal(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -22,6 +40,10 @@ const CustomTable = ({ data, customColumns, onEdit, onDelete }) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/modificar/${role}/${id}`);
   };
 
   return (
@@ -78,7 +100,7 @@ const CustomTable = ({ data, customColumns, onEdit, onDelete }) => {
                         sx={{
                           textAlign: "center",
                           borderRight: "1px solid #ddd",
-                          overflow: "hidden", 
+                          overflow: "hidden",
                           whiteSpace: "nowrap",
                           textOverflow: "ellipsis",
                         }}
@@ -95,13 +117,21 @@ const CustomTable = ({ data, customColumns, onEdit, onDelete }) => {
                     >
                       <IconButton
                         aria-label="edit"
-                        onClick={() => onEdit(row.id)}
+                        onClick={() => handleEdit(row.id)}
                       >
                         <EditIcon />
                       </IconButton>
                       <IconButton
                         aria-label="delete"
-                        onClick={() => onDelete(row.id)}
+                        onClick={() =>
+                          handleModalOpen({
+                            selectedEntity:
+                              role === "proveedores"
+                                ? ENTITIES.PROVEEDOR
+                                : ENTITIES.VENDEDOR,
+                            selectedAction: BUTTONS_ACTIONS.ELIMINAR,
+                          })
+                        }
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -119,6 +149,12 @@ const CustomTable = ({ data, customColumns, onEdit, onDelete }) => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <CustomModal
+          entity={entity}
+          action={action}
+          openModal={openModal}
+          onClose={handleModalClose}
         />
       </div>
     </Paper>

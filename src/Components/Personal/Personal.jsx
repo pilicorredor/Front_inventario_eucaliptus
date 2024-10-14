@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Personal.css";
+import RegistrarProveedor from "../RegisterSupplier/RegisterSupplierPage";
 
 const Personal = () => {
   const navigate = useNavigate();
@@ -102,6 +103,33 @@ const Personal = () => {
     },
   ];
 
+  const burnedProvider = {
+    nombres: "Martin",
+    apellidos: "Corredor",
+    email: "dev.martincorredor@gmail.com",
+    teléfono: "3224682353",
+    tipo: "Natural",
+    documento: "1052405114",
+    empresa: "Rappi",
+    teléfonoEmpresa: "3212002638",
+    emailEmpresa: "rappi@gmail.com",
+    direccionEmpresa: "carrera 10 #20 Bogotá",
+    nombreBanco: "Rappipay",
+    numeroCuenta: "20304050",
+  };
+
+  const burnedSeller = {
+    nombres: "Martin ",
+    apellidos: "Corredor",
+    email: "dev.martincorredor@gmail.com",
+    teléfono: "3224682353",
+    tipo: "cedula",
+    documento: "1052405114",
+    usuario: "martin",
+    contraseña: "123456",
+    direccion: "carrera 10 #20 Duitama",
+  };
+
   const columnsProveedores = [
     "id",
     "nombre",
@@ -111,6 +139,7 @@ const Personal = () => {
     "empresa",
     "cuenta",
   ];
+
   const columnsVendedores = ["id", "nombre", "direccion", "email", "telefono"];
 
   const handleRoleChange = (selectedRole) => {
@@ -123,8 +152,10 @@ const Personal = () => {
   };
 
   const handleNew = () => {
-    navigate(`/nuevo-${role}`);
+    navigate(`/registrar-${role}`);
   };
+
+  const handleDelete = () => {};
 
   return (
     <div className="personal">
@@ -164,10 +195,20 @@ const Personal = () => {
 
       <div className="content">
         {role === "proveedores" && (
-          <CustomTable data={proveedores} customColumns={columnsProveedores} />
+          <CustomTable
+            data={proveedores}
+            customColumns={columnsProveedores}
+            role={role}
+            onDelete={handleDelete}
+          />
         )}
         {role === "vendedores" && (
-          <CustomTable data={vendedores} customColumns={columnsVendedores} />
+          <CustomTable
+            data={vendedores}
+            customColumns={columnsVendedores}
+            role={role}
+            onDelete={handleDelete}
+          />
         )}
       </div>
     </div>

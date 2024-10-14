@@ -5,6 +5,9 @@ import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
 import Navbar from './Components/SideNavbar/Navbar';
+import RegistrarVendedor from './Components/RegisterSeller/RegisterSellerPage';
+import RegistrarProveedor from './Components/RegisterSupplier/RegisterSupplierPage';
+import EditPersonal from './Components/EditPersonal/EditPersonal';
 
 function App() {
     const [login, setLogin] = useState(false);
@@ -20,7 +23,9 @@ function App() {
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/personal*' element={<Personal />} />
-                
+                <Route path="/registrar-vendedores" element={<RegistrarVendedor />} />
+                <Route path="/registrar-proveedores" element={<RegistrarProveedor />} />
+                <Route path="/modificar/:role/:id" element={<EditPersonal />} />
             </Routes>
         </Router>
     );

@@ -21,11 +21,11 @@ const LoginForm = ({ handleLogin }) => {
         <img src={logo} alt="Logo de la Empresa" className="logo" />
         <h1>¡Bienvenido!</h1>
         <div className='input-box'>
-          <input type="text" placeholder='Nombre de Usuario' required />
+          <input type="text" placeholder='Nombre de Usuario'  />
           <FaUser className='icon' />
         </div>
         <div className='input-box'>
-          <input type="password" placeholder='Contraseña' required />
+          <input type="password" placeholder='Contraseña'  />
           <FaEyeSlash className='icon' />
         </div>
         <div className="remember-forgot">
