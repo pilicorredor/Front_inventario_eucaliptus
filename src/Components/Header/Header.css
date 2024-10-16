@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.header-options {
+    list-style: none;
+    display: flex;
+    gap: 20px; /* Espacio entre los íconos */
+    margin: 0;
+    padding: 0;
+}
+
+.header-options li {
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+
+.logo {
+    width: 40px; /* Ajusta el tamaño de la imagen */
+    height: auto;
+    border-radius: 50%;
+}

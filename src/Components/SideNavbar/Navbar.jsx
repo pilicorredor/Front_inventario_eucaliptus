@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "./Navbar.css";
 
-function Navbar() {
+const Navbar = () => {
   return (
     <div className="sidebar">
         <img
