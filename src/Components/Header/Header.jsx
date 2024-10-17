@@ -1,6 +1,8 @@
 import React from "react";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
+import "./Header.css";
+import logo from "../Assets/logoInterfaces.png"
 
 const Header = ({ pageTitle }) => {
     return (
@@ -12,7 +14,7 @@ const Header = ({ pageTitle }) => {
                 <li><IoMdSettings /></li>
                 <li><IoNotificationsSharp /></li>
                 <li><img
-                    src="https://via.placeholder.com/80"
+                    src= {logo}
                     alt="logo"
                     className="logo" />
                 </li>

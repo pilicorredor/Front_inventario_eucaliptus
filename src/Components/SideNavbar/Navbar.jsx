@@ -14,7 +14,7 @@ const Navbar = () => {
         />
       <div className="user-profile">
         <h4 className="username">Laura Carreño</h4>
-        <p className="user-role">Admin</p>
+        <div className="user-role">Admin</div>
         
       </div>
       <hr className="divider" />
