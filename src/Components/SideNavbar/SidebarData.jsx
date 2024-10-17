@@ -12,7 +12,7 @@ export const SidebarData = [
     },
     {
         title: 'Personal',
-        path: '/personal/proveedores',
+        path: '/personal/proveedor',
         icon: <IoIcons.IoMdPeople className='nav-menu-item-icon'/>,
         cName: 'nav-text'
     },

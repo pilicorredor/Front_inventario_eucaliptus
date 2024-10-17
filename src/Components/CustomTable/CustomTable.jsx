@@ -126,7 +126,7 @@ const CustomTable = ({ data, customColumns, onDelete, role }) => {
                         onClick={() =>
                           handleModalOpen({
                             selectedEntity:
-                              role === "proveedores"
+                              role === "proveedor"
                                 ? ENTITIES.PROVEEDOR
                                 : ENTITIES.VENDEDOR,
                             selectedAction: BUTTONS_ACTIONS.ELIMINAR,

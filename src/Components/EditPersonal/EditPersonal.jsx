@@ -6,8 +6,8 @@ const EditPersonal = () => {
 
   return (
     <div>
-      <h2>Editar {role === "proveedores" ? "Proveedor" : "Vendedor"}</h2>
-      <p>ID del {role === "proveedores" ? "Proveedor" : "Vendedor"}: {id}</p>
+      <h2>Editar {role === "proveedor" ? "Proveedor" : "Vendedor"}</h2>
+      <p>ID del {role === "proveedor" ? "Proveedor" : "Vendedor"}: {id}</p>
 
       {/* Aquí iría la llamada a una API o buscar los datos correspondientes
           según el role e id, y mostrarlos en un formulario para que el usuario los edite */}

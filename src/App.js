@@ -23,8 +23,8 @@ function App() {
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/personal*' element={<Personal />} />
-                <Route path="/registrar-vendedores" element={<RegistrarVendedor />} />
-                <Route path="/registrar-proveedores" element={<RegistrarProveedor />} />
+                <Route path="/registrar-vendedor" element={<RegistrarVendedor />} />
+                <Route path="/registrar-proveedor" element={<RegistrarProveedor />} />
                 <Route path="/modificar/:role/:id" element={<EditPersonal />} />
             </Routes>
         </Router>

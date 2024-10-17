@@ -3,16 +3,15 @@ import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Personal.css";
-import RegistrarProveedor from "../RegisterSupplier/RegisterSupplierPage";
 import Header from "../Header/Header.jsx";
 
 const Personal = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState("proveedores");
+  const [role, setRole] = useState("proveedor");
   const [searchQuery, setSearchQuery] = useState("");
 
   //Datos de prueba
-  const proveedores = [
+  const providers_data = [
     {
       id: 1,
       nombre: "Proveedor 1",
@@ -87,7 +86,7 @@ const Personal = () => {
     },
   ];
 
-  const vendedores = [
+  const sellers_data = [
     {
       id: 1,
       nombre: "Vendedor 1",
@@ -131,7 +130,7 @@ const Personal = () => {
     direccion: "carrera 10 #20 Duitama",
   };
 
-  const columnsProveedores = [
+  const columnsProviders = [
     "id",
     "nombre",
     "direccion",
@@ -141,7 +140,7 @@ const Personal = () => {
     "cuenta",
   ];
 
-  const columnsVendedores = ["id", "nombre", "direccion", "email", "telefono"];
+  const columnsSellers = ["id", "nombre", "direccion", "email", "telefono"];
 
   const handleRoleChange = (selectedRole) => {
     setRole(selectedRole);
@@ -164,14 +163,14 @@ const Personal = () => {
       <div>
         <div className="personal-header">
           <button
-            onClick={() => handleRoleChange("proveedores")}
-            className={role === "proveedores" ? "selected" : ""}
+            onClick={() => handleRoleChange("proveedor")}
+            className={role === "proveedor" ? "selected" : ""}
           >
             Proveedores
           </button>
           <button
-            onClick={() => handleRoleChange("vendedores")}
-            className={role === "vendedores" ? "selected" : ""}
+            onClick={() => handleRoleChange("vendedor")}
+            className={role === "vendedor" ? "selected" : ""}
           >
             Vendedores
           </button>
@@ -196,19 +195,19 @@ const Personal = () => {
           </button>
         </div>
 
-        <div className="content">
-          {role === "proveedores" && (
+        <div className="personal-content">
+          {role === "proveedor" && (
             <CustomTable
-              data={proveedores}
-              customColumns={columnsProveedores}
+              data={providers_data}
+              customColumns={columnsProviders}
               role={role}
               onDelete={handleDelete}
             />
           )}
-          {role === "vendedores" && (
+          {role === "vendedor" && (
             <CustomTable
-              data={vendedores}
-              customColumns={columnsVendedores}
+              data={sellers_data}
+              customColumns={columnsSellers}
               role={role}
               onDelete={handleDelete}
             />
