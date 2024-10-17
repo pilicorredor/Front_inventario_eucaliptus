@@ -4,6 +4,7 @@ import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Personal.css";
 import RegistrarProveedor from "../RegisterSupplier/RegisterSupplierPage";
+import Header from "../Header/Header.jsx";
 
 const Personal = () => {
   const navigate = useNavigate();
@@ -159,57 +160,60 @@ const Personal = () => {
 
   return (
     <div className="personal">
-      <div className="header">
-        <button
-          onClick={() => handleRoleChange("proveedores")}
-          className={role === "proveedores" ? "selected" : ""}
-        >
-          Proveedores
-        </button>
-        <button
-          onClick={() => handleRoleChange("vendedores")}
-          className={role === "vendedores" ? "selected" : ""}
-        >
-          Vendedores
-        </button>
-      </div>
-
-      <div className="search-bar">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Ingresa tu búsqueda"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-          <SearchIcon className="search-icon" />
-          <button className="btn search-btn" onClick={handleSearch}>
-            Buscar
+      <Header pageTitle="Personal" />
+      <div>
+        <div className="personal-header">
+          <button
+            onClick={() => handleRoleChange("proveedores")}
+            className={role === "proveedores" ? "selected" : ""}
+          >
+            Proveedores
+          </button>
+          <button
+            onClick={() => handleRoleChange("vendedores")}
+            className={role === "vendedores" ? "selected" : ""}
+          >
+            Vendedores
           </button>
         </div>
-        <button className="btn new-btn" onClick={handleNew}>
-          Nuevo
-        </button>
-      </div>
 
-      <div className="content">
-        {role === "proveedores" && (
-          <CustomTable
-            data={proveedores}
-            customColumns={columnsProveedores}
-            role={role}
-            onDelete={handleDelete}
-          />
-        )}
-        {role === "vendedores" && (
-          <CustomTable
-            data={vendedores}
-            customColumns={columnsVendedores}
-            role={role}
-            onDelete={handleDelete}
-          />
-        )}
+        <div className="search-bar">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Ingresa tu búsqueda"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            <SearchIcon className="search-icon" />
+            <button className="btn search-btn" onClick={handleSearch}>
+              Buscar
+            </button>
+          </div>
+          <button className="btn new-btn" onClick={handleNew}>
+            Nuevo
+          </button>
+        </div>
+
+        <div className="content">
+          {role === "proveedores" && (
+            <CustomTable
+              data={proveedores}
+              customColumns={columnsProveedores}
+              role={role}
+              onDelete={handleDelete}
+            />
+          )}
+          {role === "vendedores" && (
+            <CustomTable
+              data={vendedores}
+              customColumns={columnsVendedores}
+              role={role}
+              onDelete={handleDelete}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
