@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "./Navbar.css";
 
-function Navbar() {
+const Navbar = () => {
   return (
     <div className="sidebar">
         <img
@@ -14,7 +14,7 @@ function Navbar() {
         />
       <div className="user-profile">
         <h4 className="username">Laura Carreño</h4>
-        <p className="user-role">Admin</p>
+        <div className="user-role">Admin</div>
         
       </div>
       <hr className="divider" />
