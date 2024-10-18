@@ -58,6 +58,14 @@
   font-size: 16px;
 }
 
+.error-message {
+  color: #ff0000; /* Rojo para indicar error */
+  font-size: 14px; /* Tamaño pequeño */
+  margin-top: -26px; /* Ajustar la posición si es necesario */
+  margin-bottom: 20px; /* Espacio debajo del mensaje */
+  text-align: center; /* Centrar el mensaje */
+}
+
 .wrapper .remember-forgot {
   display: flex;
   justify-content: space-between;

@@ -1,3 +1,7 @@
+export const SERVICES = {
+    LOGIN_SERVICE: 'http://localhost:8081/auth/login',
+}
+
 export const MODAL_TYPES = {
     CONFIRMATION: 'CONFIRMATION',
     CHECK: 'CHECK',

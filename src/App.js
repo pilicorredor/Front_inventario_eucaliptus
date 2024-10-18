@@ -8,6 +8,7 @@ import Navbar from './Components/SideNavbar/Navbar';
 import RegistrarVendedor from './Components/RegisterSeller/RegisterSellerPage';
 import RegistrarProveedor from './Components/RegisterProvider/RegisterProviderPage';
 import EditPersonal from './Components/EditPersonal/EditPersonal';
+import Products from './Components/Products/Products';
 
 function App() {
     const [login, setLogin] = useState(false);
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/registrar-vendedor" element={<RegistrarVendedor />} />
                 <Route path="/registrar-proveedor" element={<RegistrarProveedor />} />
                 <Route path="/modificar/:role/:id" element={<EditPersonal />} />
+                <Route path='/productos*' element={<Products />} />
             </Routes>
         </Router>
     );
