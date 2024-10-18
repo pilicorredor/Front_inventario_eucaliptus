@@ -15,3 +15,21 @@ export const BUTTONS_ACTIONS = {
     MODIFICAR: 'modificar',
     ELIMINAR: 'eliminar',
 }
+
+export const ROLES = {
+    ADMIN: 'ROLE_ADMIN',
+    PROVIDER: 'ROLE_PROVIDER',
+    SELLER: 'ROLE_SELLER',
+    CLIENT: 'ROLE_CLIENT',
+}
+
+export const PERSON_TYPE = {
+    NATURAL: 'NATURAL',
+    LEGAL: 'JURIDICA',
+}
+
+export const DOCUMENT_TYPE = {
+    CEDULA: 'CC',
+    IMMIGRATION_CARD: 'CE',
+    PASSPORT: 'PASS',
+}

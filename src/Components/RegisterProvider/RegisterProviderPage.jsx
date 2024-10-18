@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./RegisterSupplier.css";
+import "./RegisterProvider.css";
 import logo from "../Assets/logo2.png";
 import CustomModal from "../../Modales/CustomModal";
 import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";

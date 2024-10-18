@@ -6,7 +6,7 @@ import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
 import Navbar from './Components/SideNavbar/Navbar';
 import RegistrarVendedor from './Components/RegisterSeller/RegisterSellerPage';
-import RegistrarProveedor from './Components/RegisterSupplier/RegisterSupplierPage';
+import RegistrarProveedor from './Components/RegisterProvider/RegisterProviderPage';
 import EditPersonal from './Components/EditPersonal/EditPersonal';
 
 function App() {
