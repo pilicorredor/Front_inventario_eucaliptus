@@ -11,17 +11,28 @@ import EditPersonal from './Components/EditPersonal/EditPersonal';
 import Products from './Components/Products/Products';
 
 function App() {
-    const [login, setLogin] = useState(false);
+    const [login, setLogin] = useState(localStorage.getItem('login'));
+    const [username, setUsername] = useState(localStorage.getItem("username"));
+    const [role, setRole] = useState(localStorage.getItem("role"));
 
-    const handleLogin = () => {
-        setLogin(true);
+    const handleLogin = ({ username, role }) => {
+        localStorage.setItem('login', true)
+        setUsername(username)
+        setLogin(true)
+        setRole(role)
     };
+
+    const handleLogout = () => {
+        localStorage.setItem('login', false)
+        setLogin(false)
+    }
 
     return (
         <Router>
-            {login && <Navbar login={login} handleLogin={handleLogin} />}
+            {login && <Navbar login={login} handleLogin={handleLogin} username={username} role={role} handleLogout={handleLogout} />}
             <Routes>
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
+                {/* <Route path='/' element={<HomePage />} /> */}
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/personal*' element={<Personal />} />
                 <Route path="/registrar-vendedor" element={<RegistrarVendedor />} />

@@ -5,15 +5,18 @@ import { FaEyeSlash } from "react-icons/fa";
 import logo from "../Assets/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { SERVICES } from "../../Constants/Constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Evitar que el formulario se recargue
+    setLoading(true);
     try {
       const response = await fetch(SERVICES.LOGIN_SERVICE, {
         method: "POST",
@@ -27,15 +30,25 @@ const LoginForm = ({ handleLogin }) => {
       });
 
       if (response.ok) {
-        const token = await response.text();
-        handleLogin(token);
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("username", data.username);
+        console.log("Inicio de sesión exitoso:", data);
+        setLoading(false);
+        handleLogin({
+          username: localStorage.getItem("username"),
+          role: localStorage.getItem("role"),
+        });
         navigate("/inicio");
         setError(false);
       } else {
+        setLoading(false);
         setError(true);
       }
     } catch (error) {
       console.error("Error en la solicitud de login:", error);
+      setLoading(false);
       setError(true);
     }
   };
@@ -48,6 +61,11 @@ const LoginForm = ({ handleLogin }) => {
   return (
     <div className="login-section">
       <div className="wrapper">
+        {loading && (
+          <div className="loading-container">
+            <CircularProgress className="loading-icon" />
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <img src={logo} alt="Logo de la Empresa" className="logo" />
           <h1>¡Bienvenido!</h1>

@@ -228,21 +228,27 @@ const RegistrarVendedor = ({ sellerData }) => {
             </div>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
-                <label>Usuario</label>
+                <label>
+                  Usuario <span className="red">*</span>
+                </label>
                 <input
                   type="text"
                   name="username"
                   value={seller.username}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="sellerForm-item">
-                <label>Contraseña</label>
+                <label>
+                  Contraseña <span className="red">*</span>
+                </label>
                 <input
                   type="text"
                   name="password"
                   value={seller.password}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             </div>
