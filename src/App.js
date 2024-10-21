@@ -1,14 +1,13 @@
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
 import Navbar from './Components/SideNavbar/Navbar';
-import RegistrarVendedor from './Components/RegisterSeller/RegisterSellerPage';
-import RegistrarProveedor from './Components/RegisterProvider/RegisterProviderPage';
-import EditPersonal from './Components/EditPersonal/EditPersonal';
+import RegisterSeller from './Components/RegisterSeller/RegisterSellerPage';
+import RegisterProvider from './Components/RegisterProvider/RegisterProviderPage';
 import Products from './Components/Products/Products';
+import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
 
 function App() {
     const [login, setLogin] = useState(localStorage.getItem('login'));
@@ -35,9 +34,9 @@ function App() {
                 {/* <Route path='/' element={<HomePage />} /> */}
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/personal*' element={<Personal />} />
-                <Route path="/registrar-vendedor" element={<RegistrarVendedor />} />
-                <Route path="/registrar-proveedor" element={<RegistrarProveedor />} />
-                <Route path="/modificar/:role/:id" element={<EditPersonal />} />
+                <Route path="/registrar-vendedor" element={<RegisterSeller />} />
+                <Route path="/registrar-proveedor" element={<RegisterProvider />} />
+                <Route path="/modificar/proveedor/:id" element={<ModifyProvider />} />
                 <Route path='/productos*' element={<Products />} />
             </Routes>
         </Router>

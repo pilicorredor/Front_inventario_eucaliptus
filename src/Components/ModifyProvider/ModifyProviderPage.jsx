@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./RegisterProvider.css";
+import { useNavigate, useParams } from "react-router-dom";
+import "./ModifyProvider.css";
 import logo from "../Assets/logo2.png";
 import CustomModal from "../../Modales/CustomModal";
 import Header from "../Header/Header";
@@ -12,9 +12,15 @@ import {
   SERVICES,
 } from "../../Constants/Constants";
 
-const RegisterProvider = ({ providerData }) => {
+const ModifyProvider = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [entity, setEntity] = useState("proveedor");
+  const [action, setAction] = useState("modificar");
+
   const [providerSend, setProviderSend] = useState({
     personDTO: {
       idPerson: "",
@@ -35,109 +41,72 @@ const RegisterProvider = ({ providerData }) => {
       bankAccountNumber: "",
     },
   });
-  const [provider, setProvider] = useState({
-    idPerson: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    personType: PERSON_TYPE.NATURAL,
-    nit: "",
-    companyName: "",
-    companyPhoneNumber: "",
-    companyEmail: "",
-    companyAddress: "",
-    bankName: "",
-    bankAccountNumber: "",
-  });
 
-  const [update, setUpdate] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [entity, setEntity] = useState("proveedor");
-  const [action, setAction] = useState("registrar");
-
-  // Abrir el modal con la entidad y acción correspondientes
-  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
-    setEntity(selectedEntity);
-    setAction(selectedAction);
-    setOpenModal(true);
+  const fillProvider = (dataProvider) => {
+    console.log("data provider en fill provider: ", dataProvider);
+    setProviderSend(dataProvider);
+    console.log("provider send: ", providerSend);
   };
 
-  // Cerrar el modal
-  const handleModalClose = () => {
-    setProvider({
-      idPerson: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      personType: PERSON_TYPE.NATURAL,
-      nit: "",
-      companyName: "",
-      companyPhoneNumber: "",
-      companyEmail: "",
-      companyAddress: "",
-      bankName: "",
-      bankAccountNumber: "",
-    });
-    setOpenModal(false);
-    setSend(false);
-    // Redirigir solo después de cerrar el modal
-    navigate("/personal");
-  };
-
-  // Efecto para cargar los datos si se pasa providerData como props
   useEffect(() => {
-    if (providerData) {
-      setUpdate(true);
-      setProvider(providerData);
-    }
-  }, [providerData]);
+    const fetchProviderById = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const url = `${SERVICES.GET_PROVIDER_BY_ID}/${id}`;
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          fillProvider(data);
+        } else {
+          console.error("Error al traer el proveedor:", await response.json());
+        }
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
+    };
+
+    fetchProviderById();
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProvider((prevProvider) => ({
-      ...prevProvider,
-      [name]: value,
-    }));
+
+    // Verifica si el campo pertenece a personDTO o companyDTO
+    if (name in providerSend.personDTO) {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        personDTO: {
+          ...prevProvider.personDTO,
+          [name]: value,
+        },
+      }));
+    } else if (name in providerSend.companyDTO) {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        companyDTO: {
+          ...prevProvider.companyDTO,
+          [name]: value,
+        },
+      }));
+    } else {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        [name]: value,
+      }));
+    }
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí puedes enviar los datos al servidor o hacer alguna validación
-    console.log(provider);
-
-    setProviderSend({
-      personDTO: {
-        idPerson: provider.nit,
-        firstName: provider.firstName,
-        lastName: provider.lastName,
-        email: provider.email,
-        phoneNumber: provider.phoneNumber,
-        role: ROLES.PROVIDER,
-      },
-      personType: provider.personType,
-      companyDTO: {
-        nit: provider.nit,
-        companyName: provider.companyName,
-        companyPhoneNumber: provider.companyPhoneNumber,
-        companyEmail: provider.companyEmail,
-        companyAddress: provider.companyAddress,
-        bankName: provider.bankName,
-        bankAccountNumber: provider.bankAccountNumber,
-      },
-    });
-
     setSend(true);
-
-    // Abrir el modal después de intentar registrar o modificar
-    // handleModalOpen({
-    //   selectedEntity: ENTITIES.PROVEEDOR,
-    //   selectedAction: update
-    //     ? BUTTONS_ACTIONS.MODIFICAR
-    //     : BUTTONS_ACTIONS.REGISTRAR,
-    // });
   };
 
   useEffect(() => {
@@ -149,9 +118,11 @@ const RegisterProvider = ({ providerData }) => {
   const handleService = async () => {
     try {
       const token = localStorage.getItem("token");
+      const url = `${SERVICES.MODIFY_PROVIDER_SERVICE}/${id}`;
+      const method = "PUT";
 
-      const response = await fetch(SERVICES.REGISTER_PROVIDER_SERVICE, {
-        method: "POST",
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -163,31 +134,36 @@ const RegisterProvider = ({ providerData }) => {
         const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.PROVEEDOR,
-          selectedAction: update
-            ? BUTTONS_ACTIONS.MODIFICAR
-            : BUTTONS_ACTIONS.REGISTRAR,
+          selectedAction: BUTTONS_ACTIONS.MODIFICAR,
           success: true,
         });
-        console.log("Proveedor registrado exitosamente:", data);
-        setSend(false);
+        console.log("Proveedor modificado exitosamente:", data);
       } else {
         const errorData = await response.json();
-        console.error("Error al registrar el proveedor:", errorData);
-        setSend(false);
+        console.error("Error al modificar el proveedor:", errorData);
       }
     } catch (error) {
       handleModalOpen({
         selectedEntity: ENTITIES.PROVEEDOR,
-        selectedAction: update
-          ? BUTTONS_ACTIONS.MODIFICAR
-          : BUTTONS_ACTIONS.REGISTRAR,
+        selectedAction: BUTTONS_ACTIONS.MODIFICAR,
         success: false,
       });
       console.error("Error en la solicitud:", error);
+    } finally {
       setSend(false);
     }
-    console.log("handle service: ", providerSend);
-    console.log(JSON.stringify(providerSend, null, 2));
+  };
+
+  const handleModalOpen = ({ selectedEntity, selectedAction, success }) => {
+    setEntity(selectedEntity);
+    setAction(selectedAction);
+    setOpenModal(true);
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+    setSend(false);
+    navigate("/personal");
   };
 
   return (
@@ -197,9 +173,7 @@ const RegisterProvider = ({ providerData }) => {
         {update ? (
           <label className="providerSection-title">Modificar Proveedor</label>
         ) : (
-          <label className="providerSection-title">
-            Agregar Nuevo Proveedor
-          </label>
+          <label className="providerSection-title">Modificar Proveedor</label>
         )}
         <form className="providerForm" onSubmit={handleSubmit}>
           <div className="providerForm-section">
@@ -212,7 +186,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="text"
                   name="firstName"
-                  value={provider.firstName}
+                  value={providerSend.personDTO.firstName}
                   onChange={handleInputChange}
                   required
                 />
@@ -224,7 +198,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="text"
                   name="lastName"
-                  value={provider.lastName}
+                  value={providerSend.personDTO.lastName}
                   onChange={handleInputChange}
                   required
                 />
@@ -236,7 +210,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="email"
                   name="email"
-                  value={provider.email}
+                  value={providerSend.personDTO.email}
                   onChange={handleInputChange}
                 />
               </div>
@@ -247,7 +221,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="number"
                   name="phoneNumber"
-                  value={provider.phoneNumber}
+                  value={providerSend.personDTO.phoneNumber}
                   onChange={handleInputChange}
                   required
                 />
@@ -265,12 +239,12 @@ const RegisterProvider = ({ providerData }) => {
                 </label>
                 <select
                   name="personType"
-                  value={provider.personType}
+                  value={providerSend.personType}
                   onChange={handleInputChange}
                   required
+                  disabled
                 >
-                  <option value={PERSON_TYPE.NATURAL}>Natural</option>
-                  <option value={PERSON_TYPE.LEGAL}>Jurídica</option>
+                  <option>{providerSend.personType}</option>
                 </select>
               </div>
               <div className="providerForm-item">
@@ -279,11 +253,12 @@ const RegisterProvider = ({ providerData }) => {
                   <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text" //arreglar esto--------------------------------------------------------------!!!!!!
                   name="nit"
-                  value={provider.nit}
+                  value={providerSend.companyDTO.nit}
                   onChange={handleInputChange}
                   required
+                  disabled
                 />
               </div>
             </div>
@@ -293,7 +268,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="text"
                   name="companyName"
-                  value={provider.companyName}
+                  value={providerSend.companyDTO.companyName}
                   onChange={handleInputChange}
                 />
               </div>
@@ -302,7 +277,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="text"
                   name="companyPhoneNumber"
-                  value={provider.companyPhoneNumber}
+                  value={providerSend.companyDTO.companyPhoneNumber}
                   onChange={handleInputChange}
                 />
               </div>
@@ -313,7 +288,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="email"
                   name="companyEmail"
-                  value={provider.companyEmail}
+                  value={providerSend.companyDTO.companyEmail}
                   onChange={handleInputChange}
                 />
               </div>
@@ -324,7 +299,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="text"
                   name="companyAddress"
-                  value={provider.companyAddress}
+                  value={providerSend.companyDTO.companyAddress}
                   onChange={handleInputChange}
                   required
                 />
@@ -336,7 +311,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="text"
                   name="bankName"
-                  value={provider.bankName}
+                  value={providerSend.companyDTO.bankName}
                   onChange={handleInputChange}
                 />
               </div>
@@ -347,7 +322,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="number"
                   name="bankAccountNumber"
-                  value={provider.bankAccountNumber}
+                  value={providerSend.companyDTO.bankAccountNumber}
                   onChange={handleInputChange}
                   required
                 />
@@ -359,8 +334,8 @@ const RegisterProvider = ({ providerData }) => {
             {update
               ? BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
                 BUTTONS_ACTIONS.MODIFICAR.slice(1)
-              : BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
-                BUTTONS_ACTIONS.REGISTRAR.slice(1)}
+              : BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
+                BUTTONS_ACTIONS.MODIFICAR.slice(1)}
           </button>
           <img src={logo} alt="logo" className="provider-logo" />
 
@@ -377,4 +352,4 @@ const RegisterProvider = ({ providerData }) => {
   );
 };
 
-export default RegisterProvider;
+export default ModifyProvider;

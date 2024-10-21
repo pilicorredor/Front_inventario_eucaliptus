@@ -117,7 +117,7 @@ const CustomTable = ({ data, customColumns, onDelete, role }) => {
                     >
                       <IconButton
                         aria-label="edit"
-                        onClick={() => handleEdit(row.id)}
+                        onClick={() => handleEdit(row.id_edit)}
                       >
                         <EditIcon />
                       </IconButton>

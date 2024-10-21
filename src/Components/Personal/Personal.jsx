@@ -1,146 +1,107 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Personal.css";
 import Header from "../Header/Header.jsx";
+import { SERVICES } from "../../Constants/Constants";
 
 const Personal = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("proveedor");
   const [searchQuery, setSearchQuery] = useState("");
+  const [providersData, setProvidersData] = useState([]);
+  const [sellersData, setSellersData] = useState([]);
 
-  //Datos de prueba
-  const providers_data = [
-    {
-      id: 1,
-      nombre: "Proveedor 1",
-      direccion: "Dirección 1",
-      email: "email1@proveedor.com",
-      telefono: "1234567890",
-      empresa: "Empresa 1",
-      cuenta: "1234",
-    },
-    {
-      id: 2,
-      nombre: "Proveedor 2",
-      direccion: "Dirección 2",
-      email: "email2@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 2",
-      cuenta: "5678",
-    },
-    {
-      id: 3,
-      nombre: "Proveedor 3",
-      direccion: "Dirección 3",
-      email: "email3@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 3",
-      cuenta: "2212",
-    },
-    {
-      id: 4,
-      nombre: "Proveedor 4",
-      direccion: "Dirección 4",
-      email: "email4@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 4",
-      cuenta: "3413",
-    },
-    {
-      id: 5,
-      nombre: "Proveedor 5",
-      direccion: "Dirección 5",
-      email: "email5@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 5",
-      cuenta: "9876",
-    },
-    {
-      id: 6,
-      nombre: "Proveedor 6",
-      direccion: "Dirección 6",
-      email: "email6@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 6",
-      cuenta: "6534",
-    },
-    {
-      id: 7,
-      nombre: "Proveedor 7",
-      direccion: "Dirección 7",
-      email: "email7@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 7",
-      cuenta: "3456",
-    },
-    {
-      id: 8,
-      nombre: "Proveedor 8",
-      direccion: "Dirección 8",
-      email: "email8@proveedor.com",
-      telefono: "0987654321",
-      empresa: "Empresa 8",
-      cuenta: "5321",
-    },
-  ];
+  useEffect(() => {
+    if (role === "vendedor") {
+      fetchSellersData();
+    } else if (role === "proveedor") {
+      fetchProvidersData();
+    }
+  }, [role]);
 
-  const sellers_data = [
-    {
-      id: 1,
-      nombre: "Vendedor 1",
-      direccion: "Dirección 1",
-      email: "email1@vendedor.com",
-      telefono: "1234567890",
-    },
-    {
-      id: 2,
-      nombre: "Vendedor 2",
-      direccion: "Dirección 2",
-      email: "email2@vendedor.com",
-      telefono: "0987654321",
-    },
-  ];
+  const fetchSellersData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.GET_SELLERS_ALL_SERVICE, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  const burnedProvider = {
-    nombres: "Martin",
-    apellidos: "Corredor",
-    email: "dev.martincorredor@gmail.com",
-    teléfono: "3224682353",
-    tipo: "Natural",
-    documento: "1052405114",
-    empresa: "Rappi",
-    teléfonoEmpresa: "3212002638",
-    emailEmpresa: "rappi@gmail.com",
-    direccionEmpresa: "carrera 10 #20 Bogotá",
-    nombreBanco: "Rappipay",
-    numeroCuenta: "20304050",
+      if (response.ok) {
+        const data = await response.json();
+        const formattedSellers = data.map((seller) => ({
+          id_edit: seller.idSeller,
+          id: seller.personDTO.idPerson,
+          nombre: `${seller.personDTO.firstName} ${seller.personDTO.lastName}`,
+          direccion: seller.homeAddress,
+          correo_electronico: seller.personDTO.email,
+          telefono: seller.personDTO.phoneNumber,
+        }));
+        setSellersData(formattedSellers);
+      } else {
+        const errorMessage = await response.text();
+        console.error("Error al obtener los vendedores:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud de vendedores:", error);
+    }
   };
 
-  const burnedSeller = {
-    nombres: "Martin ",
-    apellidos: "Corredor",
-    email: "dev.martincorredor@gmail.com",
-    teléfono: "3224682353",
-    tipo: "cedula",
-    documento: "1052405114",
-    usuario: "martin",
-    contraseña: "123456",
-    direccion: "carrera 10 #20 Duitama",
+  const fetchProvidersData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.GET_PROVIDERS_ALL_SERVICE, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const formattedProviders = data.map((provider) => ({
+          id_edit: provider.idProvider,
+          id: provider.personDTO.idPerson,
+          nombre: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
+          direccion: provider.companyDTO.companyAddress,
+          correo_electronico: provider.personDTO.email,
+          telefono: provider.personDTO.phoneNumber,
+          empresa: provider.companyDTO.companyName,
+          cuenta: provider.companyDTO.bankAccountNumber,
+        }));
+        setProvidersData(formattedProviders);
+      } else {
+        const errorMessage = await response.text();
+        console.error("Error al obtener los vendedores:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud de vendedores:", error);
+    }
   };
 
   const columnsProviders = [
     "id",
     "nombre",
     "direccion",
-    "email",
+    "correo_electronico",
     "telefono",
     "empresa",
     "cuenta",
   ];
 
-  const columnsSellers = ["id", "nombre", "direccion", "email", "telefono"];
+  const columnsSellers = [
+    "id",
+    "nombre",
+    "direccion",
+    "correo_electronico",
+    "telefono",
+  ];
 
   const handleRoleChange = (selectedRole) => {
     setRole(selectedRole);
@@ -198,7 +159,7 @@ const Personal = () => {
         <div className="personal-content">
           {role === "proveedor" && (
             <CustomTable
-              data={providers_data}
+              data={providersData}
               customColumns={columnsProviders}
               role={role}
               onDelete={handleDelete}
@@ -206,7 +167,7 @@ const Personal = () => {
           )}
           {role === "vendedor" && (
             <CustomTable
-              data={sellers_data}
+              data={sellersData}
               customColumns={columnsSellers}
               role={role}
               onDelete={handleDelete}

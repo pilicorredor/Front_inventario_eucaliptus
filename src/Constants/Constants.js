@@ -1,5 +1,11 @@
 export const SERVICES = {
     LOGIN_SERVICE: 'http://localhost:8081/auth/login',
+    GET_SELLERS_ALL_SERVICE: 'http://localhost:8082/person/sellers/all',
+    GET_PROVIDERS_ALL_SERVICE: 'http://localhost:8082/person/providers/all',
+    REGISTER_SELLER_SERVICE: "http://localhost:8082/person/sellers/addSeller",
+    REGISTER_PROVIDER_SERVICE: "http://localhost:8082/person/providers/addProvider",
+    GET_PROVIDER_BY_ID: "http://localhost:8082/person/providers/getProviderById",
+    MODIFY_PROVIDER_SERVICE: "http://localhost:8082/person/providers/updateProvider",
 }
 
 export const MODAL_TYPES = {

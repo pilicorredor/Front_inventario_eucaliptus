@@ -9,9 +9,10 @@ import {
   ENTITIES,
   ROLES,
   DOCUMENT_TYPE,
+  SERVICES,
 } from "../../Constants/Constants";
 
-const RegistrarVendedor = ({ sellerData }) => {
+const RegisterSeller = ({ sellerData }) => {
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
   const [sellerSend, setSellerSend] = useState({
@@ -46,6 +47,10 @@ const RegistrarVendedor = ({ sellerData }) => {
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("vendedor");
   const [action, setAction] = useState("registrar");
+  const [successful, setSuccessful] = useState(true);
+
+  console.log("---------------------");
+  console.log("datos: ", entity, action, successful);
 
   // Efecto para cargar los datos si se pasa sellerData como props
   useEffect(() => {
@@ -65,7 +70,6 @@ const RegistrarVendedor = ({ sellerData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Actualizar sellerSend con los datos de seller y establecer idPerson como documentNumber
     setSellerSend({
       personDTO: {
         idPerson: seller.documentNumber, // Asignar el número de documento como idPerson
@@ -83,13 +87,6 @@ const RegistrarVendedor = ({ sellerData }) => {
     });
 
     setSend(true);
-
-    handleModalOpen({
-      selectedEntity: ENTITIES.VENDEDOR,
-      selectedAction: update
-        ? BUTTONS_ACTIONS.MODIFICAR
-        : BUTTONS_ACTIONS.REGISTRAR,
-    });
   };
 
   useEffect(() => {
@@ -98,15 +95,59 @@ const RegistrarVendedor = ({ sellerData }) => {
     }
   }, [send]);
 
-  const handleService = () => {
-    console.log("handle service: ", sellerSend);
-    console.log(JSON.stringify(sellerSend, null, 2));
-    //LLAMAR EL SERVICIO CON EL FECTH Y LE PASO EL SELLERSEND AL SERVICIO------------------------------------------------------------------
+  const handleService = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(SERVICES.REGISTER_SELLER_SERVICE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(sellerSend),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        handleModalOpen({
+          selectedEntity: ENTITIES.VENDEDOR,
+          selectedAction: update
+            ? BUTTONS_ACTIONS.MODIFICAR
+            : BUTTONS_ACTIONS.REGISTRAR,
+          success: true,
+        });
+        console.log("Vendedor registrado exitosamente:", data);
+        setSend(false);
+      } else {
+        const errorData = await response.json();
+        handleModalOpen({
+          selectedEntity: ENTITIES.VENDEDOR,
+          selectedAction: update
+            ? BUTTONS_ACTIONS.MODIFICAR
+            : BUTTONS_ACTIONS.REGISTRAR,
+          success: false,
+        });
+        console.error("Error al registrar el vendedor:", errorData);
+        setSend(false);
+      }
+    } catch (error) {
+      handleModalOpen({
+        selectedEntity: ENTITIES.VENDEDOR,
+        selectedAction: update
+          ? BUTTONS_ACTIONS.MODIFICAR
+          : BUTTONS_ACTIONS.REGISTRAR,
+        success: false,
+      });
+      console.error("Error en la solicitud:", error);
+      setSend(false);
+    }
   };
 
-  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
+  const handleModalOpen = ({ selectedEntity, selectedAction, success }) => {
     setEntity(selectedEntity);
     setAction(selectedAction);
+    setSuccessful(success);
     setOpenModal(true);
   };
 
@@ -282,6 +323,7 @@ const RegistrarVendedor = ({ sellerData }) => {
             action={action}
             openModal={openModal}
             onClose={handleModalClose}
+            successfull={successful}
           />
         </form>
       </div>
@@ -289,4 +331,4 @@ const RegistrarVendedor = ({ sellerData }) => {
   );
 };
 
-export default RegistrarVendedor;
+export default RegisterSeller;

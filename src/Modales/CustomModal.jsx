@@ -7,43 +7,53 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-const CustomModal = ({ entity, action, openModal, onClose }) => {
+const CustomModal = ({ entity, action, openModal, onClose, successfull }) => {
   const [modalType, setModalType] = useState("");
   const [serviceCheck, setServiceCheck] = useState("");
   const [title, setTitle] = useState("");
 
-  const defineModalContent = () => {
+  const modalContent = () => {
+    if (action === BUTTONS_ACTIONS.REGISTRAR) {
+      if (successfull === false) {
+        setTitle(`No se pudo registrar el ${capitalize(entity)}`);
+        setModalType(MODAL_TYPES.ERROR);
+      } else {
+        setTitle(`${capitalize(entity)} registrado con éxito.`);
+        setModalType(MODAL_TYPES.CHECK);
+      }
+    }
+    if (action === BUTTONS_ACTIONS.MODIFICAR) {
+      if (successfull === false) {
+        setTitle(`No se pudo modificar el ${capitalize(entity)}`);
+        setModalType(MODAL_TYPES.ERROR);
+      } else {
+        setTitle(`${capitalize(entity)} modificado con éxito.`);
+        setModalType(MODAL_TYPES.CHECK);
+      }
+    }
     if (action === BUTTONS_ACTIONS.ELIMINAR) {
       setTitle(`¿Seguro quieres eliminar este ${entity}?`);
       setModalType(MODAL_TYPES.CONFIRMATION);
-    } else if (action === BUTTONS_ACTIONS.REGISTRAR) {
-      setTitle(`${capitalize(entity)} registrado con éxito.`);
-      setModalType(MODAL_TYPES.CHECK);
-    } else if (action === BUTTONS_ACTIONS.MODIFICAR) {
-      setTitle(`${capitalize(entity)} modificado con éxito.`);
-      setModalType(MODAL_TYPES.CHECK);
     }
   };
 
   useEffect(() => {
     if (openModal) {
-      defineModalContent();
+      modalContent();
       setServiceCheck("");
     }
   }, [openModal, action, entity]);
 
-  // Función para capitalizar el nombre de la entidad
   const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
   const handleService = () => {
-    if (action === BUTTONS_ACTIONS.ELIMINAR) {
-      const result =
-        //Acá toca cambiarlo según la respuesta del servicio el lugar de un número random
-        Math.random() > 0.5 ? MODAL_TYPES.CHECK : MODAL_TYPES.ERROR;
-      setServiceCheck(result);
-    }
+    // ACÁ HAS EL FETCH
+    //En el response.ok
+    // setServiceCheck(MODAL_TYPES.CHECK)
+    // Cuando el servicio no responda
+    // setServiceCheck(MODAL_TYPES.ERROR)
   };
 
   useEffect(() => {

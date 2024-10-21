@@ -34,7 +34,6 @@ const LoginForm = ({ handleLogin }) => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
         localStorage.setItem("username", data.username);
-        console.log("Inicio de sesión exitoso:", data);
         setLoading(false);
         handleLogin({
           username: localStorage.getItem("username"),
