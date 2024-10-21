@@ -8,6 +8,7 @@ import RegisterSeller from './Components/RegisterSeller/RegisterSellerPage';
 import RegisterProvider from './Components/RegisterProvider/RegisterProviderPage';
 import Products from './Components/Products/Products';
 import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
+import ModifySeller from './Components/ModifySeller/ModifySellerPage';
 
 function App() {
     const [login, setLogin] = useState(localStorage.getItem('login'));
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/registrar-vendedor" element={<RegisterSeller />} />
                 <Route path="/registrar-proveedor" element={<RegisterProvider />} />
                 <Route path="/modificar/proveedor/:id" element={<ModifyProvider />} />
+                <Route path="/modificar/vendedor/:id" element={<ModifySeller />} />
                 <Route path='/productos*' element={<Products />} />
             </Routes>
         </Router>
