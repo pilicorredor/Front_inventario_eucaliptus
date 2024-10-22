@@ -56,3 +56,18 @@
 .check-button {
   background-color: #227e3c;
 }
+
+.modal-loading-container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  top: 40%;
+  left: 44%;
+}
+
+.modal-loading-icon {
+  width: 70px !important;
+  height: 70px !important;
+  z-index: 1000;
+}

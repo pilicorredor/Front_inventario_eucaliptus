@@ -11,6 +11,7 @@ import {
   PERSON_TYPE,
   SERVICES,
 } from "../../Constants/Constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ModifyProvider = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const ModifyProvider = () => {
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("modificar");
+  const [loading, setLoading] = useState(false);
 
   const [providerSend, setProviderSend] = useState({
     personDTO: {
@@ -48,6 +50,7 @@ const ModifyProvider = () => {
 
   useEffect(() => {
     const fetchProviderById = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("token");
         const url = `${SERVICES.GET_PROVIDER_BY_ID}/${id}`;
@@ -61,12 +64,15 @@ const ModifyProvider = () => {
         });
 
         if (response.ok) {
+          setLoading(false);
           const data = await response.json();
           fillProvider(data);
         } else {
+          setLoading(false);
           console.error("Error al traer el proveedor:", await response.json());
         }
       } catch (error) {
+        setLoading(false);
         console.error("Error en la solicitud:", error);
       }
     };
@@ -105,6 +111,7 @@ const ModifyProvider = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSend(true);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -136,6 +143,7 @@ const ModifyProvider = () => {
           success: true,
         });
         console.log("Proveedor modificado exitosamente:", data);
+        setLoading(false);
       } else {
         const errorData = await response.json();
         console.error("Error al modificar el proveedor:", errorData);
@@ -147,7 +155,9 @@ const ModifyProvider = () => {
         success: false,
       });
       console.error("Error en la solicitud:", error);
+      setLoading(false);
     } finally {
+      setLoading(false);
       setSend(false);
     }
   };
@@ -168,6 +178,11 @@ const ModifyProvider = () => {
     <div className="provider-section-container">
       <Header pageTitle="Personal" />
       <div className="provider-section">
+        {loading && (
+          <div className="page-loading-container">
+            <CircularProgress className="page-loading-icon" />
+          </div>
+        )}
         {update ? (
           <label className="providerSection-title">Modificar Proveedor</label>
         ) : (

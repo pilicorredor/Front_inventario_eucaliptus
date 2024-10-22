@@ -11,10 +11,12 @@ import {
   PERSON_TYPE,
   SERVICES,
 } from "../../Constants/Constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RegisterProvider = ({ providerData }) => {
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [providerSend, setProviderSend] = useState({
     personDTO: {
       idPerson: "",
@@ -127,6 +129,7 @@ const RegisterProvider = ({ providerData }) => {
     });
 
     setSend(true);
+    setLoading(true);
 
     // Abrir el modal después de intentar registrar o modificar
     // handleModalOpen({
@@ -166,10 +169,12 @@ const RegisterProvider = ({ providerData }) => {
           success: true,
         });
         console.log("Proveedor registrado exitosamente:", data);
+        setLoading(false);
         setSend(false);
       } else {
         const errorData = await response.json();
         console.error("Error al registrar el proveedor:", errorData);
+        setLoading(false);
         setSend(false);
       }
     } catch (error) {
@@ -181,6 +186,7 @@ const RegisterProvider = ({ providerData }) => {
         success: false,
       });
       console.error("Error en la solicitud:", error);
+      setLoading(false);
       setSend(false);
     }
     console.log(JSON.stringify(providerSend, null, 2));
@@ -190,6 +196,11 @@ const RegisterProvider = ({ providerData }) => {
     <div className="provider-section-container">
       <Header pageTitle="Personal" />
       <div className="provider-section">
+        {loading && (
+          <div className="page-loading-container">
+            <CircularProgress className="page-loading-icon" />
+          </div>
+        )}
         {update ? (
           <label className="providerSection-title">Modificar Proveedor</label>
         ) : (

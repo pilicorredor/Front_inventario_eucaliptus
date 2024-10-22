@@ -11,6 +11,7 @@ import {
   DOCUMENT_TYPE,
   SERVICES,
 } from "../../Constants/Constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ModifySeller = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const ModifySeller = () => {
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("vendedor");
   const [action, setAction] = useState("modificar");
+  const [loading, setLoading] = useState(false);
 
   const [sellerSend, setSellerSend] = useState({
     personDTO: {
@@ -43,6 +45,7 @@ const ModifySeller = () => {
 
   useEffect(() => {
     const fetchSellerById = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("token");
         const url = `${SERVICES.GET_SELLER_BY_ID}/${id}`;
@@ -56,12 +59,15 @@ const ModifySeller = () => {
         });
 
         if (response.ok) {
+          setLoading(false);
           const data = await response.json();
           fillSeller(data);
         } else {
+          setLoading(false);
           console.error("Error al traer el vendedor:", await response.json());
         }
       } catch (error) {
+        setLoading(false);
         console.error("Error en la solicitud:", error);
       }
     };
@@ -90,6 +96,7 @@ const ModifySeller = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSend(true);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -121,9 +128,11 @@ const ModifySeller = () => {
           success: true,
         });
         console.log("Vendedor modificado exitosamente:", data);
+        setLoading(false);
       } else {
         const errorData = await response.json();
         console.error("Error al modificar el Vendedor:", errorData);
+        setLoading(false);
       }
     } catch (error) {
       handleModalOpen({
@@ -132,7 +141,9 @@ const ModifySeller = () => {
         success: false,
       });
       console.error("Error en la solicitud:", error);
+      setLoading(false);
     } finally {
+      setLoading(false);
       setSend(false);
     }
   };
@@ -153,6 +164,11 @@ const ModifySeller = () => {
     <div className="seller-section-container">
       <Header pageTitle="Personal" />
       <div className="seller-section">
+        {loading && (
+          <div className="page-loading-container">
+            <CircularProgress className="page-loading-icon" />
+          </div>
+        )}
         {update ? (
           <label className="sellerSection-title">Modificar Vendedor</label>
         ) : (

@@ -14,7 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CustomModal from "../../Modales/CustomModal";
 import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";
 
-const CustomTable = ({ data, customColumns, role }) => {
+const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ const CustomTable = ({ data, customColumns, role }) => {
 
   const handleModalClose = () => {
     //Acá se llamaría el servicio de eliminar
+    handleUpdateData(role);
     setOpenModal(false);
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
@@ -26,6 +26,10 @@ function App() {
         localStorage.setItem('login', false)
         setLogin(false)
     }
+
+    useEffect(() => {
+        setLogin(false)
+    }, [])
 
     return (
         <Router>

@@ -6,6 +6,7 @@ import { MODAL_TYPES, BUTTONS_ACTIONS, SERVICES } from "../Constants/Constants";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const CustomModal = ({
   entity,
@@ -19,6 +20,7 @@ const CustomModal = ({
   const [serviceCheck, setServiceCheck] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const modalContent = () => {
     if (action === BUTTONS_ACTIONS.REGISTRAR) {
@@ -57,6 +59,7 @@ const CustomModal = ({
   };
 
   const handleService = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       if (entity === "proveedor") {
@@ -73,11 +76,14 @@ const CustomModal = ({
       });
 
       if (response.ok) {
+        setLoading(false);
         setServiceCheck(MODAL_TYPES.CHECK);
       } else {
+        setLoading(false);
         setServiceCheck(MODAL_TYPES.ERROR);
       }
     } catch (error) {
+      setLoading(false);
       setServiceCheck(MODAL_TYPES.ERROR);
     }
   };
@@ -95,6 +101,11 @@ const CustomModal = ({
   return (
     <Modal open={openModal} onClose={onClose}>
       <Box className="modal-box">
+        {loading && (
+          <div className="modal-loading-container">
+            <CircularProgress className="modal-loading-icon" />
+          </div>
+        )}
         <h2 id="parent-modal-title">{title}</h2>
         {modalType === MODAL_TYPES.CHECK && (
           <CheckCircleOutlineIcon className="modal-icon icon-green" />

@@ -4,7 +4,7 @@ import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Personal.css";
 import Header from "../Header/Header.jsx";
-import { SERVICES } from "../../Constants/Constants";
+import { SERVICES, ENTITIES } from "../../Constants/Constants";
 
 const Personal = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Personal = () => {
     } else if (role === "proveedor") {
       fetchProvidersData();
     }
-  }, [role]);
+  }, [role, sellersData]);
 
   const fetchSellersData = async () => {
     try {
@@ -82,6 +82,14 @@ const Personal = () => {
       }
     } catch (error) {
       console.error("Error en la solicitud de vendedores:", error);
+    }
+  };
+
+  const handleUpdateData = (role) => {
+    if (role === ENTITIES.VENDEDOR) {
+      fetchSellersData();
+    } else if (role === ENTITIES.PROVEEDOR) {
+      fetchProvidersData();
     }
   };
 
@@ -163,6 +171,7 @@ const Personal = () => {
               customColumns={columnsProviders}
               role={role}
               onDelete={handleDelete}
+              handleUpdateData={handleUpdateData}
             />
           )}
           {role === "vendedor" && (
@@ -171,6 +180,7 @@ const Personal = () => {
               customColumns={columnsSellers}
               role={role}
               onDelete={handleDelete}
+              handleUpdateData={handleUpdateData}
             />
           )}
         </div>

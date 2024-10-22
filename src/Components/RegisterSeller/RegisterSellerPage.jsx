@@ -11,10 +11,12 @@ import {
   DOCUMENT_TYPE,
   SERVICES,
 } from "../../Constants/Constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RegisterSeller = ({ sellerData }) => {
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [sellerSend, setSellerSend] = useState({
     personDTO: {
       idPerson: "",
@@ -83,6 +85,7 @@ const RegisterSeller = ({ sellerData }) => {
     });
 
     setSend(true);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -114,6 +117,7 @@ const RegisterSeller = ({ sellerData }) => {
           success: true,
         });
         console.log("Vendedor registrado exitosamente:", data);
+        setLoading(false);
         setSend(false);
       } else {
         const errorData = await response.json();
@@ -125,6 +129,7 @@ const RegisterSeller = ({ sellerData }) => {
           success: false,
         });
         console.error("Error al registrar el vendedor:", errorData);
+        setLoading(false);
         setSend(false);
       }
     } catch (error) {
@@ -136,6 +141,7 @@ const RegisterSeller = ({ sellerData }) => {
         success: false,
       });
       console.error("Error en la solicitud:", error);
+      setLoading(false);
       setSend(false);
     }
   };
@@ -169,6 +175,11 @@ const RegisterSeller = ({ sellerData }) => {
     <div className="seller-section-container">
       <Header pageTitle="Personal" />
       <div className="seller-section">
+        {loading && (
+          <div className="page-loading-container">
+            <CircularProgress className="page-loading-icon" />
+          </div>
+        )}
         {update ? (
           <label className="sellerSection-title">Modificar Vendedor</label>
         ) : (

@@ -84,3 +84,18 @@
   z-index: -1;
   opacity: 0.2;
 }
+
+.page-loading-container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  top: 40%;
+  left: 46%;
+}
+
+.page-loading-icon {
+  width: 70px !important;
+  height: 70px !important;
+  z-index: 1000;
+}
