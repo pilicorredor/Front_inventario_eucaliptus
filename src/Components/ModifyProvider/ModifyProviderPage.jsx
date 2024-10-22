@@ -43,9 +43,7 @@ const ModifyProvider = () => {
   });
 
   const fillProvider = (dataProvider) => {
-    console.log("data provider en fill provider: ", dataProvider);
     setProviderSend(dataProvider);
-    console.log("provider send: ", providerSend);
   };
 
   useEffect(() => {

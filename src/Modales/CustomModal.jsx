@@ -2,15 +2,23 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import "./CustomModal.css";
-import { MODAL_TYPES, BUTTONS_ACTIONS } from "../Constants/Constants";
+import { MODAL_TYPES, BUTTONS_ACTIONS, SERVICES } from "../Constants/Constants";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-const CustomModal = ({ entity, action, openModal, onClose, successfull }) => {
+const CustomModal = ({
+  entity,
+  action,
+  openModal,
+  onClose,
+  successfull,
+  id,
+}) => {
   const [modalType, setModalType] = useState("");
   const [serviceCheck, setServiceCheck] = useState("");
   const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
 
   const modalContent = () => {
     if (action === BUTTONS_ACTIONS.REGISTRAR) {
@@ -48,12 +56,30 @@ const CustomModal = ({ entity, action, openModal, onClose, successfull }) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
-  const handleService = () => {
-    // ACÁ HAS EL FETCH
-    //En el response.ok
-    // setServiceCheck(MODAL_TYPES.CHECK)
-    // Cuando el servicio no responda
-    // setServiceCheck(MODAL_TYPES.ERROR)
+  const handleService = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (entity === "proveedor") {
+        setUrl(`${SERVICES.DELETE_PROVIDER_SERVICE}/${id}`);
+      } else {
+        setUrl(`${SERVICES.DELETE_SELLER_SERVICE}/${id}`);
+      }
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setServiceCheck(MODAL_TYPES.CHECK);
+      } else {
+        setServiceCheck(MODAL_TYPES.ERROR);
+      }
+    } catch (error) {
+      setServiceCheck(MODAL_TYPES.ERROR);
+    }
   };
 
   useEffect(() => {

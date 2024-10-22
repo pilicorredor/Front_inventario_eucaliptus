@@ -35,7 +35,7 @@ const Personal = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedSellers = data.map((seller) => ({
-          id_edit: seller.idSeller,
+          id_modify: seller.idSeller,
           id: seller.personDTO.idPerson,
           nombre: `${seller.personDTO.firstName} ${seller.personDTO.lastName}`,
           direccion: seller.homeAddress,
@@ -66,7 +66,7 @@ const Personal = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
-          id_edit: provider.idProvider,
+          id_modify: provider.idProvider,
           id: provider.personDTO.idPerson,
           nombre: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
           direccion: provider.companyDTO.companyAddress,

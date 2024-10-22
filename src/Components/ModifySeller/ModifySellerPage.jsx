@@ -38,9 +38,7 @@ const ModifySeller = () => {
   });
 
   const fillSeller = (dataSeller) => {
-    console.log("data seller en fill seller: ", dataSeller);
     setSellerSend(dataSeller);
-    console.log("seller send: ", sellerSend);
   };
 
   useEffect(() => {
@@ -59,9 +57,7 @@ const ModifySeller = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("data: ", data);
           fillSeller(data);
-          console.log("fill pr");
         } else {
           console.error("Error al traer el vendedor:", await response.json());
         }

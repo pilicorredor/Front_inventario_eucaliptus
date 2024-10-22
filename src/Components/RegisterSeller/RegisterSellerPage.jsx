@@ -49,10 +49,6 @@ const RegisterSeller = ({ sellerData }) => {
   const [action, setAction] = useState("registrar");
   const [successful, setSuccessful] = useState(true);
 
-  console.log("---------------------");
-  console.log("datos: ", entity, action, successful);
-
-  // Efecto para cargar los datos si se pasa sellerData como props
   useEffect(() => {
     if (sellerData) {
       setUpdate(true);

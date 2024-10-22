@@ -102,11 +102,8 @@ const RegisterProvider = ({ providerData }) => {
     }));
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí puedes enviar los datos al servidor o hacer alguna validación
-    console.log(provider);
 
     setProviderSend({
       personDTO: {
@@ -186,7 +183,6 @@ const RegisterProvider = ({ providerData }) => {
       console.error("Error en la solicitud:", error);
       setSend(false);
     }
-    console.log("handle service: ", providerSend);
     console.log(JSON.stringify(providerSend, null, 2));
   };
 

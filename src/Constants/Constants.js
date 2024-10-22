@@ -8,6 +8,8 @@ export const SERVICES = {
     MODIFY_PROVIDER_SERVICE: "http://localhost:8082/person/providers/updateProvider",
     GET_SELLER_BY_ID: "http://localhost:8082/person/sellers/getSellerById",
     MODIFY_SELLER_SERVICE: "http://localhost:8082/person/sellers/updateSeller",
+    DELETE_SELLER_SERVICE: "http://localhost:8082/person/sellers/deleteSeller",
+    DELETE_PROVIDER_SERVICE: "http://localhost:8082/person/providers/deleteProvider",
 }
 
 export const MODAL_TYPES = {

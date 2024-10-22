@@ -14,17 +14,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CustomModal from "../../Modales/CustomModal";
 import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";
 
-const CustomTable = ({ data, customColumns, onDelete, role }) => {
+const CustomTable = ({ data, customColumns, role }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("registrar");
+  const [selectedId, setSelectedId] = useState(null);
 
-  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
+  const handleModalOpen = ({ selectedEntity, selectedAction, id }) => {
     setEntity(selectedEntity);
     setAction(selectedAction);
+    setSelectedId(id);
     setOpenModal(true);
   };
 
@@ -117,7 +119,7 @@ const CustomTable = ({ data, customColumns, onDelete, role }) => {
                     >
                       <IconButton
                         aria-label="edit"
-                        onClick={() => handleEdit(row.id_edit)}
+                        onClick={() => handleEdit(row.id_modify)}
                       >
                         <EditIcon />
                       </IconButton>
@@ -130,6 +132,7 @@ const CustomTable = ({ data, customColumns, onDelete, role }) => {
                                 ? ENTITIES.PROVEEDOR
                                 : ENTITIES.VENDEDOR,
                             selectedAction: BUTTONS_ACTIONS.ELIMINAR,
+                            id: row.id_modify,
                           })
                         }
                       >
@@ -155,6 +158,7 @@ const CustomTable = ({ data, customColumns, onDelete, role }) => {
           action={action}
           openModal={openModal}
           onClose={handleModalClose}
+          id={selectedId}
         />
       </div>
     </Paper>
