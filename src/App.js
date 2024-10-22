@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
@@ -9,6 +9,7 @@ import RegisterProvider from './Components/RegisterProvider/RegisterProviderPage
 import Products from './Components/Products/Products';
 import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
 import ModifySeller from './Components/ModifySeller/ModifySellerPage';
+import Config from './Components/ConfigPanel/ConfigPanel';
 
 function App() {
     const [login, setLogin] = useState(localStorage.getItem('login'));
@@ -27,10 +28,6 @@ function App() {
         setLogin(false)
     }
 
-    useEffect(() => {
-        setLogin(false)
-    }, [])
-
     return (
         <Router>
             {login && <Navbar login={login} handleLogin={handleLogin} username={username} role={role} handleLogout={handleLogout} />}
@@ -38,6 +35,7 @@ function App() {
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 {/* <Route path='/' element={<HomePage />} /> */}
                 <Route path='/inicio' element={<HomePage />} />
+                <Route path='/config' element={<Config />} />
                 <Route path='/personal*' element={<Personal />} />
                 <Route path="/registrar-vendedor" element={<RegisterSeller />} />
                 <Route path="/registrar-proveedor" element={<RegisterProvider />} />

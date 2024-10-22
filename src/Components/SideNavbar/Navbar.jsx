@@ -3,12 +3,13 @@ import * as Io5Icons from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "./Navbar.css";
+import userImg from "../Assets/person-circle.png";
 
 const Navbar = ({ username, role, handleLogout }) => {
   return (
     <div className="sidebar">
       <img
-        src="https://via.placeholder.com/80"
+        src={userImg}
         alt="Profile"
         className="profile-image"
       />
