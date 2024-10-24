@@ -36,11 +36,10 @@ const Personal = () => {
         const data = await response.json();
         const formattedSellers = data.map((seller) => ({
           id_modify: seller.idSeller,
-          id: seller.personDTO.idPerson,
-          nombre: `${seller.personDTO.firstName} ${seller.personDTO.lastName}`,
-          direccion: seller.homeAddress,
-          correo_electronico: seller.personDTO.email,
-          telefono: seller.personDTO.phoneNumber,
+          name: `${seller.personDTO.firstName} ${seller.personDTO.lastName}`,
+          homeAddress: seller.homeAddress,
+          email: seller.personDTO.email,
+          phoneNumber: seller.personDTO.phoneNumber,
         }));
         setSellersData(formattedSellers);
       } else {
@@ -67,13 +66,12 @@ const Personal = () => {
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
           id_modify: provider.idProvider,
-          id: provider.personDTO.idPerson,
-          nombre: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
-          direccion: provider.companyDTO.companyAddress,
-          correo_electronico: provider.personDTO.email,
-          telefono: provider.personDTO.phoneNumber,
-          empresa: provider.companyDTO.companyName,
-          cuenta: provider.companyDTO.bankAccountNumber,
+          name: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
+          addressCompany: provider.companyDTO.companyAddress,
+          email: provider.personDTO.email,
+          phoneNumber: provider.personDTO.phoneNumber,
+          companyName: provider.companyDTO.companyName,
+          banckAccount: provider.companyDTO.bankAccountNumber,
         }));
         setProvidersData(formattedProviders);
       } else {
@@ -94,21 +92,19 @@ const Personal = () => {
   };
 
   const columnsProviders = [
-    "id",
-    "nombre",
-    "direccion",
-    "correo_electronico",
-    "telefono",
-    "empresa",
-    "cuenta",
+    "name",
+    "addressCompany",
+    "email",
+    "phoneNumber",
+    "companyName",
+    "banckAccount",
   ];
 
   const columnsSellers = [
-    "id",
-    "nombre",
-    "direccion",
-    "correo_electronico",
-    "telefono",
+    "name",
+    "homeAddress",
+    "email",
+    "phoneNumber",
   ];
 
   const handleRoleChange = (selectedRole) => {
@@ -165,7 +161,7 @@ const Personal = () => {
         </div>
 
         <div className="personal-content">
-          {role === "proveedor" && (
+          {role === ENTITIES.PROVEEDOR && (
             <CustomTable
               data={providersData}
               customColumns={columnsProviders}
@@ -174,7 +170,7 @@ const Personal = () => {
               handleUpdateData={handleUpdateData}
             />
           )}
-          {role === "vendedor" && (
+          {role === ENTITIES.VENDEDOR && (
             <CustomTable
               data={sellersData}
               customColumns={columnsSellers}

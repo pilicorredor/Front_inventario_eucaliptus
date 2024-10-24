@@ -24,22 +24,21 @@ const RegisterSeller = ({ sellerData }) => {
       lastName: "",
       email: "",
       phoneNumber: "",
+      documentType: DOCUMENT_TYPE.CEDULA,
       role: ROLES.SELLER,
     },
-    documentType: DOCUMENT_TYPE.CEDULA,
-    documentNumber: "",
     username: "",
     password: "",
     homeAddress: "",
   });
 
   const [seller, setSeller] = useState({
+    idPerson: "",
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
     documentType: DOCUMENT_TYPE.CEDULA,
-    documentNumber: "",
     username: "",
     password: "",
     homeAddress: "",
@@ -70,15 +69,14 @@ const RegisterSeller = ({ sellerData }) => {
     e.preventDefault();
     setSellerSend({
       personDTO: {
-        idPerson: seller.documentNumber, // Asignar el número de documento como idPerson
+        idPerson: seller.idPerson,
         firstName: seller.firstName,
         lastName: seller.lastName,
         email: seller.email,
         phoneNumber: seller.phoneNumber,
+        documentType: seller.documentType,
         role: ROLES.SELLER,
       },
-      documentType: seller.documentType,
-      documentNumber: seller.documentNumber,
       username: seller.username,
       password: seller.password,
       homeAddress: seller.homeAddress,
@@ -108,7 +106,6 @@ const RegisterSeller = ({ sellerData }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.VENDEDOR,
           selectedAction: update
@@ -116,7 +113,6 @@ const RegisterSeller = ({ sellerData }) => {
             : BUTTONS_ACTIONS.REGISTRAR,
           success: true,
         });
-        console.log("Vendedor registrado exitosamente:", data);
         setLoading(false);
         setSend(false);
       } else {
@@ -154,14 +150,13 @@ const RegisterSeller = ({ sellerData }) => {
   };
 
   const handleModalClose = () => {
-    //Limpiar el formulario
     setSeller({
+      idPerson: "",
       firstName: "",
       lastName: "",
       email: "",
       phoneNumber: "",
       documentType: DOCUMENT_TYPE.CEDULA,
-      documentNumber: "",
       username: "",
       password: "",
       homeAddress: "",
@@ -173,7 +168,7 @@ const RegisterSeller = ({ sellerData }) => {
 
   return (
     <div className="seller-section-container">
-      <Header pageTitle="Personal" />
+      <Header pageTitle="Personal - Vendedor" />
       <div className="seller-section">
         {loading && (
           <div className="page-loading-container">
@@ -220,6 +215,7 @@ const RegisterSeller = ({ sellerData }) => {
                 <input
                   type="email"
                   name="email"
+                  placeholder="usuario@example.com"
                   value={seller.email}
                   onChange={handleInputChange}
                 />
@@ -229,7 +225,7 @@ const RegisterSeller = ({ sellerData }) => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="tel"
                   name="phoneNumber"
                   value={seller.phoneNumber}
                   onChange={handleInputChange}
@@ -237,10 +233,6 @@ const RegisterSeller = ({ sellerData }) => {
                 />
               </div>
             </div>
-          </div>
-
-          <div className="sellerForm-section">
-            <h3 className="sellerForm-title">Información del Vendedor</h3>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
@@ -267,13 +259,18 @@ const RegisterSeller = ({ sellerData }) => {
                 </label>
                 <input
                   type="number"
-                  name="documentNumber"
-                  value={seller.documentNumber}
+                  name="idPerson"
+                  value={seller.idPerson}
                   onChange={handleInputChange}
                   required
                 />
               </div>
             </div>
+          </div>
+
+          <div className="sellerForm-section">
+            <h3 className="sellerForm-title">Información del Vendedor</h3>
+
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
@@ -303,7 +300,7 @@ const RegisterSeller = ({ sellerData }) => {
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
-                  Dirección <span className="red">*</span>
+                  Dirección de residencia <span className="red">*</span>
                 </label>
                 <input
                   type="text"

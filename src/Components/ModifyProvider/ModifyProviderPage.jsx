@@ -10,6 +10,7 @@ import {
   ROLES,
   PERSON_TYPE,
   SERVICES,
+  DOCUMENT_TYPE,
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -22,6 +23,7 @@ const ModifyProvider = () => {
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("modificar");
   const [loading, setLoading] = useState(false);
+  const [legalPerson, setLegalPerson] = useState(false);
 
   const [providerSend, setProviderSend] = useState({
     personDTO: {
@@ -174,9 +176,18 @@ const ModifyProvider = () => {
     navigate("/personal");
   };
 
+  useEffect(() => {
+    if (providerSend.personType === PERSON_TYPE.LEGAL) {
+      setLegalPerson(true);
+    }
+    if (providerSend.personType === PERSON_TYPE.NATURAL) {
+      setLegalPerson(false);
+    }
+  }, [providerSend.personType]);
+
   return (
     <div className="provider-section-container">
-      <Header pageTitle="Personal" />
+      <Header pageTitle="Personal - Modificar proveedor" />
       <div className="provider-section">
         {loading && (
           <div className="page-loading-container">
@@ -190,7 +201,9 @@ const ModifyProvider = () => {
         )}
         <form className="providerForm" onSubmit={handleSubmit}>
           <div className="providerForm-section">
-            <h3 className="providerForm-title">Información básica</h3>
+            <h3 className="providerForm-title">
+              Información del representante legal
+            </h3>
             <div className="providerForm-row">
               <div className="providerForm-item">
                 <label>
@@ -240,11 +253,40 @@ const ModifyProvider = () => {
                 />
               </div>
             </div>
+            <div className="providerForm-row">
+              <div className="providerForm-item">
+                <label>
+                  Tipo de documento <span className="red">*</span>
+                </label>
+                <select
+                  name="idPerson"
+                  value={providerSend.personDTO.documentType}
+                  onChange={handleInputChange}
+                  required
+                  disabled
+                >
+                  <option>{providerSend.personDTO.documentType}</option>
+                </select>
+              </div>
+              <div className="providerForm-item">
+                <label>
+                  Número de documento <span className="red">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="idPerson"
+                  value={providerSend.personDTO.idPerson}
+                  onChange={handleInputChange}
+                  required
+                  disabled
+                />
+              </div>
+            </div>
           </div>
 
           {/* Información adicional */}
           <div className="providerForm-section">
-            <h3 className="providerForm-title">Información del proveedor</h3>
+            <h3 className="providerForm-title">Información legal</h3>
             <div className="providerForm-row">
               <div className="providerForm-item">
                 <label>
@@ -275,57 +317,67 @@ const ModifyProvider = () => {
                 />
               </div>
             </div>
+            {legalPerson && (
+              <div className="companyFrom-container">
+                <div className="providerForm-row">
+                  <div className="providerForm-item">
+                    <label>
+                      Empresa <span className="red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={providerSend.companyDTO.companyName}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="providerForm-item">
+                    <label>Teléfono de la empresa</label>
+                    <input
+                      type="text"
+                      name="companyPhoneNumber"
+                      value={providerSend.companyDTO.companyPhoneNumber}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+                <div className="providerForm-row">
+                  <div className="providerForm-item">
+                    <label>Correo electrónico de la empresa</label>
+                    <input
+                      type="email"
+                      name="companyEmail"
+                      value={providerSend.companyDTO.companyEmail}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="providerForm-item">
+                    <label>
+                      Dirección de la empresa <span className="red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyAddress"
+                      value={providerSend.companyDTO.companyAddress}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Empresa</label>
-                <input
-                  type="text"
-                  name="companyName"
-                  value={providerSend.companyDTO.companyName}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="providerForm-item">
-                <label>Teléfono de la empresa</label>
-                <input
-                  type="text"
-                  name="companyPhoneNumber"
-                  value={providerSend.companyDTO.companyPhoneNumber}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Correo electrónico de la empresa</label>
-                <input
-                  type="email"
-                  name="companyEmail"
-                  value={providerSend.companyDTO.companyEmail}
-                  onChange={handleInputChange}
-                />
-              </div>
               <div className="providerForm-item">
                 <label>
-                  Dirección de la empresa <span className="red">*</span>
+                  Nombre del banco <span className="red">*</span>
                 </label>
-                <input
-                  type="text"
-                  name="companyAddress"
-                  value={providerSend.companyDTO.companyAddress}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </div>
-            <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Nombre del banco</label>
                 <input
                   type="text"
                   name="bankName"
                   value={providerSend.companyDTO.bankName}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="providerForm-item">

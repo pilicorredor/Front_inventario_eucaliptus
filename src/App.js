@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
@@ -11,29 +11,38 @@ import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
 import ModifySeller from './Components/ModifySeller/ModifySellerPage';
 import Config from './Components/ConfigPanel/ConfigPanel';
 
-function App() {
-    const [login, setLogin] = useState(localStorage.getItem('login'));
+const AppContent = () => {
+    const [login, setLogin] = useState(false);
     const [username, setUsername] = useState(localStorage.getItem("username"));
     const [role, setRole] = useState(localStorage.getItem("role"));
+    const location = useLocation();
 
     const handleLogin = ({ username, role }) => {
-        localStorage.setItem('login', true)
-        setUsername(username)
-        setLogin(true)
-        setRole(role)
+        localStorage.setItem('login', true);
+        setUsername(username);
+        setLogin(true);
+        setRole(role);
     };
 
     const handleLogout = () => {
-        localStorage.setItem('login', false)
-        setLogin(false)
-    }
+        localStorage.setItem('login', false);
+        setLogin(false);
+    };
+
+    useEffect(() => {
+        if (location.pathname === '/') {
+            setLogin(false);
+        } else {
+            setLogin(true);
+        }
+    }, [location.pathname]);
+
 
     return (
-        <Router>
+        <>
             {login && <Navbar login={login} handleLogin={handleLogin} username={username} role={role} handleLogout={handleLogout} />}
             <Routes>
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
-                {/* <Route path='/' element={<HomePage />} /> */}
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/config' element={<Config />} />
                 <Route path='/personal*' element={<Personal />} />
@@ -43,6 +52,14 @@ function App() {
                 <Route path="/modificar/vendedor/:id" element={<ModifySeller />} />
                 <Route path='/productos*' element={<Products />} />
             </Routes>
+        </>
+    );
+}
+
+const App = () => {
+    return (
+        <Router>
+            <AppContent />
         </Router>
     );
 }

@@ -226,11 +226,6 @@ const ModifySeller = () => {
                 />
               </div>
             </div>
-          </div>
-
-          {/* Información adicional */}
-          <div className="sellerForm-section">
-            <h3 className="sellerForm-title">Información del proveedor</h3>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
@@ -238,12 +233,12 @@ const ModifySeller = () => {
                 </label>
                 <select
                   name="documentType"
-                  value={sellerSend.documentType}
+                  value={sellerSend.personDTO.documentType}
                   onChange={handleInputChange}
                   required
                   disabled
                 >
-                  <option>{sellerSend.documentType}</option>
+                  <option>{sellerSend.personDTO.documentType}</option>
                 </select>
               </div>
               <div className="sellerForm-item">
@@ -260,6 +255,11 @@ const ModifySeller = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Información adicional */}
+          <div className="sellerForm-section">
+            <h3 className="sellerForm-title">Información del proveedor</h3>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>

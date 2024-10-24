@@ -106,3 +106,19 @@
   height: 70px !important;
   z-index: 1000;
 }
+
+.companyFrom-container {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
