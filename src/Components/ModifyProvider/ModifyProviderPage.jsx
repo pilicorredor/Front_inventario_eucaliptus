@@ -82,34 +82,6 @@ const ModifyProvider = () => {
     fetchProviderById();
   }, [id]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Verifica si el campo pertenece a personDTO o companyDTO
-    if (name in providerSend.personDTO) {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        personDTO: {
-          ...prevProvider.personDTO,
-          [name]: value,
-        },
-      }));
-    } else if (name in providerSend.companyDTO) {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        companyDTO: {
-          ...prevProvider.companyDTO,
-          [name]: value,
-        },
-      }));
-    } else {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        [name]: value,
-      }));
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSend(true);
@@ -144,7 +116,6 @@ const ModifyProvider = () => {
           selectedAction: BUTTONS_ACTIONS.MODIFICAR,
           success: true,
         });
-        console.log("Proveedor modificado exitosamente:", data);
         setLoading(false);
       } else {
         const errorData = await response.json();
@@ -185,6 +156,69 @@ const ModifyProvider = () => {
     }
   }, [providerSend.personType]);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    const isNumericField =
+      name === "phoneNumber" ||
+      name === "bankAccountNumber" ||
+      name === "companyPhoneNumber";
+
+    const newValue = isNumericField ? validateNumericInput(value) : value;
+
+    if (name in providerSend.personDTO) {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        personDTO: {
+          ...prevProvider.personDTO,
+          [name]: newValue,
+        },
+      }));
+    } else if (name in providerSend.companyDTO) {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        companyDTO: {
+          ...prevProvider.companyDTO,
+          [name]: newValue,
+        },
+      }));
+    } else {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        [name]: newValue,
+      }));
+    }
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
+  };
+
   return (
     <div className="provider-section-container">
       <Header pageTitle="Personal - Modificar proveedor" />
@@ -214,6 +248,7 @@ const ModifyProvider = () => {
                   name="firstName"
                   value={providerSend.personDTO.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -226,6 +261,7 @@ const ModifyProvider = () => {
                   name="lastName"
                   value={providerSend.personDTO.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -245,11 +281,15 @@ const ModifyProvider = () => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="phoneNumber"
                   value={providerSend.personDTO.phoneNumber}
                   onChange={handleInputChange}
+                  minLength="8"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -273,7 +313,7 @@ const ModifyProvider = () => {
                   Número de documento <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="idPerson"
                   value={providerSend.personDTO.idPerson}
                   onChange={handleInputChange}
@@ -308,7 +348,7 @@ const ModifyProvider = () => {
                   <span className="red">*</span>
                 </label>
                 <input
-                  type="text" //arreglar esto--------------------------------------------------------------!!!!!!
+                  type="text"
                   name="nit"
                   value={providerSend.companyDTO.nit}
                   onChange={handleInputChange}
@@ -339,6 +379,10 @@ const ModifyProvider = () => {
                       name="companyPhoneNumber"
                       value={providerSend.companyDTO.companyPhoneNumber}
                       onChange={handleInputChange}
+                      minLength="7"
+                      maxLength="10"
+                      onInvalid={handleValidation}
+                      onInput={handleInputReset}
                     />
                   </div>
                 </div>
@@ -385,11 +429,15 @@ const ModifyProvider = () => {
                   Número de cuenta <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="bankAccountNumber"
                   value={providerSend.companyDTO.bankAccountNumber}
                   onChange={handleInputChange}
+                  minLength="10"
+                  maxLength="20"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -409,7 +457,7 @@ const ModifyProvider = () => {
             entity={entity}
             action={action}
             openModal={openModal}
-            onClose={handleModalClose} // Cierra el modal y redirige
+            onClose={handleModalClose}
           />
         </form>
       </div>

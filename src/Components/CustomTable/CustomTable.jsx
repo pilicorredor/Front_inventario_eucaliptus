@@ -24,7 +24,6 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
   const [selectedId, setSelectedId] = useState(null);
 
   const handleModalOpen = ({ selectedEntity, selectedAction, id }) => {
-    console.log("id en el MODALOPEN:", id);
     setEntity(selectedEntity);
     setAction(selectedAction);
     setSelectedId(id);
@@ -56,7 +55,7 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
     email: "Correo Electrónico",
     phoneNumber: "Número de Teléfono",
     companyName: "Nombre de la Empresa",
-    banckAccount: "Número de Cuenta",
+    banckAccount: "Cuenta Bancaria",
     //Poner despues las columnas de productos
   };
 

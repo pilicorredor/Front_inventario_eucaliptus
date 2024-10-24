@@ -57,14 +57,6 @@ const RegisterSeller = ({ sellerData }) => {
     }
   }, [sellerData]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSeller((prevSeller) => ({
-      ...prevSeller,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSellerSend({
@@ -166,6 +158,54 @@ const RegisterSeller = ({ sellerData }) => {
     navigate("/personal");
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    if (name === "phoneNumber" || name === "idPerson") {
+      const numericValue = validateNumericInput(value);
+
+      setSeller((prevSeller) => ({
+        ...prevSeller,
+        [name]: numericValue,
+      }));
+    } else {
+      const { name, value } = e.target;
+      setSeller((prevSeller) => ({
+        ...prevSeller,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
+  };
+
   return (
     <div className="seller-section-container">
       <Header pageTitle="Personal - Vendedor" />
@@ -193,6 +233,7 @@ const RegisterSeller = ({ sellerData }) => {
                   name="firstName"
                   value={seller.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -205,6 +246,7 @@ const RegisterSeller = ({ sellerData }) => {
                   name="lastName"
                   value={seller.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -225,11 +267,15 @@ const RegisterSeller = ({ sellerData }) => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   name="phoneNumber"
                   value={seller.phoneNumber}
                   onChange={handleInputChange}
+                  minLength="8"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -258,11 +304,15 @@ const RegisterSeller = ({ sellerData }) => {
                   Número de documento <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="idPerson"
                   value={seller.idPerson}
                   onChange={handleInputChange}
+                  minLength="7"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>

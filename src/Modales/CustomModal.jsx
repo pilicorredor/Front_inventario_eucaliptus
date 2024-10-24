@@ -92,7 +92,6 @@ const CustomModal = ({
         setServiceCheck(MODAL_TYPES.ERROR);
       }
     } catch (error) {
-      console.log("error al eliminar: ", error);
       setLoading(false);
       setServiceCheck(MODAL_TYPES.ERROR);
     }

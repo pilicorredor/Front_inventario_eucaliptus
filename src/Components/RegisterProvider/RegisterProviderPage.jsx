@@ -18,8 +18,11 @@ const RegisterProvider = ({ providerData }) => {
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [phoneWarning, setPhoneWarning] = useState("");
-  console.log("phoneWarning");
+  const [update, setUpdate] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [entity, setEntity] = useState("proveedor");
+  const [action, setAction] = useState("registrar");
+  const [legalPerson, setLegalPerson] = useState(false);
   const [providerSend, setProviderSend] = useState({
     personDTO: {
       idPerson: "",
@@ -41,6 +44,7 @@ const RegisterProvider = ({ providerData }) => {
       bankAccountNumber: "",
     },
   });
+
   const [provider, setProvider] = useState({
     idPerson: "",
     firstName: "",
@@ -57,12 +61,6 @@ const RegisterProvider = ({ providerData }) => {
     bankName: "",
     bankAccountNumber: "",
   });
-
-  const [update, setUpdate] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [entity, setEntity] = useState("proveedor");
-  const [action, setAction] = useState("registrar");
-  const [legalPerson, setLegalPerson] = useState(false);
 
   // Abrir el modal con la entidad y acción correspondientes
   const handleModalOpen = ({ selectedEntity, selectedAction }) => {
@@ -91,7 +89,6 @@ const RegisterProvider = ({ providerData }) => {
     });
     setOpenModal(false);
     setSend(false);
-    // Redirigir solo después de cerrar el modal
     navigate("/personal");
   };
 
@@ -102,23 +99,6 @@ const RegisterProvider = ({ providerData }) => {
       setProvider(providerData);
     }
   }, [providerData]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // if (name === "phoneNumber") {
-    //   if (value.length !== 10) {
-    //     setPhoneWarning("El número de teléfono debe tener exactamente 10 dígitos.");
-    //   } else {
-    //     setPhoneWarning("");
-    //   }
-    // }
-
-    setProvider((prevProvider) => ({
-      ...prevProvider,
-      [name]: value,
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -207,6 +187,60 @@ const RegisterProvider = ({ providerData }) => {
     }
   }, [provider.personType]);
 
+  //Validaciones
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    if (
+      name === "phoneNumber" ||
+      name === "idPerson" ||
+      name === "nit" ||
+      name === "bankAccountNumber" ||
+      name === "companyPhoneNumber"
+    ) {
+      const numericValue = validateNumericInput(value);
+
+      setProvider((prevProvider) => ({
+        ...prevProvider,
+        [name]: numericValue,
+      }));
+    } else {
+      setProvider((prevProvider) => ({
+        ...prevProvider,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
+  };
+
   return (
     <div className="provider-section-container">
       <Header pageTitle="Personal - Proveedor" />
@@ -238,6 +272,7 @@ const RegisterProvider = ({ providerData }) => {
                   name="firstName"
                   value={provider.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -250,6 +285,7 @@ const RegisterProvider = ({ providerData }) => {
                   name="lastName"
                   value={provider.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -270,14 +306,15 @@ const RegisterProvider = ({ providerData }) => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   name="phoneNumber"
                   value={provider.phoneNumber}
                   onChange={handleInputChange}
-                  maxLength="10"
                   minLength="8"
+                  maxLength="10"
                   required
-                  style={{ appearance: "textfield" }}
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -307,11 +344,15 @@ const RegisterProvider = ({ providerData }) => {
                   Número de documento <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="idPerson"
                   value={provider.idPerson}
                   onChange={handleInputChange}
+                  minLength="7"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -341,11 +382,15 @@ const RegisterProvider = ({ providerData }) => {
                   <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="nit"
                   value={provider.nit}
                   onChange={handleInputChange}
+                  minLength="9"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -371,6 +416,10 @@ const RegisterProvider = ({ providerData }) => {
                       name="companyPhoneNumber"
                       value={provider.companyPhoneNumber}
                       onChange={handleInputChange}
+                      minLength="8"
+                      maxLength="10"
+                      onInvalid={handleValidation}
+                      onInput={handleInputReset}
                     />
                   </div>
                 </div>
@@ -418,11 +467,15 @@ const RegisterProvider = ({ providerData }) => {
                   Número de cuenta <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="bankAccountNumber"
                   value={provider.bankAccountNumber}
                   onChange={handleInputChange}
+                  minLength="10"
+                  maxLength="20"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -442,7 +495,7 @@ const RegisterProvider = ({ providerData }) => {
             entity={entity}
             action={action}
             openModal={openModal}
-            onClose={handleModalClose} // Cierra el modal y redirige
+            onClose={handleModalClose}
           />
         </form>
       </div>
