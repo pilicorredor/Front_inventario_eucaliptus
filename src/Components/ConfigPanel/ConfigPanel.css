@@ -33,7 +33,7 @@
 }
 
 .config-form {
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .configForm-row {
@@ -51,7 +51,7 @@
 .configForm-item input {
     padding: 8px;
     margin-top: 5px;
-    width: 70%;
+    width: 300px;
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid;

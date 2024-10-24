@@ -6,10 +6,12 @@ import { FaEdit } from "react-icons/fa";
 
 const Config = () => {
     const [isNameEditable, setIsNameEditable] = useState(false);
+    const [isLastNameEditable, setIsLastNameEditable] = useState(false);
     const [isEmailEditable, setIsEmailEditable] = useState(false);
     const [isUsernameEditable, setIsUsernameEditable] = useState(false);
 
     const handleEditName = () => setIsNameEditable(!isNameEditable);
+    const handleEditLastName = () => setIsLastNameEditable(!isLastNameEditable);
     const handleEditEmail = () => setIsEmailEditable(!isEmailEditable);
     const handleEditUsername = () => setIsUsernameEditable(!isUsernameEditable);
 
@@ -29,13 +31,13 @@ const Config = () => {
                     <div className="configForm-row">
                         <div className="configForm-item">
                             <label>
-                                Nombres y Apellidos
+                                Nombres
                             </label>
                             <div className="input-and-button">
                                 <input
                                     type="text"
                                     name="config-input-name"
-                                    placeholder="Laura Carreño"
+                                    placeholder="Laura"
                                     disabled={!isNameEditable}
                                 />
                                 <button onClick={handleEditName}><FaEdit /></button>
@@ -43,16 +45,16 @@ const Config = () => {
                         </div>
                         <div className="configForm-item">
                             <label>
-                                Correo
+                                Apellidos
                             </label>
                             <div className="input-and-button">
                                 <input
                                     type="text"
-                                    name="config-input-email"
-                                    placeholder="laura@example.com"
-                                    disabled={!isEmailEditable}
+                                    name="config-input-lastname"
+                                    placeholder="Carreño"
+                                    disabled={!isLastNameEditable}
                                 />
-                                <button onClick={handleEditEmail}><FaEdit /></button>
+                                <button onClick={handleEditLastName}><FaEdit /></button>
                             </div>
                         </div>
                     </div>
@@ -72,6 +74,22 @@ const Config = () => {
                             </div>
 
                         </div>
+                        <div className="configForm-item">
+                            <label>
+                                Correo
+                            </label>
+                            <div className="input-and-button">
+                                <input
+                                    type="text"
+                                    name="config-input-email"
+                                    placeholder="laura@example.com"
+                                    disabled={!isEmailEditable}
+                                />
+                                <button onClick={handleEditEmail}><FaEdit /></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="configForm-row">
                         <div className="configForm-item">
                             <label>
                                 Contraseña
