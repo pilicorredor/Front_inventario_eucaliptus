@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../Header/Header.jsx";
 import userImg from "../Assets/person-circle.png";
 import "./ConfigPanel.css";
 import { FaEdit } from "react-icons/fa";
 
 const Config = () => {
+    const [isNameEditable, setIsNameEditable] = useState(false);
+    const [isEmailEditable, setIsEmailEditable] = useState(false);
+    const [isUsernameEditable, setIsUsernameEditable] = useState(false);
+
+    const handleEditName = () => setIsNameEditable(!isNameEditable);
+    const handleEditEmail = () => setIsEmailEditable(!isEmailEditable);
+    const handleEditUsername = () => setIsUsernameEditable(!isUsernameEditable);
+
     return (
         <div className="config">
             <Header pageTitle="Configuración" />
@@ -28,8 +36,9 @@ const Config = () => {
                                     type="text"
                                     name="config-input-name"
                                     placeholder="Laura Carreño"
+                                    disabled={!isNameEditable}
                                 />
-                                <button><FaEdit /></button>
+                                <button onClick={handleEditName}><FaEdit /></button>
                             </div>
                         </div>
                         <div className="configForm-item">
@@ -41,8 +50,9 @@ const Config = () => {
                                     type="text"
                                     name="config-input-email"
                                     placeholder="laura@example.com"
+                                    disabled={!isEmailEditable}
                                 />
-                                <button><FaEdit /></button>
+                                <button onClick={handleEditEmail}><FaEdit /></button>
                             </div>
                         </div>
                     </div>
@@ -56,8 +66,9 @@ const Config = () => {
                                     type="text"
                                     name="config-input-username"
                                     placeholder="LauraCarreño"
+                                    disabled={!isUsernameEditable}
                                 />
-                                <button><FaEdit /></button>
+                                <button onClick={handleEditUsername}><FaEdit /></button>
                             </div>
 
                         </div>
@@ -70,8 +81,8 @@ const Config = () => {
                                     type="text"
                                     name="config-input-password"
                                     placeholder="**********"
+                                    disabled={true}
                                 />
-                                <button><FaEdit /></button>
                             </div>
                             <a href="#">Actualizar contraseña</a>
                         </div>
