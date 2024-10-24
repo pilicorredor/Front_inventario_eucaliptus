@@ -27,7 +27,7 @@ const Config = () => {
                 <p className="config-p">Actualiza la información de tu perfil en el momento que lo necesites,
                     cuando estes satisfecho con tus cambios dale click al botón de “Guardar Cambios” y listo!
                 </p>
-                <div className="config-form">
+                <form className="config-form">
                     <div className="configForm-row">
                         <div className="configForm-item">
                             <label>
@@ -102,10 +102,10 @@ const Config = () => {
                                     disabled={true}
                                 />
                             </div>
-                            <a href="#">Actualizar contraseña</a>
+                            <a href="/config/send-email-password">Actualizar contraseña</a>
                         </div>
                     </div>
-                </div>
+                </form>
                 <div className="config-button-container">
                     <button className="confing-submit-btn" type="config-submit">Guardar Cambios</button>
                 </div>

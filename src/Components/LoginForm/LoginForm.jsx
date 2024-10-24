@@ -98,7 +98,7 @@ const LoginForm = ({ handleLogin }) => {
               <input type="checkbox" />
               Recuerdame
             </label>
-            <a href="#">¿Olvidaste tu contraseña?</a>
+            <a href="/config/send-email-password">¿Olvidaste tu contraseña?</a>
           </div>
           <div className="button-container">
             <button type="submit">Entrar</button>

@@ -10,6 +10,10 @@ import Products from './Components/Products/Products';
 import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
 import ModifySeller from './Components/ModifySeller/ModifySellerPage';
 import Config from './Components/ConfigPanel/ConfigPanel';
+import SendEmailPassword from './Components/ChangePassword/SendEmailPassword';
+import CheckPswdToken from './Components/ChangePassword/CheckPswdToken';
+import UpdatePassword from './Components/ChangePassword/UpdatePassword';
+
 
 function App() {
     const [login, setLogin] = useState(localStorage.getItem('login'));
@@ -36,6 +40,9 @@ function App() {
                 {/* <Route path='/' element={<HomePage />} /> */}
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/config' element={<Config />} />
+                <Route path='/config/send-email-password' element={<SendEmailPassword />} />
+                <Route path='/config/check-token-password' element={<CheckPswdToken />} />
+                <Route path='/config/update-password' element={<UpdatePassword />} />
                 <Route path='/personal*' element={<Personal />} />
                 <Route path="/registrar-vendedor" element={<RegisterSeller />} />
                 <Route path="/registrar-proveedor" element={<RegisterProvider />} />
