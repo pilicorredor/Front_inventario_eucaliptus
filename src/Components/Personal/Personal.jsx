@@ -5,6 +5,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import "./Personal.css";
 import Header from "../Header/Header.jsx";
 import { SERVICES, ENTITIES } from "../../Constants/Constants";
+import Dropdown from "../Dropdown/Dropdown.jsx";
+import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 
 const Personal = () => {
   const navigate = useNavigate();
@@ -12,6 +14,42 @@ const Personal = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [providersData, setProvidersData] = useState([]);
   const [sellersData, setSellersData] = useState([]);
+  const [buttonText, setButtonText] = useState('Buscar por...');
+  const [selectedFilter, setSelectedFilter] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+
+
+  const columnsProviders = [
+    "name",
+    "addressCompany",
+    "email",
+    "phoneNumber",
+    "companyName",
+    "banckAccount",
+  ];
+
+  const columnsSellers = [
+    "name",
+    "homeAddress",
+    "email",
+    "phoneNumber",
+  ];
+
+  const providerItems = [
+    "Nombre",
+    "Dirección Empresarial",
+    "Correo Electrónico",
+    "Número de Teléfono",
+    "Nombre de la Empresa",
+    "Cuenta Bancaria",
+  ];
+
+  const sellerItems = [
+    "Nombre",
+    "Dirección de domicilio",
+    "Correo Electrónico",
+    "Número de Teléfono",
+  ];
 
   useEffect(() => {
     if (role === "vendedor") {
@@ -91,36 +129,37 @@ const Personal = () => {
     }
   };
 
-  const columnsProviders = [
-    "name",
-    "addressCompany",
-    "email",
-    "phoneNumber",
-    "companyName",
-    "banckAccount",
-  ];
-
-  const columnsSellers = [
-    "name",
-    "homeAddress",
-    "email",
-    "phoneNumber",
-  ];
-
   const handleRoleChange = (selectedRole) => {
     setRole(selectedRole);
     navigate(`/personal/${selectedRole}`);
   };
 
   const handleSearch = () => {
-    console.log("Buscar:", searchQuery);
+    //TODO
+    if (!selectedFilter || !searchQuery) {
+      alert('Por favor, selecciona un criterio de búsqueda y escribe algo en la barra de búsqueda.');
+      return;
+    }
+
+    // Aquí es donde implementarías la lógica de búsqueda según selectedFilter y searchQuery
+    const dataToFilter = role === ENTITIES.PROVEEDOR ? providersData : sellersData;
+
+    if (dataToFilter === ENTITIES.PROVEEDOR) {
+      
+    }
+    setFilteredData(filtered);
   };
 
   const handleNew = () => {
     navigate(`/registrar-${role}`);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => { };
+
+  const handleFilterSelection = (selectedItem) => {
+    setSelectedFilter(selectedItem);
+    setButtonText(selectedItem);
+  };
 
   return (
     <div className="personal">
@@ -143,6 +182,18 @@ const Personal = () => {
 
         <div className="search-bar">
           <div className="search-container">
+            <Dropdown buttonText={buttonText} content={
+              role === "proveedor" ? <> {
+                providerItems.map(
+                  item =>
+                    <DropdownItem key={item} onClick={() => handleFilterSelection(item)}>
+                      {`${item}`}
+                    </DropdownItem>)} </> :
+                <> {sellerItems.map(
+                  item =>
+                    <DropdownItem key={item} onClick={() => handleFilterSelection(item)}>
+                      {`${item}`}
+                    </DropdownItem>)} </>} />
             <input
               type="text"
               placeholder="Ingresa tu búsqueda"
