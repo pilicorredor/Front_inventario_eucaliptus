@@ -14,7 +14,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CustomModal from "../../Modales/CustomModal";
 import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";
 
-const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
+const CustomTable = ({
+  data,
+  customColumns,
+  role,
+  handleUpdateData,
+  context,
+}) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const navigate = useNavigate();
@@ -48,6 +54,10 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
     navigate(`/modificar/${role}/${id}`);
   };
 
+  const handleSelect = (id) => {
+    navigate(`/productos/registrar/${id}`);
+  };
+
   const columnNamesLabels = {
     name: "Nombre",
     addressCompany: "Dirección Empresarial",
@@ -56,13 +66,18 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
     phoneNumber: "Número de Teléfono",
     companyName: "Nombre de la Empresa",
     banckAccount: "Cuenta Bancaria",
+    nameProduct: "Nombre",
+    brand: "Marca",
+    category: "Categoría",
+    use: "Uso",
+    provider: "Proveedor",
     //Poner despues las columnas de productos
   };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", margin: "auto" }}>
       <div style={{ display: "flex", flexDirection: "column", height: "80%" }}>
-        <TableContainer sx={{ maxHeight: 300 }}>
+        <TableContainer sx={{ maxHeight: 250 }}>
           <Table
             stickyHeader
             aria-label="sticky table"
@@ -128,27 +143,43 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
                         padding: "10px",
                       }}
                     >
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => handleEdit(row.id_modify)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() =>
-                          handleModalOpen({
-                            selectedEntity:
-                              role === "proveedor"
-                                ? ENTITIES.PROVEEDOR
-                                : ENTITIES.VENDEDOR,
-                            selectedAction: BUTTONS_ACTIONS.ELIMINAR,
-                            id: row.id_modify,
-                          })
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {context === "registerProd" ? (
+                        <button
+                          onClick={() => handleSelect(row.id_modify)}
+                          style={{
+                            backgroundColor: "#227e3c",
+                            color: "white",
+                            padding: "8px 16px",
+                            borderRadius: "8px",
+                            border: "none",
+                            cursor: "pointer",
+                            fontSize: "16px",
+                          }}
+                        >
+                          Seleccionar
+                        </button>
+                      ) : (
+                        <>
+                          <IconButton
+                            aria-label="edit"
+                            onClick={() => handleEdit(row.id_modify)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() =>
+                              handleModalOpen({
+                                selectedEntity: role,
+                                selectedAction: BUTTONS_ACTIONS.ELIMINAR,
+                                id: row.id_modify,
+                              })
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
