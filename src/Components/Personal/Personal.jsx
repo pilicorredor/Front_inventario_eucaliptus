@@ -165,7 +165,7 @@ const Personal = () => {
             <CustomTable
               data={providersData}
               customColumns={columnsProviders}
-              role={role}
+              role={ENTITIES.PROVEEDOR}
               onDelete={handleDelete}
               handleUpdateData={handleUpdateData}
             />
@@ -174,7 +174,7 @@ const Personal = () => {
             <CustomTable
               data={sellersData}
               customColumns={columnsSellers}
-              role={role}
+              role={ENTITIES.VENDEDOR}
               onDelete={handleDelete}
               handleUpdateData={handleUpdateData}
             />

@@ -1,26 +1,114 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Products.css";
 import Header from "../Header/Header.jsx";
+import {
+  SERVICES,
+  CATEGORY_PRODUCT,
+  ENTITIES,
+} from "../../Constants/Constants";
 
 const Products = () => {
   const navigate = useNavigate();
+  const [categoryProd, setCategoryProd] = useState(
+    CATEGORY_PRODUCT.ALL_PRODUCTS
+  );
+  const [productsData, setProductsData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [category, setCategory] = useState("todos");
+  const [selectedUse, setSelectedUse] = useState("Todos");
 
-  const handleRoleChange = (selectedCategory) => {
-    setCategory(selectedCategory);
-    navigate(`/products/${selectedCategory}`);
+  const productsList = [
+    {
+      nameProduct: "Suplemento con Ganoderma",
+      brand: "DXN",
+      category: "No Perecedero",
+      use: "Suplementos",
+      provider: "Proveedor A",
+    },
+    {
+      nameProduct: "Spirulina",
+      brand: "Naturela",
+      category: "No Perecedero",
+      use: "Otro",
+      provider: "Proveedor B",
+    },
+    {
+      nameProduct: "Cacao Latte Con Maca",
+      brand: "NatuYerb",
+      category: "Perecedero",
+      use: "Especias",
+      provider: "Proveedor C",
+    },
+    {
+      nameProduct: "Jabon de menta con extracto de avena puramente",
+      brand: "Puramente",
+      category: "No Perecedero",
+      use: "Cuidado Personal",
+      provider: "Proveedor D",
+    },
+  ];
+
+  const availableUses = [
+    "Todos",
+    "Suplementos",
+    "Homeopáticos",
+    "Fitoterapéuticos",
+    "Especias",
+    "Esotéricos",
+    "Cuidado Personal",
+    "Otro",
+  ];
+
+  useEffect(() => {
+    handleUpdateData(categoryProd, selectedUse);
+  }, [categoryProd, selectedUse]);
+
+  const handleCategoryChange = (selectedCategory) => {
+    setCategoryProd(selectedCategory);
   };
+
+  const handleUseChange = (event) => {
+    setSelectedUse(event.target.value);
+  };
+
+  const columsProducts = [
+    "nameProduct",
+    "brand",
+    "category",
+    "use",
+    "provider",
+  ];
 
   const handleSearch = () => {
     console.log("Buscar:", searchQuery);
   };
 
   const handleNew = () => {
-    navigate(`/registrarProducto-${category}`);
+    navigate(`/productos/escoger-proveedor`);
+  };
+
+  const handleUpdateData = (categoryProd, selectedUse) => {
+    let filteredProducts = productsList;
+
+    if (categoryProd !== CATEGORY_PRODUCT.ALL_PRODUCTS) {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          (categoryProd === CATEGORY_PRODUCT.PERISHABLE &&
+            product.category === "Perecedero") ||
+          (categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE &&
+            product.category === "No Perecedero")
+      );
+    }
+
+    if (selectedUse !== "Todos") {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.use === selectedUse
+      );
+    }
+
+    setProductsData(filteredProducts);
   };
 
   return (
@@ -29,20 +117,28 @@ const Products = () => {
       <div>
         <div className="products-header">
           <button
-            onClick={() => handleRoleChange("todos")}
-            className={category === "todos" ? "selected" : ""}
+            onClick={() => handleCategoryChange(CATEGORY_PRODUCT.ALL_PRODUCTS)}
+            className={
+              categoryProd === CATEGORY_PRODUCT.ALL_PRODUCTS ? "selected" : ""
+            }
           >
             Todos
           </button>
           <button
-            onClick={() => handleRoleChange("perecederos")}
-            className={category === "perecederos" ? "selected" : ""}
+            onClick={() => handleCategoryChange(CATEGORY_PRODUCT.PERISHABLE)}
+            className={
+              categoryProd === CATEGORY_PRODUCT.PERISHABLE ? "selected" : ""
+            }
           >
             Perecederos
           </button>
           <button
-            onClick={() => handleRoleChange("noPerecederos")}
-            className={category === "noPerecederos" ? "selected" : ""}
+            onClick={() =>
+              handleCategoryChange(CATEGORY_PRODUCT.NON_PERISHABLE)
+            }
+            className={
+              categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE ? "selected" : ""
+            }
           >
             No Perecederos
           </button>
@@ -65,6 +161,27 @@ const Products = () => {
           <button className="btn new-btn" onClick={handleNew}>
             Nuevo
           </button>
+        </div>
+
+        {/* Nuevo filtro por uso */}
+        <div className="filter-use">
+          <label>Filtrar por Uso: </label>
+          <select id="useFilter" value={selectedUse} onChange={handleUseChange}>
+            {availableUses.map((use) => (
+              <option key={use} value={use}>
+                {use}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="products-content">
+          <CustomTable
+            data={productsData}
+            customColumns={columsProducts}
+            handleUpdateData={handleUpdateData}
+            role={ENTITIES.PRODUCTO}
+          />
         </div>
       </div>
     </div>

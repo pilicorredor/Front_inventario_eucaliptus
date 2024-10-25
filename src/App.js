@@ -7,6 +7,8 @@ import Navbar from './Components/SideNavbar/Navbar';
 import RegisterSeller from './Components/RegisterSeller/RegisterSellerPage';
 import RegisterProvider from './Components/RegisterProvider/RegisterProviderPage';
 import Products from './Components/Products/Products';
+import ChooseProvider from './Components/RegisterProducts/ChooseProvider';
+import RegisterProduct from './Components/RegisterProducts/FormRegisterProduct';
 import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
 import ModifySeller from './Components/ModifySeller/ModifySellerPage';
 import Config from './Components/ConfigPanel/ConfigPanel';
@@ -51,6 +53,8 @@ const AppContent = () => {
                 <Route path="/modificar/proveedor/:id" element={<ModifyProvider />} />
                 <Route path="/modificar/vendedor/:id" element={<ModifySeller />} />
                 <Route path='/productos*' element={<Products />} />
+                <Route path='/productos/escoger-proveedor' element={<ChooseProvider />} />
+                <Route path="/productos/registrar/:id" element={<RegisterProduct />} />
             </Routes>
         </>
     );

@@ -4,18 +4,25 @@ import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "./Navbar.css";
 import userImg from "../Assets/person-circle.png";
+import { ROLES } from "../../Constants/Constants";
 
 const Navbar = ({ username, role, handleLogout }) => {
+  const [roleName, setRoleName] = useState("Rol no asignado");
+
+  useEffect(() => {
+    if (role === ROLES.ADMIN) {
+      setRoleName("Administrador");
+    } else {
+      setRoleName("Vendedor");
+    }
+  }, [role]);
+
   return (
     <div className="sidebar">
-      <img
-        src={userImg}
-        alt="Profile"
-        className="profile-image"
-      />
+      <img src={userImg} alt="Profile" className="profile-image" />
       <div className="user-profile">
         <h4 className="username">{username || "Usuario"}</h4>
-        <div className="user-role">{role || "Rol no asignado"}</div>
+        <div className="user-role">{roleName}</div>
       </div>
       <hr className="divider" />
       <ul className="nav-menu-items">

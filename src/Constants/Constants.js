@@ -47,3 +47,9 @@ export const DOCUMENT_TYPE = {
     IMMIGRATION_CARD: 'CE',
     PASSPORT: 'PASS',
 }
+
+export const CATEGORY_PRODUCT = {
+    PERISHABLE: 'Perecedero',
+    NON_PERISHABLE: 'No Perecedero',
+    ALL_PRODUCTS: 'Todos',
+}
