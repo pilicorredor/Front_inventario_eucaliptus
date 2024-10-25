@@ -10,6 +10,7 @@ import {
   ROLES,
   PERSON_TYPE,
   SERVICES,
+  DOCUMENT_TYPE,
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -17,6 +18,11 @@ const RegisterProvider = ({ providerData }) => {
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [entity, setEntity] = useState("proveedor");
+  const [action, setAction] = useState("registrar");
+  const [legalPerson, setLegalPerson] = useState(false);
   const [providerSend, setProviderSend] = useState({
     personDTO: {
       idPerson: "",
@@ -24,6 +30,7 @@ const RegisterProvider = ({ providerData }) => {
       lastName: "",
       email: "",
       phoneNumber: "",
+      documentType: DOCUMENT_TYPE.CEDULA,
       role: ROLES.PROVIDER,
     },
     personType: PERSON_TYPE.NATURAL,
@@ -37,12 +44,14 @@ const RegisterProvider = ({ providerData }) => {
       bankAccountNumber: "",
     },
   });
+
   const [provider, setProvider] = useState({
     idPerson: "",
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
+    documentType: DOCUMENT_TYPE.CEDULA,
     personType: PERSON_TYPE.NATURAL,
     nit: "",
     companyName: "",
@@ -52,11 +61,6 @@ const RegisterProvider = ({ providerData }) => {
     bankName: "",
     bankAccountNumber: "",
   });
-
-  const [update, setUpdate] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [entity, setEntity] = useState("proveedor");
-  const [action, setAction] = useState("registrar");
 
   // Abrir el modal con la entidad y acción correspondientes
   const handleModalOpen = ({ selectedEntity, selectedAction }) => {
@@ -73,6 +77,7 @@ const RegisterProvider = ({ providerData }) => {
       lastName: "",
       email: "",
       phoneNumber: "",
+      documentType: DOCUMENT_TYPE.CEDULA,
       personType: PERSON_TYPE.NATURAL,
       nit: "",
       companyName: "",
@@ -84,7 +89,6 @@ const RegisterProvider = ({ providerData }) => {
     });
     setOpenModal(false);
     setSend(false);
-    // Redirigir solo después de cerrar el modal
     navigate("/personal");
   };
 
@@ -96,24 +100,17 @@ const RegisterProvider = ({ providerData }) => {
     }
   }, [providerData]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProvider((prevProvider) => ({
-      ...prevProvider,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setProviderSend({
       personDTO: {
-        idPerson: provider.nit,
+        idPerson: provider.idPerson,
         firstName: provider.firstName,
         lastName: provider.lastName,
         email: provider.email,
         phoneNumber: provider.phoneNumber,
+        documentType: provider.documentType,
         role: ROLES.PROVIDER,
       },
       personType: provider.personType,
@@ -130,14 +127,6 @@ const RegisterProvider = ({ providerData }) => {
 
     setSend(true);
     setLoading(true);
-
-    // Abrir el modal después de intentar registrar o modificar
-    // handleModalOpen({
-    //   selectedEntity: ENTITIES.PROVEEDOR,
-    //   selectedAction: update
-    //     ? BUTTONS_ACTIONS.MODIFICAR
-    //     : BUTTONS_ACTIONS.REGISTRAR,
-    // });
   };
 
   useEffect(() => {
@@ -160,7 +149,6 @@ const RegisterProvider = ({ providerData }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.PROVEEDOR,
           selectedAction: update
@@ -168,7 +156,6 @@ const RegisterProvider = ({ providerData }) => {
             : BUTTONS_ACTIONS.REGISTRAR,
           success: true,
         });
-        console.log("Proveedor registrado exitosamente:", data);
         setLoading(false);
         setSend(false);
       } else {
@@ -189,12 +176,74 @@ const RegisterProvider = ({ providerData }) => {
       setLoading(false);
       setSend(false);
     }
-    console.log(JSON.stringify(providerSend, null, 2));
+  };
+
+  useEffect(() => {
+    if (provider.personType === PERSON_TYPE.LEGAL) {
+      setLegalPerson(true);
+    }
+    if (provider.personType === PERSON_TYPE.NATURAL) {
+      setLegalPerson(false);
+    }
+  }, [provider.personType]);
+
+  //Validaciones
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    if (
+      name === "phoneNumber" ||
+      name === "idPerson" ||
+      name === "nit" ||
+      name === "bankAccountNumber" ||
+      name === "companyPhoneNumber"
+    ) {
+      const numericValue = validateNumericInput(value);
+
+      setProvider((prevProvider) => ({
+        ...prevProvider,
+        [name]: numericValue,
+      }));
+    } else {
+      setProvider((prevProvider) => ({
+        ...prevProvider,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
   };
 
   return (
     <div className="provider-section-container">
-      <Header pageTitle="Personal" />
+      <Header pageTitle="Personal - Proveedor" />
       <div className="provider-section">
         {loading && (
           <div className="page-loading-container">
@@ -210,7 +259,9 @@ const RegisterProvider = ({ providerData }) => {
         )}
         <form className="providerForm" onSubmit={handleSubmit}>
           <div className="providerForm-section">
-            <h3 className="providerForm-title">Información básica</h3>
+            <h3 className="providerForm-title">
+              Información del representante legal
+            </h3>
             <div className="providerForm-row">
               <div className="providerForm-item">
                 <label>
@@ -221,6 +272,7 @@ const RegisterProvider = ({ providerData }) => {
                   name="firstName"
                   value={provider.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -233,6 +285,7 @@ const RegisterProvider = ({ providerData }) => {
                   name="lastName"
                   value={provider.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -243,6 +296,7 @@ const RegisterProvider = ({ providerData }) => {
                 <input
                   type="email"
                   name="email"
+                  placeholder="usuario@example.com"
                   value={provider.email}
                   onChange={handleInputChange}
                 />
@@ -252,11 +306,53 @@ const RegisterProvider = ({ providerData }) => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="phoneNumber"
                   value={provider.phoneNumber}
                   onChange={handleInputChange}
+                  minLength="8"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
+                />
+              </div>
+            </div>
+
+            <div className="providerForm-row">
+              <div className="providerForm-item">
+                <label>
+                  Tipo de documento <span className="red">*</span>
+                </label>
+                <select
+                  name="documentType"
+                  value={provider.documentType}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value={DOCUMENT_TYPE.CEDULA}>
+                    Cédula de Ciudadanía
+                  </option>
+                  <option value={DOCUMENT_TYPE.IMMIGRATION_CARD}>
+                    Cédula de Extranjería
+                  </option>
+                  <option value={DOCUMENT_TYPE.PASSPORT}>Pasaporte</option>
+                </select>
+              </div>
+              <div className="providerForm-item">
+                <label>
+                  Número de documento <span className="red">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="idPerson"
+                  value={provider.idPerson}
+                  onChange={handleInputChange}
+                  minLength="7"
+                  maxLength="10"
+                  required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -264,7 +360,7 @@ const RegisterProvider = ({ providerData }) => {
 
           {/* Información adicional */}
           <div className="providerForm-section">
-            <h3 className="providerForm-title">Información del proveedor</h3>
+            <h3 className="providerForm-title">Información legal</h3>
             <div className="providerForm-row">
               <div className="providerForm-item">
                 <label>
@@ -286,65 +382,84 @@ const RegisterProvider = ({ providerData }) => {
                   <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="nit"
                   value={provider.nit}
                   onChange={handleInputChange}
+                  minLength="9"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
+            {legalPerson && (
+              <div className="companyFrom-container">
+                <div className="providerForm-row">
+                  <div className="providerForm-item">
+                    <label>
+                      Empresa <span className="red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={provider.companyName}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="providerForm-item">
+                    <label>Teléfono de la empresa</label>
+                    <input
+                      type="text"
+                      name="companyPhoneNumber"
+                      value={provider.companyPhoneNumber}
+                      onChange={handleInputChange}
+                      minLength="8"
+                      maxLength="10"
+                      onInvalid={handleValidation}
+                      onInput={handleInputReset}
+                    />
+                  </div>
+                </div>
+                <div className="providerForm-row">
+                  <div className="providerForm-item">
+                    <label>Correo electrónico de la empresa</label>
+                    <input
+                      type="email"
+                      name="companyEmail"
+                      placeholder="usuario@example.com"
+                      value={provider.companyEmail}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="providerForm-item">
+                    <label>
+                      Dirección de la empresa <span className="red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyAddress"
+                      value={provider.companyAddress}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Empresa</label>
-                <input
-                  type="text"
-                  name="companyName"
-                  value={provider.companyName}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="providerForm-item">
-                <label>Teléfono de la empresa</label>
-                <input
-                  type="text"
-                  name="companyPhoneNumber"
-                  value={provider.companyPhoneNumber}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Correo electrónico de la empresa</label>
-                <input
-                  type="email"
-                  name="companyEmail"
-                  value={provider.companyEmail}
-                  onChange={handleInputChange}
-                />
-              </div>
               <div className="providerForm-item">
                 <label>
-                  Dirección de la empresa <span className="red">*</span>
+                  Nombre del banco <span className="red">*</span>
                 </label>
-                <input
-                  type="text"
-                  name="companyAddress"
-                  value={provider.companyAddress}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </div>
-            <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Nombre del banco</label>
                 <input
                   type="text"
                   name="bankName"
                   value={provider.bankName}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="providerForm-item">
@@ -352,11 +467,15 @@ const RegisterProvider = ({ providerData }) => {
                   Número de cuenta <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="bankAccountNumber"
                   value={provider.bankAccountNumber}
                   onChange={handleInputChange}
+                  minLength="10"
+                  maxLength="20"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -376,7 +495,7 @@ const RegisterProvider = ({ providerData }) => {
             entity={entity}
             action={action}
             openModal={openModal}
-            onClose={handleModalClose} // Cierra el modal y redirige
+            onClose={handleModalClose}
           />
         </form>
       </div>

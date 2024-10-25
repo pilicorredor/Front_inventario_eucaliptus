@@ -24,22 +24,21 @@ const RegisterSeller = ({ sellerData }) => {
       lastName: "",
       email: "",
       phoneNumber: "",
+      documentType: DOCUMENT_TYPE.CEDULA,
       role: ROLES.SELLER,
     },
-    documentType: DOCUMENT_TYPE.CEDULA,
-    documentNumber: "",
     username: "",
     password: "",
     homeAddress: "",
   });
 
   const [seller, setSeller] = useState({
+    idPerson: "",
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
     documentType: DOCUMENT_TYPE.CEDULA,
-    documentNumber: "",
     username: "",
     password: "",
     homeAddress: "",
@@ -58,27 +57,18 @@ const RegisterSeller = ({ sellerData }) => {
     }
   }, [sellerData]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSeller((prevSeller) => ({
-      ...prevSeller,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSellerSend({
       personDTO: {
-        idPerson: seller.documentNumber, // Asignar el número de documento como idPerson
+        idPerson: seller.idPerson,
         firstName: seller.firstName,
         lastName: seller.lastName,
         email: seller.email,
         phoneNumber: seller.phoneNumber,
+        documentType: seller.documentType,
         role: ROLES.SELLER,
       },
-      documentType: seller.documentType,
-      documentNumber: seller.documentNumber,
       username: seller.username,
       password: seller.password,
       homeAddress: seller.homeAddress,
@@ -108,7 +98,6 @@ const RegisterSeller = ({ sellerData }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.VENDEDOR,
           selectedAction: update
@@ -116,7 +105,6 @@ const RegisterSeller = ({ sellerData }) => {
             : BUTTONS_ACTIONS.REGISTRAR,
           success: true,
         });
-        console.log("Vendedor registrado exitosamente:", data);
         setLoading(false);
         setSend(false);
       } else {
@@ -154,14 +142,13 @@ const RegisterSeller = ({ sellerData }) => {
   };
 
   const handleModalClose = () => {
-    //Limpiar el formulario
     setSeller({
+      idPerson: "",
       firstName: "",
       lastName: "",
       email: "",
       phoneNumber: "",
       documentType: DOCUMENT_TYPE.CEDULA,
-      documentNumber: "",
       username: "",
       password: "",
       homeAddress: "",
@@ -171,9 +158,57 @@ const RegisterSeller = ({ sellerData }) => {
     navigate("/personal");
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    if (name === "phoneNumber" || name === "idPerson") {
+      const numericValue = validateNumericInput(value);
+
+      setSeller((prevSeller) => ({
+        ...prevSeller,
+        [name]: numericValue,
+      }));
+    } else {
+      const { name, value } = e.target;
+      setSeller((prevSeller) => ({
+        ...prevSeller,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
+  };
+
   return (
     <div className="seller-section-container">
-      <Header pageTitle="Personal" />
+      <Header pageTitle="Personal - Vendedor" />
       <div className="seller-section">
         {loading && (
           <div className="page-loading-container">
@@ -198,6 +233,7 @@ const RegisterSeller = ({ sellerData }) => {
                   name="firstName"
                   value={seller.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -210,6 +246,7 @@ const RegisterSeller = ({ sellerData }) => {
                   name="lastName"
                   value={seller.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -220,6 +257,7 @@ const RegisterSeller = ({ sellerData }) => {
                 <input
                   type="email"
                   name="email"
+                  placeholder="usuario@example.com"
                   value={seller.email}
                   onChange={handleInputChange}
                 />
@@ -229,18 +267,18 @@ const RegisterSeller = ({ sellerData }) => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="phoneNumber"
                   value={seller.phoneNumber}
                   onChange={handleInputChange}
+                  minLength="8"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
-          </div>
-
-          <div className="sellerForm-section">
-            <h3 className="sellerForm-title">Información del Vendedor</h3>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
@@ -266,14 +304,23 @@ const RegisterSeller = ({ sellerData }) => {
                   Número de documento <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
-                  name="documentNumber"
-                  value={seller.documentNumber}
+                  type="text"
+                  name="idPerson"
+                  value={seller.idPerson}
                   onChange={handleInputChange}
+                  minLength="7"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
+          </div>
+
+          <div className="sellerForm-section">
+            <h3 className="sellerForm-title">Información del Vendedor</h3>
+
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
@@ -303,7 +350,7 @@ const RegisterSeller = ({ sellerData }) => {
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
-                  Dirección <span className="red">*</span>
+                  Dirección de residencia <span className="red">*</span>
                 </label>
                 <input
                   type="text"

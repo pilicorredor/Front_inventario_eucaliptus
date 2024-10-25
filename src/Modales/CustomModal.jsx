@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import "./CustomModal.css";
-import { MODAL_TYPES, BUTTONS_ACTIONS, SERVICES } from "../Constants/Constants";
+import {
+  MODAL_TYPES,
+  BUTTONS_ACTIONS,
+  SERVICES,
+  ENTITIES,
+} from "../Constants/Constants";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
@@ -58,15 +63,19 @@ const CustomModal = ({
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
+  useEffect(() => {
+    if (entity === ENTITIES.PROVEEDOR) {
+      setUrl(`${SERVICES.DELETE_PROVIDER_SERVICE}/${id}`);
+    } else if (entity === ENTITIES.VENDEDOR) {
+      setUrl(`${SERVICES.DELETE_SELLER_SERVICE}/${id}`);
+    }
+  }, [id]);
+
+
   const handleService = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      if (entity === "proveedor") {
-        setUrl(`${SERVICES.DELETE_PROVIDER_SERVICE}/${id}`);
-      } else {
-        setUrl(`${SERVICES.DELETE_SELLER_SERVICE}/${id}`);
-      }
       const response = await fetch(url, {
         method: "DELETE",
         headers: {

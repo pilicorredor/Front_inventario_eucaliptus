@@ -75,24 +75,6 @@ const ModifySeller = () => {
     fetchSellerById();
   }, [id]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name in sellerSend.personDTO) {
-      setSellerSend((prevSeller) => ({
-        ...prevSeller,
-        personDTO: {
-          ...prevSeller.personDTO,
-          [name]: value,
-        },
-      }));
-    } else {
-      setSellerSend((prevSeller) => ({
-        ...prevSeller,
-        [name]: value,
-      }));
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSend(true);
@@ -127,7 +109,6 @@ const ModifySeller = () => {
           selectedAction: BUTTONS_ACTIONS.MODIFICAR,
           success: true,
         });
-        console.log("Vendedor modificado exitosamente:", data);
         setLoading(false);
       } else {
         const errorData = await response.json();
@@ -160,6 +141,62 @@ const ModifySeller = () => {
     navigate("/personal");
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    const isNumericField = name === "phoneNumber";
+    const newValue = isNumericField ? validateNumericInput(value) : value;
+
+    if (name in sellerSend.personDTO) {
+      setSellerSend((prevSeller) => ({
+        ...prevSeller,
+        personDTO: {
+          ...prevSeller.personDTO,
+          [name]: newValue,
+        },
+      }));
+    } else {
+      setSellerSend((prevSeller) => ({
+        ...prevSeller,
+        [name]: newValue,
+      }));
+    }
+
+    setSellerSend((prevSeller) => ({
+      ...prevSeller,
+      [name]: newValue,
+    }));
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
+  };
+
   return (
     <div className="seller-section-container">
       <Header pageTitle="Personal" />
@@ -187,6 +224,7 @@ const ModifySeller = () => {
                   name="firstName"
                   value={sellerSend.personDTO.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -199,6 +237,7 @@ const ModifySeller = () => {
                   name="lastName"
                   value={sellerSend.personDTO.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -218,19 +257,18 @@ const ModifySeller = () => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="phoneNumber"
                   value={sellerSend.personDTO.phoneNumber}
                   onChange={handleInputChange}
+                  minLength="8"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
-          </div>
-
-          {/* Información adicional */}
-          <div className="sellerForm-section">
-            <h3 className="sellerForm-title">Información del proveedor</h3>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>
@@ -238,12 +276,12 @@ const ModifySeller = () => {
                 </label>
                 <select
                   name="documentType"
-                  value={sellerSend.documentType}
+                  value={sellerSend.personDTO.documentType}
                   onChange={handleInputChange}
                   required
                   disabled
                 >
-                  <option>{sellerSend.documentType}</option>
+                  <option>{sellerSend.personDTO.documentType}</option>
                 </select>
               </div>
               <div className="sellerForm-item">
@@ -251,7 +289,7 @@ const ModifySeller = () => {
                   Número de documento <span className="red">*</span>
                 </label>
                 <input
-                  type="number" //arreglar esto--------------------------------------------------------------!!!!!!
+                  type="text"
                   name="idPerson"
                   value={sellerSend.personDTO.idPerson}
                   onChange={handleInputChange}
@@ -260,6 +298,11 @@ const ModifySeller = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Información adicional */}
+          <div className="sellerForm-section">
+            <h3 className="sellerForm-title">Información del proveedor</h3>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
                 <label>

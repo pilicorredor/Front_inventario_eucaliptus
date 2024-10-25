@@ -91,3 +91,9 @@
   z-index: -1;
   opacity: 0.2;
 }
+
+.companyFrom-container {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}

@@ -106,3 +106,9 @@
   height: 70px !important;
   z-index: 1000;
 }
+
+.companyFrom-container {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}

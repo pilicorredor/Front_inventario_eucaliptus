@@ -31,7 +31,6 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
   };
 
   const handleModalClose = () => {
-    //Acá se llamaría el servicio de eliminar
     handleUpdateData(role);
     setOpenModal(false);
   };
@@ -47,6 +46,17 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
 
   const handleEdit = (id) => {
     navigate(`/modificar/${role}/${id}`);
+  };
+
+  const columnNamesLabels = {
+    name: "Nombre",
+    addressCompany: "Dirección Empresarial",
+    homeAddress: "Dirección de domicilio",
+    email: "Correo Electrónico",
+    phoneNumber: "Número de Teléfono",
+    companyName: "Nombre de la Empresa",
+    banckAccount: "Cuenta Bancaria",
+    //Poner despues las columnas de productos
   };
 
   return (
@@ -77,7 +87,7 @@ const CustomTable = ({ data, customColumns, role, handleUpdateData }) => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {column}
+                    {columnNamesLabels[column]}
                   </TableCell>
                 ))}
                 <TableCell

@@ -10,6 +10,7 @@ import {
   ROLES,
   PERSON_TYPE,
   SERVICES,
+  DOCUMENT_TYPE,
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -22,6 +23,7 @@ const ModifyProvider = () => {
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("modificar");
   const [loading, setLoading] = useState(false);
+  const [legalPerson, setLegalPerson] = useState(false);
 
   const [providerSend, setProviderSend] = useState({
     personDTO: {
@@ -80,34 +82,6 @@ const ModifyProvider = () => {
     fetchProviderById();
   }, [id]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Verifica si el campo pertenece a personDTO o companyDTO
-    if (name in providerSend.personDTO) {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        personDTO: {
-          ...prevProvider.personDTO,
-          [name]: value,
-        },
-      }));
-    } else if (name in providerSend.companyDTO) {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        companyDTO: {
-          ...prevProvider.companyDTO,
-          [name]: value,
-        },
-      }));
-    } else {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        [name]: value,
-      }));
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSend(true);
@@ -142,7 +116,6 @@ const ModifyProvider = () => {
           selectedAction: BUTTONS_ACTIONS.MODIFICAR,
           success: true,
         });
-        console.log("Proveedor modificado exitosamente:", data);
         setLoading(false);
       } else {
         const errorData = await response.json();
@@ -174,9 +147,81 @@ const ModifyProvider = () => {
     navigate("/personal");
   };
 
+  useEffect(() => {
+    if (providerSend.personType === PERSON_TYPE.LEGAL) {
+      setLegalPerson(true);
+    }
+    if (providerSend.personType === PERSON_TYPE.NATURAL) {
+      setLegalPerson(false);
+    }
+  }, [providerSend.personType]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const validateNumericInput = (value) => {
+      return value.replace(/\D/g, "");
+    };
+
+    const isNumericField =
+      name === "phoneNumber" ||
+      name === "bankAccountNumber" ||
+      name === "companyPhoneNumber";
+
+    const newValue = isNumericField ? validateNumericInput(value) : value;
+
+    if (name in providerSend.personDTO) {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        personDTO: {
+          ...prevProvider.personDTO,
+          [name]: newValue,
+        },
+      }));
+    } else if (name in providerSend.companyDTO) {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        companyDTO: {
+          ...prevProvider.companyDTO,
+          [name]: newValue,
+        },
+      }));
+    } else {
+      setProviderSend((prevProvider) => ({
+        ...prevProvider,
+        [name]: newValue,
+      }));
+    }
+  };
+
+  const handleInput = (event) => {
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, "");
+    }
+  };
+
+  const handleValidation = (e) => {
+    const minLength = e.target.minLength;
+    const maxLength = e.target.maxLength;
+    const valueLength = e.target.value.length;
+
+    if (valueLength < minLength) {
+      e.target.setCustomValidity(
+        `El número debe tener entre ${minLength} y ${maxLength} digitos.`
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  };
+
+  const handleInputReset = (e) => {
+    e.target.setCustomValidity("");
+  };
+
   return (
     <div className="provider-section-container">
-      <Header pageTitle="Personal" />
+      <Header pageTitle="Personal - Modificar proveedor" />
       <div className="provider-section">
         {loading && (
           <div className="page-loading-container">
@@ -190,7 +235,9 @@ const ModifyProvider = () => {
         )}
         <form className="providerForm" onSubmit={handleSubmit}>
           <div className="providerForm-section">
-            <h3 className="providerForm-title">Información básica</h3>
+            <h3 className="providerForm-title">
+              Información del representante legal
+            </h3>
             <div className="providerForm-row">
               <div className="providerForm-item">
                 <label>
@@ -201,6 +248,7 @@ const ModifyProvider = () => {
                   name="firstName"
                   value={providerSend.personDTO.firstName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -213,6 +261,7 @@ const ModifyProvider = () => {
                   name="lastName"
                   value={providerSend.personDTO.lastName}
                   onChange={handleInputChange}
+                  onInput={handleInput}
                   required
                 />
               </div>
@@ -232,11 +281,44 @@ const ModifyProvider = () => {
                   Teléfono <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="phoneNumber"
                   value={providerSend.personDTO.phoneNumber}
                   onChange={handleInputChange}
+                  minLength="8"
+                  maxLength="10"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
+                />
+              </div>
+            </div>
+            <div className="providerForm-row">
+              <div className="providerForm-item">
+                <label>
+                  Tipo de documento <span className="red">*</span>
+                </label>
+                <select
+                  name="idPerson"
+                  value={providerSend.personDTO.documentType}
+                  onChange={handleInputChange}
+                  required
+                  disabled
+                >
+                  <option>{providerSend.personDTO.documentType}</option>
+                </select>
+              </div>
+              <div className="providerForm-item">
+                <label>
+                  Número de documento <span className="red">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="idPerson"
+                  value={providerSend.personDTO.idPerson}
+                  onChange={handleInputChange}
+                  required
+                  disabled
                 />
               </div>
             </div>
@@ -244,7 +326,7 @@ const ModifyProvider = () => {
 
           {/* Información adicional */}
           <div className="providerForm-section">
-            <h3 className="providerForm-title">Información del proveedor</h3>
+            <h3 className="providerForm-title">Información legal</h3>
             <div className="providerForm-row">
               <div className="providerForm-item">
                 <label>
@@ -266,7 +348,7 @@ const ModifyProvider = () => {
                   <span className="red">*</span>
                 </label>
                 <input
-                  type="text" //arreglar esto--------------------------------------------------------------!!!!!!
+                  type="text"
                   name="nit"
                   value={providerSend.companyDTO.nit}
                   onChange={handleInputChange}
@@ -275,57 +357,71 @@ const ModifyProvider = () => {
                 />
               </div>
             </div>
+            {legalPerson && (
+              <div className="companyFrom-container">
+                <div className="providerForm-row">
+                  <div className="providerForm-item">
+                    <label>
+                      Empresa <span className="red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={providerSend.companyDTO.companyName}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="providerForm-item">
+                    <label>Teléfono de la empresa</label>
+                    <input
+                      type="text"
+                      name="companyPhoneNumber"
+                      value={providerSend.companyDTO.companyPhoneNumber}
+                      onChange={handleInputChange}
+                      minLength="7"
+                      maxLength="10"
+                      onInvalid={handleValidation}
+                      onInput={handleInputReset}
+                    />
+                  </div>
+                </div>
+                <div className="providerForm-row">
+                  <div className="providerForm-item">
+                    <label>Correo electrónico de la empresa</label>
+                    <input
+                      type="email"
+                      name="companyEmail"
+                      value={providerSend.companyDTO.companyEmail}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="providerForm-item">
+                    <label>
+                      Dirección de la empresa <span className="red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyAddress"
+                      value={providerSend.companyDTO.companyAddress}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Empresa</label>
-                <input
-                  type="text"
-                  name="companyName"
-                  value={providerSend.companyDTO.companyName}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="providerForm-item">
-                <label>Teléfono de la empresa</label>
-                <input
-                  type="text"
-                  name="companyPhoneNumber"
-                  value={providerSend.companyDTO.companyPhoneNumber}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Correo electrónico de la empresa</label>
-                <input
-                  type="email"
-                  name="companyEmail"
-                  value={providerSend.companyDTO.companyEmail}
-                  onChange={handleInputChange}
-                />
-              </div>
               <div className="providerForm-item">
                 <label>
-                  Dirección de la empresa <span className="red">*</span>
+                  Nombre del banco <span className="red">*</span>
                 </label>
-                <input
-                  type="text"
-                  name="companyAddress"
-                  value={providerSend.companyDTO.companyAddress}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </div>
-            <div className="providerForm-row">
-              <div className="providerForm-item">
-                <label>Nombre del banco</label>
                 <input
                   type="text"
                   name="bankName"
                   value={providerSend.companyDTO.bankName}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="providerForm-item">
@@ -333,11 +429,15 @@ const ModifyProvider = () => {
                   Número de cuenta <span className="red">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="bankAccountNumber"
                   value={providerSend.companyDTO.bankAccountNumber}
                   onChange={handleInputChange}
+                  minLength="10"
+                  maxLength="20"
                   required
+                  onInvalid={handleValidation}
+                  onInput={handleInputReset}
                 />
               </div>
             </div>
@@ -357,7 +457,7 @@ const ModifyProvider = () => {
             entity={entity}
             action={action}
             openModal={openModal}
-            onClose={handleModalClose} // Cierra el modal y redirige
+            onClose={handleModalClose}
           />
         </form>
       </div>

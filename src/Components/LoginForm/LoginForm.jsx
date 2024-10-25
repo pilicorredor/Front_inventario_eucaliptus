@@ -15,7 +15,7 @@ const LoginForm = ({ handleLogin }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Evitar que el formulario se recargue
+    e.preventDefault();
     setLoading(true);
     try {
       const response = await fetch(SERVICES.LOGIN_SERVICE, {
