@@ -11,6 +11,7 @@ import ChooseProvider from './Components/RegisterProducts/ChooseProvider';
 import RegisterProduct from './Components/RegisterProducts/FormRegisterProduct';
 import ModifyProvider from './Components/ModifyProvider/ModifyProviderPage';
 import ModifySeller from './Components/ModifySeller/ModifySellerPage';
+import ModidyProducts from './Components/ModifyProducts/ModifyProducts';
 import Config from './Components/ConfigPanel/ConfigPanel';
 
 const AppContent = () => {
@@ -55,6 +56,7 @@ const AppContent = () => {
                 <Route path='/productos*' element={<Products />} />
                 <Route path='/productos/escoger-proveedor' element={<ChooseProvider />} />
                 <Route path="/productos/registrar/:id" element={<RegisterProduct />} />
+                <Route path="/modificar/producto/:id" element={<ModidyProducts />} />
             </Routes>
         </>
     );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from "../Assets/logo2.png";
 import Header from "../Header/Header";
-import "./FormRegisterProduct.css";
+import "./ModifyProducts.css";
 import {
   USE_PRODUCTS,
   CATEGORY_PRODUCT,
@@ -10,12 +10,12 @@ import {
   SERVICES,
 } from "../../Constants/Constants";
 
-const RegisterProduct = () => {
+const ModidyProducts = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [provider, setProvider] = useState("");
   const [product, setProduct] = useState({
-    idProduct: "",
+    idProduct: id,
     nameProduct: "",
     brand: "",
     use: "",
@@ -28,24 +28,25 @@ const RegisterProduct = () => {
   useEffect(() => {
     const fetchProviderById = async () => {
       try {
+        //AQUI TOCA CAMBIAR EL SERVICIO PARA QUE ME TRAIGA LA INFO DEL PRODUCTO
         const token = localStorage.getItem("token");
-        const url = `${SERVICES.GET_PROVIDER_BY_ID}/${id}`;
+        // const url = `${SERVICES.GET_PROVIDER_BY_ID}/${id}`;
 
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        // const response = await fetch(url, {
+        //   method: "GET",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // });
 
-        if (response.ok) {
-          const data = await response.json();
-          const providerName = `${data.personDTO.firstName} ${data.personDTO.lastName}`;
-          setProvider(providerName);
-        } else {
-          console.error("Error al traer el vendedor:", await response.json());
-        }
+        // if (response.ok) {
+        //   const data = await response.json();
+        //   const providerName = `${data.personDTO.firstName} ${data.personDTO.lastName}`;
+        //   setProvider(providerName);
+        // } else {
+        //   console.error("Error al traer el vendedor:", await response.json());
+        // }
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
@@ -58,7 +59,7 @@ const RegisterProduct = () => {
     e.preventDefault();
 
     setProduct({
-      idProduct: "",
+      idProduct: id,
       nameProduct: "",
       brand: "",
       use: "",
@@ -88,7 +89,6 @@ const RegisterProduct = () => {
         </div>
         <div className="steps-section">
           <div className="stepTwo-title-left">
-            <label className="step-by-step">Paso 2 de 2</label>
             <label className="step-information-2">
               Información del producto
             </label>
@@ -116,6 +116,7 @@ const RegisterProduct = () => {
                 name="idProduct"
                 value={product.idProduct}
                 onChange={handleInputChange}
+                disabled
                 required
               />
             </div>
@@ -228,8 +229,8 @@ const RegisterProduct = () => {
         </div>
 
         <button type="submit" className="provider-button">
-          {BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
-            BUTTONS_ACTIONS.REGISTRAR.slice(1)}
+          {BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
+            BUTTONS_ACTIONS.MODIFICAR.slice(1)}
         </button>
         <img src={logo} alt="logo" className="product-logo" />
       </form>
@@ -237,4 +238,4 @@ const RegisterProduct = () => {
   );
 };
 
-export default RegisterProduct;
+export default ModidyProducts;

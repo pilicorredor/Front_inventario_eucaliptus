@@ -21,6 +21,7 @@ const Products = () => {
 
   const productsList = [
     {
+      id_modify: "SUP12",
       nameProduct: "Suplemento con Ganoderma",
       brand: "DXN",
       category: "No Perecedero",
@@ -28,6 +29,7 @@ const Products = () => {
       provider: "Proveedor A",
     },
     {
+      id_modify: "OTR42",
       nameProduct: "Spirulina",
       brand: "Naturela",
       category: "No Perecedero",
@@ -35,6 +37,7 @@ const Products = () => {
       provider: "Proveedor B",
     },
     {
+      id_modify: "ES201",
       nameProduct: "Cacao Latte Con Maca",
       brand: "NatuYerb",
       category: "Perecedero",
@@ -42,6 +45,7 @@ const Products = () => {
       provider: "Proveedor C",
     },
     {
+      id_modify: "CP156",
       nameProduct: "Jabon de menta con extracto de avena puramente",
       brand: "Puramente",
       category: "No Perecedero",
