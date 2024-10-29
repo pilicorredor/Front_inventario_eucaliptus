@@ -24,6 +24,8 @@ const AppContent = () => {
     const [role, setRole] = useState(localStorage.getItem("role"));
     const location = useLocation();
 
+    console.log(localStorage);
+
     const handleLogin = ({ username, role }) => {
         localStorage.setItem('login', true);
         setUsername(username);
@@ -44,14 +46,13 @@ const AppContent = () => {
         }
     }, [location.pathname]);
 
-
     return (
         <>
             {login && <Navbar login={login} handleLogin={handleLogin} username={username} role={role} handleLogout={handleLogout} />}
             <Routes>
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 <Route path='/inicio' element={<HomePage />} />
-                <Route path='/config' element={<Config />} />
+                <Route path='/config' element={<Config userRol={role} username={username} />} />
                 <Route path='/config/send-email-password' element={<SendEmailPassword />} />
                 <Route path='/config/check-token-password' element={<CheckPswdToken />} />
                 <Route path='/config/update-password' element={<UpdatePassword />} />

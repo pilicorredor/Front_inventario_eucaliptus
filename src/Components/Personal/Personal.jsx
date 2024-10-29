@@ -141,13 +141,13 @@ const Personal = () => {
       return;
     }
 
-    // Aquí es donde implementarías la lógica de búsqueda según selectedFilter y searchQuery
+    // TODO implementar la lógica de búsqueda según selectedFilter y searchQuery
     const dataToFilter = role === ENTITIES.PROVEEDOR ? providersData : sellersData;
 
     if (dataToFilter === ENTITIES.PROVEEDOR) {
       
     }
-    setFilteredData(filtered);
+    //setFilteredData(filtered);
   };
 
   const handleNew = () => {

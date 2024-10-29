@@ -10,6 +10,9 @@ import {
   ENTITIES,
 } from "../../Constants/Constants";
 
+import Dropdown from "../Dropdown/Dropdown.jsx";
+import DropdownItem from "../DropdownItem/DropdownItem.jsx";
+
 const Products = () => {
   const navigate = useNavigate();
   const [categoryProd, setCategoryProd] = useState(
@@ -18,6 +21,13 @@ const Products = () => {
   const [productsData, setProductsData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUse, setSelectedUse] = useState("Todos");
+  const [useButtonText, setUseButtonText] = useState('Filtrar por uso:');
+  const [productButtonText, setProductButtonText] = useState('Buscar por...');
+  const [selectedUseFilter, setSelectedUseFilter] = useState('');
+  const [selectedSearchFilter, setSelectedSearchFilter] = useState('');
+
+
+
 
   const productsList = [
     {
@@ -63,6 +73,14 @@ const Products = () => {
     "Esotéricos",
     "Cuidado Personal",
     "Otro",
+  ];
+
+  const productItems = [
+    "Nombre",
+    "Marca",
+    "Categoría",
+    "Uso",
+    "Proveedor",
   ];
 
   useEffect(() => {
@@ -115,6 +133,16 @@ const Products = () => {
     setProductsData(filteredProducts);
   };
 
+  const handleUseFilterSelection = (selectedItem) => {
+    setSelectedUseFilter(selectedItem);
+    setUseButtonText(selectedItem);
+  };
+
+  const handleSearchFilterSelection = (selectedItem) => {
+    setSelectedSearchFilter(selectedItem);
+    setProductButtonText(selectedItem);
+  };
+
   return (
     <div className="products">
       <Header pageTitle="Productos" />
@@ -150,6 +178,13 @@ const Products = () => {
 
         <div className="search-bar">
           <div className="search-container">
+            <Dropdown buttonText={productButtonText} content={
+              <> {
+                productItems.map(
+                  item =>
+                    <DropdownItem key={item} onClick={() => handleSearchFilterSelection(item)}>
+                      {`${item}`}
+                    </DropdownItem>)} </>} />
             <input
               type="text"
               placeholder="Ingresa tu búsqueda"
@@ -169,14 +204,12 @@ const Products = () => {
 
         {/* Nuevo filtro por uso */}
         <div className="filter-use">
-          <label>Filtrar por Uso: </label>
-          <select id="useFilter" value={selectedUse} onChange={handleUseChange}>
-            {availableUses.map((use) => (
-              <option key={use} value={use}>
-                {use}
-              </option>
-            ))}
-          </select>
+          <Dropdown buttonText={useButtonText} content={
+            <> {availableUses.map(
+              item =>
+                <DropdownItem key={item} onClick={() => handleUseFilterSelection(item)}>
+                  {`${item}`}
+                </DropdownItem>)} </>} />
         </div>
 
         <div className="products-content">

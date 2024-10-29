@@ -10,6 +10,8 @@ export const SERVICES = {
     MODIFY_SELLER_SERVICE: "http://localhost:8082/person/sellers/updateSeller",
     DELETE_SELLER_SERVICE: "http://localhost:8082/person/sellers/deleteSeller",
     DELETE_PROVIDER_SERVICE: "http://localhost:8082/person/providers/deleteProvider",
+    CONFIG_GET_ADMIN_DATA_SERVICE: "http://localhost:8082/person/getAdmin",
+    CONFIG_GET_SELLER_DATA_SERVICE: "http://localhost:8082/person/sellers/getSellerByUsername/",
 }
 
 export const MODAL_TYPES = {
