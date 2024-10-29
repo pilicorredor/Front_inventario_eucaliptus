@@ -7,7 +7,7 @@ const CheckPswdToken = () => {
     return (
         <div className="tokenPassword-section">
             <div className="tokenPassword-content">
-                <h1>Confirmar token</h1>
+                <h1>Confirmar código</h1>
                 <p>Ingresa a continuación el número que recibiste en tu correo</p>
                 <div className="input-token-box">
                     <input

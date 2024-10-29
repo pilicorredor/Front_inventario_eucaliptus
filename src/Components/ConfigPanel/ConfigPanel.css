@@ -2,7 +2,7 @@
     margin-top: 20px;
     width: 90%;
     margin-left: 50px;
-    height: 100vh;
+    height: 80vh;
 }
 
 .card-user-info {
@@ -33,13 +33,13 @@
 }
 
 .config-form {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .configForm-row {
     display: flex;
     gap: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .configForm-item {
@@ -88,5 +88,5 @@
     font-size: 16px;
     color: #fff;
     font-weight: 700;
-    margin-top: 20px;
+    margin-top: 10px;
 }
