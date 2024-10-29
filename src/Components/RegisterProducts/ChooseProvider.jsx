@@ -73,7 +73,7 @@ const ChooseProvider = () => {
         <div className="products-section">
           <label className="sellerSection-title">Agregar Nuevo Producto</label>
         </div>
-        <div className="steps-section">
+        <div className="steps-section-1">
           <label className="step-by-step">Paso 1 de 2</label>
           <label className="step-information">Seleccionar proveedor</label>
         </div>

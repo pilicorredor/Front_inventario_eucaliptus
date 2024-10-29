@@ -71,6 +71,7 @@ const CustomTable = ({
     category: "Categoría",
     use: "Uso",
     provider: "Proveedor",
+    
     //Poner despues las columnas de productos
   };
 

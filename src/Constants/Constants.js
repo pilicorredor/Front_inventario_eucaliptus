@@ -53,3 +53,13 @@ export const CATEGORY_PRODUCT = {
     NON_PERISHABLE: 'No Perecedero',
     ALL_PRODUCTS: 'Todos',
 }
+
+export const USE_PRODUCTS = {
+    SUPPLEMENTS: "Suplementos",
+    HOMEOPATHIC: "Homeopaticos",
+    PHYTOTHERAPEUTIC: "Fitoterapeuticos",
+    SPICES: "Especias",
+    ESOTERIC: "Esotericos",
+    PERSONAL_CARE: "Cuidado Personal",
+    OTHER: "Otro",
+}
