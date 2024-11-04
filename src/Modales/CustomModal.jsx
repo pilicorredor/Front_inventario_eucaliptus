@@ -68,6 +68,8 @@ const CustomModal = ({
       setUrl(`${SERVICES.DELETE_PROVIDER_SERVICE}/${id}`);
     } else if (entity === ENTITIES.VENDEDOR) {
       setUrl(`${SERVICES.DELETE_SELLER_SERVICE}/${id}`);
+    } else if (entity === ENTITIES.PRODUCTO) {
+      setUrl(`${SERVICES.DELETE_PRODUCT_SERVICE}/${id}`);
     }
   }, [id]);
 

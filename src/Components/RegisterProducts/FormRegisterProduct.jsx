@@ -202,7 +202,7 @@ const RegisterProduct = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(SERVICES.REGISTER_PRODUCT_SERVICCE, {
+      const response = await fetch(SERVICES.REGISTER_PRODUCT_SERVICE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

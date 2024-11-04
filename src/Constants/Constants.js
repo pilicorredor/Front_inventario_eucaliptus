@@ -15,7 +15,10 @@ export const SERVICES = {
     GET_PRODUCTS_ALL_SERVICE: "http://localhost:8083/products/all",
     GET_PRODUCTS_UNITS_SERVICE: "http://localhost:8083/products/units/getAllUnitNames",
     GET_PRODUCTS_UNITS_DESCRIPTION_SERVICE: "http://localhost:8083/products/units/getDescriptionsByUnitName",
-    REGISTER_PRODUCT_SERVICCE: "http://localhost:8083/products/addProduct",
+    REGISTER_PRODUCT_SERVICE: "http://localhost:8083/products/addProduct",
+    GET_PRODUCT_BY_ID_SERVICE: "http://localhost:8083/products/getProductById",
+    MODIFY_PRODUCT_SERVICE: "http://localhost:8083/products/updateProduct",
+    DELETE_PRODUCT_SERVICE: "http://localhost:8083/products/deleteProduct",
     ADD_UNIT_SERVICE: "http://localhost:8083/products/units/addUnit",
 }
 

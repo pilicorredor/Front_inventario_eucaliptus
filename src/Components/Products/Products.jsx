@@ -38,7 +38,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchProductsData();
-  }, []);
+  }, [productsData]);
 
   const fetchProductsData = async () => {
     try {
@@ -54,6 +54,7 @@ const Products = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedProducts = data.map((product) => ({
+          id_modify: product.idProduct,
           idProduct: product.idProduct,
           productName: product.productName,
           brand: product.brand,
