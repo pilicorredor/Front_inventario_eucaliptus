@@ -13,6 +13,7 @@ import {
   ENTITIES,
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@mui/material/Tooltip";
 
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const RegisterProduct = () => {
   const [action, setAction] = useState("registrar");
   const [openModalUnit, setOpenModalUnit] = useState(false);
   const [modalUnitMode, setModalUnitMode] = useState("addUnit");
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [product, setProduct] = useState({
     idProduct: "",
     productName: "",
@@ -141,6 +143,10 @@ const RegisterProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (tooltipOpen) {
+      return; // Evita el envío del formulario si el tooltip de cantidades está abierto
+    }
+
     setSendProduct({
       idProduct: product.idProduct,
       productName: product.productName,
@@ -240,6 +246,20 @@ const RegisterProduct = () => {
 
     if (name === "unitName") {
       fetchDescriptionByUnit(value);
+    }
+
+    //Validaciones para que la cantidad minima sea menor que la de cantidad maxima
+    if (name === "minimumProductAmount" || name === "maximumProductAmount") {
+      const minAmount =
+        name === "minimumProductAmount" ? value : product.minimumProductAmount;
+      const maxAmount =
+        name === "maximumProductAmount" ? value : product.maximumProductAmount;
+
+      if (parseInt(minAmount, 10) >= parseInt(maxAmount, 10)) {
+        setTooltipOpen(true);
+      } else {
+        setTooltipOpen(false);
+      }
     }
   };
 
@@ -449,25 +469,39 @@ const RegisterProduct = () => {
               <label>
                 Cantidad mínima del producto <span className="red">*</span>
               </label>
-              <input
-                type="number"
-                name="minimumProductAmount"
-                value={product.minimumProductAmount}
-                onChange={handleInputChange}
-                required
-              />
+              <Tooltip
+                open={tooltipOpen}
+                title="La cantidad mínima debe ser menor que la cantidad máxima"
+                arrow
+              >
+                <input
+                  type="number"
+                  name="minimumProductAmount"
+                  value={product.minimumProductAmount}
+                  onChange={handleInputChange}
+                  min="0"
+                  required
+                />
+              </Tooltip>
             </div>
             <div className="productForm-item">
               <label>
                 Cantidad máxima del producto <span className="red">*</span>
               </label>
-              <input
-                type="number"
-                name="maximumProductAmount"
-                value={product.maximumProductAmount}
-                onChange={handleInputChange}
-                required
-              />
+              <Tooltip
+                open={tooltipOpen}
+                title="La cantidad máxima debe ser mayor que la cantidad mínima"
+                arrow
+              >
+                <input
+                  type="number"
+                  name="maximumProductAmount"
+                  value={product.maximumProductAmount}
+                  onChange={handleInputChange}
+                  min="1"
+                  required
+                />
+              </Tooltip>
             </div>
           </div>
           <div className="productForm-row">
@@ -496,7 +530,11 @@ const RegisterProduct = () => {
             </div>
           </div>
         </div>
-        <button type="submit" className="provider-button">
+        <button
+          type="submit"
+          disabled={tooltipOpen}
+          className="provider-button"
+        >
           {BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
             BUTTONS_ACTIONS.REGISTRAR.slice(1)}
         </button>

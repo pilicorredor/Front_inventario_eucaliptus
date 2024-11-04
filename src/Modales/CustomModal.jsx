@@ -71,7 +71,6 @@ const CustomModal = ({
     }
   }, [id]);
 
-
   const handleService = async () => {
     setLoading(true);
     try {
