@@ -14,7 +14,16 @@ const Config = ({ userRol, username }) => {
         firstName: '',
         lastName: '',
         email: '',
+        username: username,
+        "config-input-name": '',
+        "config-input-lastname": '',
+        "config-input-username": '',
+        "config-input-email": ''
     });
+
+    let dataToSend = []
+
+    const token = localStorage.getItem("token");
 
 
     const handleEditName = (event) => {
@@ -37,10 +46,18 @@ const Config = ({ userRol, username }) => {
         setIsUsernameEditable(!isUsernameEditable);
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setPersonData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+
     const fetchPersonInfo = async () => {
         try {
             if (userRol === ROLES.ADMIN) {
-                const token = localStorage.getItem("token");
                 const response = await fetch(SERVICES.CONFIG_GET_ADMIN_DATA_SERVICE, {
                     method: "GET",
                     headers: {
@@ -51,14 +68,18 @@ const Config = ({ userRol, username }) => {
                 if (response.ok) {
                     const data = await response.json();
                     setPersonData({
+                        idPerson: data.idPerson,
                         firstName: data.firstName,
                         lastName: data.lastName,
                         email: data.email,
+                        username,
                     });
+                } else {
+                    console.error(response)
                 }
             } else {
-                const token = localStorage.getItem("token");
-                const response = await fetch(SERVICES.CONFIG_GET_SELLER_DATA_SERVICE`${username}`, {
+                const url = `${SERVICES.CONFIG_GET_SELLER_DATA_SERVICE}/${username}`;
+                const response = await fetch(url, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -68,6 +89,8 @@ const Config = ({ userRol, username }) => {
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data)
+                } else {
+                    console.error(response)
                 }
             }
         } catch (error) {
@@ -78,6 +101,38 @@ const Config = ({ userRol, username }) => {
     useEffect(() => {
         fetchPersonInfo();
     }, []);
+
+    const handleSubmitBtn = async () => {
+        dataToSend = {
+            firstName: personData["config-input-name"] || personData.firstName,
+            lastName: personData["config-input-lastname"] || personData.lastName,
+            oldUsername: username,
+            newUsername: personData["config-input-username"] || username,
+            email: personData["config-input-email"] || personData.email
+        }
+
+        try {
+            const token = localStorage.getItem("token");
+            console.log(dataToSend)
+            const response = await fetch(SERVICES.CONFIG_UPDATE_USER_INFO, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(dataToSend)
+            })
+            if (response.ok) {
+                fetchPersonInfo();
+                console.log(response);
+            } else {
+                console.error(response);
+            }
+        } catch (error) {
+            console.log("Error mandando los datos :(");
+        }
+
+    };
 
     return (
         <div className="config">
@@ -102,6 +157,7 @@ const Config = ({ userRol, username }) => {
                                     type="text"
                                     name="config-input-name"
                                     placeholder={personData.firstName}
+                                    onChange={handleInputChange}
                                     disabled={!isNameEditable}
                                 />
                                 <button onClick={handleEditName}><FaEdit /></button>
@@ -116,6 +172,8 @@ const Config = ({ userRol, username }) => {
                                     type="text"
                                     name="config-input-lastname"
                                     placeholder={personData.lastName}
+
+                                    onChange={handleInputChange}
                                     disabled={!isLastNameEditable}
                                 />
                                 <button onClick={handleEditLastName}><FaEdit /></button>
@@ -132,6 +190,8 @@ const Config = ({ userRol, username }) => {
                                     type="text"
                                     name="config-input-username"
                                     placeholder={username}
+
+                                    onChange={handleInputChange}
                                     disabled={!isUsernameEditable}
                                 />
                                 <button onClick={handleEditUsername}><FaEdit /></button>
@@ -147,6 +207,8 @@ const Config = ({ userRol, username }) => {
                                     type="text"
                                     name="config-input-email"
                                     placeholder={personData.email}
+
+                                    onChange={handleInputChange}
                                     disabled={!isEmailEditable}
                                 />
                                 <button onClick={handleEditEmail}><FaEdit /></button>
@@ -171,7 +233,7 @@ const Config = ({ userRol, username }) => {
                     </div>
                 </form>
                 <div className="config-button-container">
-                    <button className="confing-submit-btn" type="config-submit">Guardar Cambios</button>
+                    <button className="confing-submit-btn" type="config-submit" onClick={handleSubmitBtn}>Guardar Cambios</button>
                 </div>
             </div>
         </div>

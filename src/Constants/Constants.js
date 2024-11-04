@@ -12,6 +12,7 @@ export const SERVICES = {
     DELETE_PROVIDER_SERVICE: "http://localhost:8082/person/providers/deleteProvider",
     CONFIG_GET_ADMIN_DATA_SERVICE: "http://localhost:8082/person/getAdmin",
     CONFIG_GET_SELLER_DATA_SERVICE: "http://localhost:8082/person/sellers/getSellerByUsername",
+    CONFIG_UPDATE_USER_INFO: "http://localhost:8082/person/sellers/updateUserInfo",
     GET_PRODUCTS_ALL_SERVICE: "http://localhost:8083/products/all",
     GET_PRODUCTS_UNITS_SERVICE: "http://localhost:8083/products/units/getAllUnitNames",
     GET_PRODUCTS_UNITS_DESCRIPTION_SERVICE: "http://localhost:8083/products/units/getDescriptionsByUnitName",
