@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { EmailProvider } from './Context/EmailContext';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
@@ -71,7 +72,9 @@ const AppContent = () => {
 const App = () => {
     return (
         <Router>
-            <AppContent />
+            <EmailProvider>
+                <AppContent />
+            </EmailProvider>
         </Router>
     );
 }

@@ -4,10 +4,11 @@ import { IoMdMail } from "react-icons/io";
 import { SERVICES, ROLES } from "../../Constants/Constants";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useEmail } from '../../Context/EmailContext';
 
 
 const SendEmailPassword = ({ userRol, username }) => {
-    const [email, setEmail] = useState("");
+    const { email, setEmail } = useEmail();
     const [personData, setPersonData] = useState({
         firstName: '',
         lastName: '',
@@ -42,6 +43,7 @@ const SendEmailPassword = ({ userRol, username }) => {
                         email: data.email,
                         username,
                     });
+                    setEmail(data.email);
                 } else {
                     console.error(response)
                 }
@@ -114,7 +116,7 @@ const SendEmailPassword = ({ userRol, username }) => {
         <div className="emailPassword-section">
             <div className="emailPassword-content">
                 <h1>Actualiza tu contraseña</h1>
-                <p>Enviaremos un número de cuatro dígitos a tu correo para que puedas actualizar tu contraseña</p>
+                <p>Enviaremos un número de seis dígitos a tu correo para que puedas actualizar tu contraseña</p>
                 <div className="input-email-box">
                     <input
                         type="text"
