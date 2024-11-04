@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './CheckPswdToken.css';
 import { useEmail } from "../../Context/EmailContext";
+import { useVerifCode } from "../../Context/VerificationCodeContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SERVICES } from "../../Constants/Constants";
 import { useNavigate } from "react-router-dom";
@@ -10,18 +11,17 @@ import { useNavigate } from "react-router-dom";
 const CheckPswdToken = () => {
     const [loading, setLoading] = useState(false);
     const { email } = useEmail();
-    const token = localStorage.getItem("token");
     const navigate = useNavigate();
-    const [code, setCode] = useState("");
+    const { code, setVerifCode } = useVerifCode();
 
     const handleSubmit = async () => {
         setLoading(true);
         try {
+            console.log(code);
             const response = await fetch(SERVICES.RECOVERY_VALIDATE_CODE, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     email,
@@ -32,22 +32,23 @@ const CheckPswdToken = () => {
             if (response.ok) {
                 setLoading(false);
                 console.log(response)
-                navigate("/config/update-password");
+                navigate("/config/recovery-update-password");
 
             } else {
                 setLoading(false);
+                alert('Porfavor verifique que el token ingresado sea el correcto')
                 console.log(response)
             }
 
         } catch (error) {
-            alert(error)
             setLoading(false);
+            alert(error)
         }
 
     };
 
-    const handleInputChange = (setter) => (e) => {
-        setter(e.target.value);
+    const handleInputChange = (e) => {
+        setVerifCode(e.target.value);
     };
 
     return (
@@ -60,7 +61,7 @@ const CheckPswdToken = () => {
                         type="number"
                         name="input-token"
                         placeholder="123456"
-                        onChange={handleInputChange(setCode)}
+                        onChange={handleInputChange}
                     />
                 </div>
                 {loading && (

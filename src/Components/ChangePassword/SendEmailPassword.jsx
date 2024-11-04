@@ -9,7 +9,6 @@ import { useEmail } from '../../Context/EmailContext';
 
 const SendEmailPassword = () => {
     const { email, setEmail } = useEmail();
-    const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -27,7 +26,6 @@ const SendEmailPassword = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     email,

@@ -1,48 +1,51 @@
 import React, { useState } from "react";
 import './RecoveryUpdatePassword.css';
 import { FaEyeSlash } from "react-icons/fa";
+import { useEmail } from "../../Context/EmailContext";
+import { useVerifCode } from "../../Context/VerificationCodeContext";
 import { SERVICES } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 
 
-const RecoveryUpdatePassword = ({ username }) => {
+const RecoveryUpdatePassword = () => {
 
     const [loading, setLoading] = useState(false);
-    const [password, setPassword] = useState("");
+    const [newPassword, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const { email } = useEmail();
+    const { code } = useVerifCode();
     const navigate = useNavigate();
-    const token = localStorage.getItem("token");
-
 
 
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
     const handleSubmit = async () => {
-        if (password !== confirmPassword) {
+        if (newPassword !== confirmPassword) {
             setErrorMessage("Las contraseñas no coinciden. Por favor, verifícalas.");
         } else {
             setErrorMessage("");
             setLoading(true);
             try {
-                const response = await fetch(SERVICES.CONFIG_CHANGE_PASSWORD, {
+                console.log(code);
+                const response = await fetch(SERVICES.RECOVERY_PASSWORD, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
-                        username,
-                        password,
+                        email,
+                        newPassword,
+                        code,
                     }),
                 });
 
                 if (response.ok) {
                     setLoading(false);
                     alert("Contraseña actualizada correctamente")
-                    navigate("/inicio");
+                    navigate("/");
 
                 } else {
                     setLoading(false);

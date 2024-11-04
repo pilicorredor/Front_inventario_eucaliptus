@@ -5,7 +5,7 @@ import "./ConfigPanel.css";
 import { FaEdit } from "react-icons/fa";
 import { SERVICES, ROLES } from "../../Constants/Constants.js";
 
-const Config = ({ userRol, username }) => {
+const Config = ({ userRol, username, handleLogout }) => {
     const [isNameEditable, setIsNameEditable] = useState(false);
     const [isLastNameEditable, setIsLastNameEditable] = useState(false);
     const [isEmailEditable, setIsEmailEditable] = useState(false);
@@ -228,7 +228,7 @@ const Config = ({ userRol, username }) => {
                                     disabled={true}
                                 />
                             </div>
-                            <a href="/config/send-email-password">Actualizar contraseña</a>
+                            <a href="/config/login-to-change-password" onClick={handleLogout}>Actualizar contraseña</a>
                         </div>
                     </div>
                 </form>

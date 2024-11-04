@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { EmailProvider } from './Context/EmailContext';
+import { VerifCodeProvider } from './Context/VerificationCodeContext';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
@@ -16,6 +17,8 @@ import ModidyProducts from './Components/ModifyProducts/ModifyProducts';
 import Config from './Components/ConfigPanel/ConfigPanel';
 import SendEmailPassword from './Components/ChangePassword/SendEmailPassword';
 import CheckPswdToken from './Components/ChangePassword/CheckPswdToken';
+import RecoveryUpdatePassword from './Components/ChangePassword/RecoveryUpdatePassword';
+import LoginFormChangePswd from './Components/ChangePassword/LoginFormChangePswd';
 import UpdatePassword from './Components/ChangePassword/UpdatePassword';
 
 
@@ -51,10 +54,12 @@ const AppContent = () => {
             <Routes>
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 <Route path='/inicio' element={<HomePage />} />
-                <Route path='/config' element={<Config userRol={role} username={username} />} />
+                <Route path='/config' element={<Config userRol={role} username={username} handleLogout={handleLogout} />} />
+                <Route path='/config/login-to-change-password' element={<LoginFormChangePswd login={login} handleLogin={handleLogin} />} />
                 <Route path='/config/send-email-password' element={<SendEmailPassword />} />
                 <Route path='/config/check-token-password' element={<CheckPswdToken />} />
-                <Route path='/config/update-password' element={<UpdatePassword />} />
+                <Route path='/config/recovery-update-password' element={<RecoveryUpdatePassword />} />
+                <Route path='/config/update-password' element={<UpdatePassword username={username} />} />
                 <Route path='/personal*' element={<Personal />} />
                 <Route path="/registrar-vendedor" element={<RegisterSeller />} />
                 <Route path="/registrar-proveedor" element={<RegisterProvider />} />
@@ -73,7 +78,9 @@ const App = () => {
     return (
         <Router>
             <EmailProvider>
-                <AppContent />
+                <VerifCodeProvider>
+                    <AppContent />
+                </VerifCodeProvider>
             </EmailProvider>
         </Router>
     );
