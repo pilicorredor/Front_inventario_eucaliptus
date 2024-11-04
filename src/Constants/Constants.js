@@ -1,5 +1,8 @@
 export const SERVICES = {
     LOGIN_SERVICE: 'http://localhost:8081/auth/login',
+    RECOVERY_EMAIL_REQUEST: 'http://localhost:8081/auth/requestRecoveryPassword',
+    RECOVERY_VALIDATE_CODE: 'http://localhost:8081/auth/validateRecoveryCode',
+    RECOVERY_RECOVERY_PASSWORD: 'http://localhost:8081/auth/recoveryPassword',
     GET_SELLERS_ALL_SERVICE: 'http://localhost:8082/person/sellers/all',
     GET_PROVIDERS_ALL_SERVICE: 'http://localhost:8082/person/providers/all',
     REGISTER_SELLER_SERVICE: "http://localhost:8082/person/sellers/addSeller",
