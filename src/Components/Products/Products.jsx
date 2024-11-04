@@ -38,7 +38,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchProductsData();
-  }, [productsData]);
+  }, []);
 
   const fetchProductsData = async () => {
     try {
@@ -100,7 +100,7 @@ const Products = () => {
 
   useEffect(() => {
     handleUpdateData(categoryProd, selectedUseFilter);
-  }, [categoryProd, selectedUseFilter]);
+  }, [categoryProd, selectedUseFilter, productsData]);
 
   const handleCategoryChange = (selectedCategory) => {
     setCategoryProd(selectedCategory);
@@ -240,6 +240,7 @@ const Products = () => {
             customColumns={columnsProducts}
             handleUpdateData={handleUpdateData}
             role={ENTITIES.PRODUCTO}
+            fetchProductsData={fetchProductsData}
           />
         </div>
       </div>

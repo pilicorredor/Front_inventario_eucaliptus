@@ -19,6 +19,7 @@ const CustomTable = ({
   customColumns,
   role,
   handleUpdateData,
+  fetchProductsData,
   context,
 }) => {
   const [page, setPage] = React.useState(0);
@@ -37,8 +38,11 @@ const CustomTable = ({
   };
 
   const handleModalClose = () => {
-    handleUpdateData(role);
     setOpenModal(false);
+    handleUpdateData(role);
+    if (entity === "producto") {
+      fetchProductsData();
+    }
   };
 
   const handleChangePage = (event, newPage) => {
