@@ -59,7 +59,7 @@ const CheckPswdToken = () => {
                     <input
                         type="number"
                         name="input-token"
-                        placeholder="1234"
+                        placeholder="123456"
                         onChange={handleInputChange(setCode)}
                     />
                 </div>

@@ -7,66 +7,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEmail } from '../../Context/EmailContext';
 
 
-const SendEmailPassword = ({ userRol, username }) => {
+const SendEmailPassword = () => {
     const { email, setEmail } = useEmail();
-    const [personData, setPersonData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        username: username,
-    });
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-
-    useEffect(() => {
-        fetchPersonInfo();
-    }, []);
-
-    const fetchPersonInfo = async () => {
-        try {
-            if (userRol === ROLES.ADMIN) {
-                const response = await fetch(SERVICES.CONFIG_GET_ADMIN_DATA_SERVICE, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setPersonData({
-                        idPerson: data.idPerson,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        email: data.email,
-                        username,
-                    });
-                    setEmail(data.email);
-                } else {
-                    console.error(response)
-                }
-            } else {
-                const url = `${SERVICES.CONFIG_GET_SELLER_DATA_SERVICE}/${username}`;
-                const response = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log(data)
-                } else {
-                    console.error(response)
-                }
-            }
-        } catch (error) {
-            console.error("Error en la solicitud de datos de la persona:", error);
-        }
-    }
 
     const handleInputChange = (setter) => (e) => {
         setter(e.target.value);
@@ -75,38 +21,33 @@ const SendEmailPassword = ({ userRol, username }) => {
     const handleSubmit = async () => {
         setLoading(true);
 
-        if (email != personData.email) {
-            alert('El correo ingresado no coincide con el registrado, porfavor verifica tu correo e intentalo de nuevo')
-            setLoading(false);
-        } else {
+        try {
+            const url = `${SERVICES.RECOVERY_EMAIL_REQUEST}/${email}`
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email,
+                }),
+            });
 
-            try {
-                const url = `${SERVICES.RECOVERY_EMAIL_REQUEST}/${email}`
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        email,
-                    }),
-                });
-
-                if (response.ok) {
-                    setLoading(false);
-                    console.log(response)
-                    navigate("/config/check-token-password");
-
-                } else {
-                    setLoading(false);
-                    console.log(response)
-                }
-
-            } catch (error) {
-                alert(error)
+            if (response.ok) {
                 setLoading(false);
+                console.log(response)
+                navigate("/config/check-token-password");
+
+            } else {
+                setLoading(false);
+                alert('El correo ingresado no coincide con el registrado, porfavor verifica tu correo e intentalo de nuevo')
+                console.log(response)
             }
+
+        } catch (error) {
+            setLoading(false);
+            alert(error)
         }
     };
 

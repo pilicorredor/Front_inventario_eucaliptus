@@ -52,7 +52,7 @@ const AppContent = () => {
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 <Route path='/inicio' element={<HomePage />} />
                 <Route path='/config' element={<Config userRol={role} username={username} />} />
-                <Route path='/config/send-email-password' element={<SendEmailPassword userRol={role} username={username} />} />
+                <Route path='/config/send-email-password' element={<SendEmailPassword />} />
                 <Route path='/config/check-token-password' element={<CheckPswdToken />} />
                 <Route path='/config/update-password' element={<UpdatePassword />} />
                 <Route path='/personal*' element={<Personal />} />
