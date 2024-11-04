@@ -11,7 +11,12 @@ export const SERVICES = {
     DELETE_SELLER_SERVICE: "http://localhost:8082/person/sellers/deleteSeller",
     DELETE_PROVIDER_SERVICE: "http://localhost:8082/person/providers/deleteProvider",
     CONFIG_GET_ADMIN_DATA_SERVICE: "http://localhost:8082/person/getAdmin",
-    CONFIG_GET_SELLER_DATA_SERVICE: "http://localhost:8082/person/sellers/getSellerByUsername/",
+    CONFIG_GET_SELLER_DATA_SERVICE: "http://localhost:8082/person/sellers/getSellerByUsername",
+    GET_PRODUCTS_ALL_SERVICE: "http://localhost:8083/products/all",
+    GET_PRODUCTS_UNITS_SERVICE: "http://localhost:8083/products/units/getAllUnitNames",
+    GET_PRODUCTS_UNITS_DESCRIPTION_SERVICE: "http://localhost:8083/products/units/getDescriptionsByUnitName",
+    REGISTER_PRODUCT_SERVICCE: "http://localhost:8083/products/addProduct",
+    ADD_UNIT_SERVICE: "http://localhost:8083/products/units/addUnit",
 }
 
 export const MODAL_TYPES = {
@@ -51,17 +56,17 @@ export const DOCUMENT_TYPE = {
 }
 
 export const CATEGORY_PRODUCT = {
-    PERISHABLE: 'Perecedero',
-    NON_PERISHABLE: 'No Perecedero',
+    PERISHABLE: 'PERECEDERO',
+    NON_PERISHABLE: 'NO_PERECEDERO',
     ALL_PRODUCTS: 'Todos',
 }
 
 export const USE_PRODUCTS = {
-    SUPPLEMENTS: "Suplementos",
-    HOMEOPATHIC: "Homeopaticos",
-    PHYTOTHERAPEUTIC: "Fitoterapeuticos",
-    SPICES: "Especias",
-    ESOTERIC: "Esotericos",
-    PERSONAL_CARE: "Cuidado Personal",
-    OTHER: "Otro",
+    SUPPLEMENTS: "SUPLEMENTOS",
+    HOMEOPATHIC: "HOMEOPATICOS",
+    PHYTOTHERAPEUTIC: "FITOTERAPEUTICOS",
+    SPICES: "ESPECIAS",
+    ESOTERIC: "ESOTERICOS",
+    PERSONAL_CARE: "CUIDADO_PERSONAL",
+    OTHER: "OTROS",
 }

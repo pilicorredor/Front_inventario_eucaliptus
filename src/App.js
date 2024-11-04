@@ -24,8 +24,6 @@ const AppContent = () => {
     const [role, setRole] = useState(localStorage.getItem("role"));
     const location = useLocation();
 
-    console.log(localStorage);
-
     const handleLogin = ({ username, role }) => {
         localStorage.setItem('login', true);
         setUsername(username);

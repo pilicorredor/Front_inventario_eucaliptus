@@ -66,12 +66,14 @@ const CustomTable = ({
     phoneNumber: "Número de Teléfono",
     companyName: "Nombre de la Empresa",
     banckAccount: "Cuenta Bancaria",
-    nameProduct: "Nombre",
+    productName: "Nombre",
     brand: "Marca",
-    category: "Categoría",
-    use: "Uso",
-    provider: "Proveedor",
-    
+    categoryProduct: "Categoría",
+    useProduct: "Uso",
+    providerName: "Proveedor",
+    idProduct: "ID del producto",
+    unitName: "Unidad",
+    unitDescription: "Descripción Unidad",
     //Poner despues las columnas de productos
   };
 

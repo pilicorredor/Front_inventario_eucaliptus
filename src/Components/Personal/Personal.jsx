@@ -14,10 +14,9 @@ const Personal = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [providersData, setProvidersData] = useState([]);
   const [sellersData, setSellersData] = useState([]);
-  const [buttonText, setButtonText] = useState('Buscar por...');
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [buttonText, setButtonText] = useState("Buscar por...");
+  const [selectedFilter, setSelectedFilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-
 
   const columnsProviders = [
     "name",
@@ -28,12 +27,7 @@ const Personal = () => {
     "banckAccount",
   ];
 
-  const columnsSellers = [
-    "name",
-    "homeAddress",
-    "email",
-    "phoneNumber",
-  ];
+  const columnsSellers = ["name", "homeAddress", "email", "phoneNumber"];
 
   const providerItems = [
     "Nombre",
@@ -137,15 +131,17 @@ const Personal = () => {
   const handleSearch = () => {
     //TODO
     if (!selectedFilter || !searchQuery) {
-      alert('Por favor, selecciona un criterio de búsqueda y escribe algo en la barra de búsqueda.');
+      alert(
+        "Por favor, selecciona un criterio de búsqueda y escribe algo en la barra de búsqueda."
+      );
       return;
     }
 
     // TODO implementar la lógica de búsqueda según selectedFilter y searchQuery
-    const dataToFilter = role === ENTITIES.PROVEEDOR ? providersData : sellersData;
+    const dataToFilter =
+      role === ENTITIES.PROVEEDOR ? providersData : sellersData;
 
     if (dataToFilter === ENTITIES.PROVEEDOR) {
-      
     }
     //setFilteredData(filtered);
   };
@@ -154,7 +150,7 @@ const Personal = () => {
     navigate(`/registrar-${role}`);
   };
 
-  const handleDelete = () => { };
+  const handleDelete = () => {};
 
   const handleFilterSelection = (selectedItem) => {
     setSelectedFilter(selectedItem);
@@ -182,18 +178,36 @@ const Personal = () => {
 
         <div className="search-bar">
           <div className="search-container">
-            <Dropdown buttonText={buttonText} content={
-              role === "proveedor" ? <> {
-                providerItems.map(
-                  item =>
-                    <DropdownItem key={item} onClick={() => handleFilterSelection(item)}>
-                      {`${item}`}
-                    </DropdownItem>)} </> :
-                <> {sellerItems.map(
-                  item =>
-                    <DropdownItem key={item} onClick={() => handleFilterSelection(item)}>
-                      {`${item}`}
-                    </DropdownItem>)} </>} />
+            <Dropdown
+              buttonText={buttonText}
+              content={
+                role === "proveedor" ? (
+                  <>
+                    {" "}
+                    {providerItems.map((item) => (
+                      <DropdownItem
+                        key={item}
+                        onClick={() => handleFilterSelection(item)}
+                      >
+                        {`${item}`}
+                      </DropdownItem>
+                    ))}{" "}
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    {sellerItems.map((item) => (
+                      <DropdownItem
+                        key={item}
+                        onClick={() => handleFilterSelection(item)}
+                      >
+                        {`${item}`}
+                      </DropdownItem>
+                    ))}{" "}
+                  </>
+                )
+              }
+            />
             <input
               type="text"
               placeholder="Ingresa tu búsqueda"

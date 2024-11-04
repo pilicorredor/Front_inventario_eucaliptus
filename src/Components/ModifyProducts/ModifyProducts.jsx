@@ -16,7 +16,7 @@ const ModidyProducts = () => {
   const [provider, setProvider] = useState("");
   const [product, setProduct] = useState({
     idProduct: id,
-    nameProduct: "",
+    productName: "",
     brand: "",
     use: "",
     category: "",
@@ -60,7 +60,7 @@ const ModidyProducts = () => {
 
     setProduct({
       idProduct: id,
-      nameProduct: "",
+      productName: "",
       brand: "",
       use: "",
       category: "",
@@ -126,8 +126,8 @@ const ModidyProducts = () => {
               </label>
               <input
                 type="text"
-                name="nameProduct"
-                value={product.nameProduct}
+                name="productName"
+                value={product.productName}
                 onChange={handleInputChange}
                 required
               />

@@ -19,89 +19,91 @@ const Products = () => {
     CATEGORY_PRODUCT.ALL_PRODUCTS
   );
   const [productsData, setProductsData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUse, setSelectedUse] = useState("Todos");
-  const [useButtonText, setUseButtonText] = useState('Filtrar por uso:');
-  const [productButtonText, setProductButtonText] = useState('Buscar por...');
-  const [selectedUseFilter, setSelectedUseFilter] = useState('');
-  const [selectedSearchFilter, setSelectedSearchFilter] = useState('');
+  const [useButtonText, setUseButtonText] = useState("TODOS");
+  const [productButtonText, setProductButtonText] = useState("Buscar por...");
+  const [selectedUseFilter, setSelectedUseFilter] = useState("");
+  const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
 
-
-
-
-  const productsList = [
-    {
-      id_modify: "SUP12",
-      nameProduct: "Suplemento con Ganoderma",
-      brand: "DXN",
-      category: "No Perecedero",
-      use: "Suplementos",
-      provider: "Proveedor A",
-    },
-    {
-      id_modify: "OTR42",
-      nameProduct: "Spirulina",
-      brand: "Naturela",
-      category: "No Perecedero",
-      use: "Otro",
-      provider: "Proveedor B",
-    },
-    {
-      id_modify: "ES201",
-      nameProduct: "Cacao Latte Con Maca",
-      brand: "NatuYerb",
-      category: "Perecedero",
-      use: "Especias",
-      provider: "Proveedor C",
-    },
-    {
-      id_modify: "CP156",
-      nameProduct: "Jabon de menta con extracto de avena puramente",
-      brand: "Puramente",
-      category: "No Perecedero",
-      use: "Cuidado Personal",
-      provider: "Proveedor D",
-    },
+  const columnsProducts = [
+    "idProduct",
+    "productName",
+    "brand",
+    "categoryProduct",
+    "useProduct",
+    "unitName",
+    "unitDescription",
   ];
 
+  useEffect(() => {
+    fetchProductsData();
+  }, []);
+
+  const fetchProductsData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.GET_PRODUCTS_ALL_SERVICE, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const formattedProducts = data.map((product) => ({
+          idProduct: product.idProduct,
+          productName: product.productName,
+          brand: product.brand,
+          categoryProduct: product.category,
+          useProduct: product.use,
+          idProvider: product.idProvider,
+          unitName: product.unitDTO.unitName,
+          unitDescription: product.unitDTO.description,
+          minimumProductAmount: product.minimumProductAmount,
+          maximumProductAmount: product.maximumProductAmount,
+        }));
+        setProductsData(formattedProducts);
+        setFilteredData(formattedProducts);
+      } else {
+        const errorMessage = await response.text();
+        console.error("Error al obtener los productos:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud de productos:", error);
+    }
+  };
+
   const availableUses = [
-    "Todos",
-    "Suplementos",
-    "Homeopáticos",
-    "Fitoterapéuticos",
-    "Especias",
-    "Esotéricos",
-    "Cuidado Personal",
-    "Otro",
+    "TODOS",
+    "SUPLEMENTOS",
+    "HOMEOPATICOS",
+    "FITOTERAPEUTICOS",
+    "ESPECIAS",
+    "ESOTERICOS",
+    "CUIDADO_PERSONAL",
+    "OTROS",
   ];
 
   const productItems = [
+    "ID del producto",
     "Nombre",
     "Marca",
     "Categoría",
     "Uso",
-    "Proveedor",
+    "Unidad",
+    "Descripción unidad",
   ];
 
   useEffect(() => {
-    handleUpdateData(categoryProd, selectedUse);
-  }, [categoryProd, selectedUse]);
+    handleUpdateData(categoryProd, selectedUseFilter);
+  }, [categoryProd, selectedUseFilter]);
 
   const handleCategoryChange = (selectedCategory) => {
     setCategoryProd(selectedCategory);
   };
-
-  const handleUseChange = (event) => {
-    setSelectedUse(event.target.value);
-  };
-
-  const columsProducts = [
-    "nameProduct",
-    "brand",
-    "category",
-    "use",
-    "provider",
-  ];
 
   const handleSearch = () => {
     console.log("Buscar:", searchQuery);
@@ -112,25 +114,24 @@ const Products = () => {
   };
 
   const handleUpdateData = (categoryProd, selectedUse) => {
-    let filteredProducts = productsList;
+    let filteredProducts = productsData;
 
     if (categoryProd !== CATEGORY_PRODUCT.ALL_PRODUCTS) {
       filteredProducts = filteredProducts.filter(
         (product) =>
           (categoryProd === CATEGORY_PRODUCT.PERISHABLE &&
-            product.category === "Perecedero") ||
+            product.categoryProduct === "PERECEDERO") ||
           (categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE &&
-            product.category === "No Perecedero")
+            product.categoryProduct === "NO_PERECEDERO")
       );
     }
 
-    if (selectedUse !== "Todos") {
+    if (selectedUse && selectedUse !== "TODOS") {
       filteredProducts = filteredProducts.filter(
-        (product) => product.use === selectedUse
+        (product) => product.useProduct === selectedUse
       );
     }
-
-    setProductsData(filteredProducts);
+    setFilteredData(filteredProducts);
   };
 
   const handleUseFilterSelection = (selectedItem) => {
@@ -178,13 +179,22 @@ const Products = () => {
 
         <div className="search-bar">
           <div className="search-container">
-            <Dropdown buttonText={productButtonText} content={
-              <> {
-                productItems.map(
-                  item =>
-                    <DropdownItem key={item} onClick={() => handleSearchFilterSelection(item)}>
+            <Dropdown
+              buttonText={productButtonText}
+              content={
+                <>
+                  {" "}
+                  {productItems.map((item) => (
+                    <DropdownItem
+                      key={item}
+                      onClick={() => handleSearchFilterSelection(item)}
+                    >
                       {`${item}`}
-                    </DropdownItem>)} </>} />
+                    </DropdownItem>
+                  ))}{" "}
+                </>
+              }
+            />
             <input
               type="text"
               placeholder="Ingresa tu búsqueda"
@@ -204,18 +214,29 @@ const Products = () => {
 
         {/* Nuevo filtro por uso */}
         <div className="filter-use">
-          <Dropdown buttonText={useButtonText} content={
-            <> {availableUses.map(
-              item =>
-                <DropdownItem key={item} onClick={() => handleUseFilterSelection(item)}>
-                  {`${item}`}
-                </DropdownItem>)} </>} />
+          <label>Filtrar por:</label>
+          <Dropdown
+            buttonText={useButtonText}
+            content={
+              <>
+                {" "}
+                {availableUses.map((item) => (
+                  <DropdownItem
+                    key={item}
+                    onClick={() => handleUseFilterSelection(item)}
+                  >
+                    {`${item}`}
+                  </DropdownItem>
+                ))}{" "}
+              </>
+            }
+          />
         </div>
 
         <div className="products-content">
           <CustomTable
-            data={productsData}
-            customColumns={columsProducts}
+            data={filteredData}
+            customColumns={columnsProducts}
             handleUpdateData={handleUpdateData}
             role={ENTITIES.PRODUCTO}
           />

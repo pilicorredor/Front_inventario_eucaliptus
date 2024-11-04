@@ -110,27 +110,7 @@
   font-size: 16px;
 }
 
-.filter-use select {
-  padding: 8px 10px;
-  font-size: 16px;
-  border-radius: 8px;
-  width: 270px;
-  box-sizing: border-box;
-  background-color: #227e3c;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.filter-use select:hover {
-  background-color: #227e3c;
-}
-
-.filter-use option {
-  background-color: #dcf8dd;
-  color: black;
-}
-
-.filter-use select option:hover {
-  background-color: #227e3c;
+.filter-use .dropdown-button {
+  width: 150px;
+  text-align: left;
 }

@@ -2,27 +2,59 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from "../Assets/logo2.png";
 import Header from "../Header/Header";
+import CustomModal from "../../Modales/CustomModal";
+import UnitModal from "../../Modales/UnitModal";
 import "./FormRegisterProduct.css";
 import {
   USE_PRODUCTS,
   CATEGORY_PRODUCT,
   BUTTONS_ACTIONS,
   SERVICES,
+  ENTITIES,
 } from "../../Constants/Constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RegisterProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [provider, setProvider] = useState("");
+  const [unit, setUnit] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
+  const [send, setSend] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [entity, setEntity] = useState("producto");
+  const [action, setAction] = useState("registrar");
+  const [openModalUnit, setOpenModalUnit] = useState(false);
+  const [modalUnitMode, setModalUnitMode] = useState("addUnit");
   const [product, setProduct] = useState({
     idProduct: "",
-    nameProduct: "",
+    productName: "",
     brand: "",
-    use: "",
-    category: "",
-    unit: "",
-    descriptionProduct: "",
-    detailsProduct: "",
+    category: CATEGORY_PRODUCT.PERISHABLE,
+    use: USE_PRODUCTS.SUPPLEMENTS,
+    idProvider: id,
+    description: "",
+    unitName: "",
+    descriptionUnit: "",
+    minimumProductAmount: "",
+    maximumProductAmount: "",
+  });
+
+  const [sendProduct, setSendProduct] = useState({
+    idProduct: "",
+    productName: "",
+    brand: "",
+    category: CATEGORY_PRODUCT.PERISHABLE,
+    use: USE_PRODUCTS.SUPPLEMENTS,
+    idProvider: id,
+    description: "",
+    unitDTO: {
+      unitName: "",
+      description: "",
+    },
+    minimumProductAmount: "",
+    maximumProductAmount: "",
   });
 
   useEffect(() => {
@@ -52,21 +84,151 @@ const RegisterProduct = () => {
     };
 
     fetchProviderById();
+    fetchUnit();
   }, [id]);
+
+  const fetchUnit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const url = SERVICES.GET_PRODUCTS_UNITS_SERVICE;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const units = await response.json();
+        setUnit(units);
+      } else {
+        console.error("Error al traer las unidades:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
+  const fetchDescriptionByUnit = async (unitName) => {
+    try {
+      const token = localStorage.getItem("token");
+      const url = `${SERVICES.GET_PRODUCTS_UNITS_DESCRIPTION_SERVICE}/${unitName}`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDescriptions(data);
+      } else {
+        console.error(
+          "Error al obtener las descripciones:",
+          await response.json()
+        );
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setSendProduct({
+      idProduct: product.idProduct,
+      productName: product.productName,
+      brand: product.brand,
+      category: product.category,
+      use: product.use,
+      idProvider: id,
+      description: product.description,
+      unitDTO: {
+        unitName: product.unitName,
+        description: product.descriptionUnit,
+      },
+      minimumProductAmount: product.minimumProductAmount,
+      maximumProductAmount: product.maximumProductAmount,
+    });
+    setSend(true);
+    setLoading(true);
+  };
+
+  useEffect(() => {
+    if (send) {
+      handleService();
+    }
+  }, [send]);
+
+  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
+    setEntity(selectedEntity);
+    setAction(selectedAction);
+    setOpenModal(true);
+  };
+
+  // Cerrar el modal
+  const handleModalClose = () => {
     setProduct({
       idProduct: "",
-      nameProduct: "",
+      productName: "",
       brand: "",
-      use: "",
-      category: "",
-      unit: "",
-      descriptionProduct: "",
-      detailsProduct: "",
+      category: CATEGORY_PRODUCT.PERISHABLE,
+      use: USE_PRODUCTS.SUPPLEMENTS,
+      idProvider: id,
+      description: "",
+      unitName: "",
+      descriptionUnit: "",
+      minimumProductAmount: "",
+      maximumProductAmount: "",
     });
+    setOpenModal(false);
+    setSend(false);
+    navigate("/productos");
+  };
+
+  const handleService = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(SERVICES.REGISTER_PRODUCT_SERVICCE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(sendProduct),
+      });
+
+      if (response.ok) {
+        handleModalOpen({
+          selectedEntity: ENTITIES.PRODUCTO,
+          selectedAction: BUTTONS_ACTIONS.REGISTRAR,
+          success: true,
+        });
+        setLoading(false);
+        setSend(false);
+      } else {
+        const errorData = await response.json();
+        console.error("Error al registrar el producto:", errorData);
+        setLoading(false);
+        setSend(false);
+      }
+    } catch (error) {
+      handleModalOpen({
+        selectedEntity: ENTITIES.PRODUCTO,
+        selectedAction: BUTTONS_ACTIONS.REGISTRAR,
+        success: false,
+      });
+      console.error("Error en la solicitud:", error);
+      setLoading(false);
+      setSend(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -75,6 +237,50 @@ const RegisterProduct = () => {
       ...prevProduct,
       [name]: value,
     }));
+
+    if (name === "unitName") {
+      fetchDescriptionByUnit(value);
+    }
+  };
+
+  const handleAddUnit = () => {
+    setModalUnitMode("addUnit");
+    setOpenModalUnit(true);
+  };
+
+  const handleAddDescription = () => {
+    setModalUnitMode("addDescription");
+    setOpenModalUnit(true);
+  };
+
+  const handleSaveUnitData = async (unitData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.ADD_UNIT_SERVICE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          unitName: unitData.unitName,
+          description: unitData.description,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al guardar la unidad en la base de datos");
+      }
+
+      const result = await response.json();
+      console.log("Unidad guardada correctamente:", result);
+    } catch (error) {
+      console.error("Hubo un error:", error);
+      alert("No se pudo guardar la unidad. Inténtalo de nuevo.");
+    }
+    fetchUnit();
+    fetchDescriptionByUnit(unitData.unitName);
+    setOpenModalUnit(false);
   };
 
   return (
@@ -92,6 +298,11 @@ const RegisterProduct = () => {
             <label className="step-information-2">
               Información del producto
             </label>
+            {loading && (
+              <div className="page-loading-container">
+                <CircularProgress className="page-loading-icon" />
+              </div>
+            )}
           </div>
           <div className="stepTwo-title-right">
             <label>Proveedor: {provider}</label>
@@ -125,8 +336,8 @@ const RegisterProduct = () => {
               </label>
               <input
                 type="text"
-                name="nameProduct"
-                value={product.nameProduct}
+                name="productName"
+                value={product.productName}
                 onChange={handleInputChange}
                 required
               />
@@ -135,15 +346,19 @@ const RegisterProduct = () => {
           <div className="productForm-row">
             <div className="productForm-item">
               <label>
-                Marca <span className="red">*</span>
+                Categoría <span className="red">*</span>
               </label>
-              <input
-                type="text"
-                name="brand"
-                value={product.brand}
+              <select
+                name="category"
+                value={product.category}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value={CATEGORY_PRODUCT.PERISHABLE}>Perecedero</option>
+                <option value={CATEGORY_PRODUCT.NON_PERISHABLE}>
+                  No Perecedero
+                </option>
+              </select>
             </div>
             <div className="productForm-item">
               <label>
@@ -172,66 +387,134 @@ const RegisterProduct = () => {
           <div className="productForm-row">
             <div className="productForm-item">
               <label>
-                Categoría <span className="red">*</span>
+                Unidad <span className="red">*</span>
               </label>
-              <select
-                name="category"
-                value={product.category}
-                onChange={handleInputChange}
-                required
-              >
-                <option value={CATEGORY_PRODUCT.PERISHABLE}>Perecedero</option>
-                <option value={CATEGORY_PRODUCT.NON_PERISHABLE}>
-                  No Perecedero
-                </option>
-              </select>
+              <div className="unit-container">
+                <select
+                  name="unitName"
+                  value={product.unitName}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="" disabled hidden>
+                    Seleccione una unidad
+                  </option>
+                  {unit.map((u, index) => (
+                    <option key={index} value={u}>
+                      {u}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="add-unit-btn"
+                  onClick={handleAddUnit}
+                >
+                  +
+                </button>
+              </div>
             </div>
             <div className="productForm-item">
               <label>
-                Unidad <span className="red">*</span>
+                Descripción de la unidad <span className="red">*</span>
+              </label>
+              <div className="unit-container">
+                <select
+                  name="descriptionUnit"
+                  value={product.descriptionUnit}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="" disabled hidden>
+                    Seleccione una descripción
+                  </option>
+                  {descriptions.map((desc, index) => (
+                    <option key={index} value={desc}>
+                      {desc}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="add-unit-btn"
+                  onClick={handleAddDescription}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="productForm-row">
+            <div className="productForm-item">
+              <label>
+                Cantidad mínima del producto <span className="red">*</span>
               </label>
               <input
-                type="text"
-                name="unit"
-                value={product.unit}
+                type="number"
+                name="minimumProductAmount"
+                value={product.minimumProductAmount}
                 onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="productForm-item">
+              <label>
+                Cantidad máxima del producto <span className="red">*</span>
+              </label>
+              <input
+                type="number"
+                name="maximumProductAmount"
+                value={product.maximumProductAmount}
+                onChange={handleInputChange}
+                required
               />
             </div>
           </div>
           <div className="productForm-row">
             <div className="productForm-item">
               <label>
-                Descripción <span className="red">*</span>
+                Marca <span className="red">*</span>
               </label>
-              <textarea
-                className="custom-textarea"
-                name="descriptionProduct"
-                value={product.descriptionProduct}
-                rows="4"
-                cols="40"
+              <input
+                type="text"
+                name="brand"
+                value={product.brand}
                 onChange={handleInputChange}
                 required
               />
             </div>
             <div className="productForm-item">
-              <label>Detalles</label>
+              <label>Detalles del producto</label>
               <textarea
                 className="custom-textarea"
-                name="detailsProduct"
-                value={product.detailsProduct}
-                rows="4"
+                name="description"
+                value={product.description}
+                rows="2"
                 cols="40"
                 onChange={handleInputChange}
               />
             </div>
           </div>
         </div>
-
         <button type="submit" className="provider-button">
           {BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
             BUTTONS_ACTIONS.REGISTRAR.slice(1)}
         </button>
         <img src={logo} alt="logo" className="product-logo" />
+        {/* Componente del modal */}
+        <CustomModal
+          entity={entity}
+          action={action}
+          openModal={openModal}
+          onClose={handleModalClose}
+        />
+        <UnitModal
+          isOpen={openModalUnit}
+          onClose={() => setOpenModalUnit(false)}
+          unitName={product.unitName}
+          onSave={handleSaveUnitData}
+          mode={modalUnitMode}
+        />
       </form>
     </div>
   );
