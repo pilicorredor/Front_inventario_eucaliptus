@@ -17,6 +17,8 @@ const Personal = () => {
   const [buttonText, setButtonText] = useState("Buscar por...");
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [filteredProviderData, setFilteredProviderData] = useState([]);
+
 
   const columnsProviders = [
     "name",
@@ -30,6 +32,7 @@ const Personal = () => {
   const columnsSellers = ["name", "homeAddress", "email", "phoneNumber"];
 
   const providerItems = [
+    "Todos",
     "Nombre",
     "Dirección Empresarial",
     "Correo Electrónico",
@@ -39,11 +42,28 @@ const Personal = () => {
   ];
 
   const sellerItems = [
+    "Todos",
     "Nombre",
     "Dirección de domicilio",
     "Correo Electrónico",
     "Número de Teléfono",
   ];
+
+  const providerColumnMap = {
+    "Nombre": "name",
+    "Dirección Empresarial": "addressCompany",
+    "Correo Electrónico": "email",
+    "Número de Teléfono": "phoneNumber",
+    "Nombre de la Empresa": "companyName",
+    "Cuenta Bancaria": "banckAccount",
+  };
+
+  const sellerColumnMap = {
+    "Nombre": "name",
+    "Dirección de domicilio": "homeAddress",
+    "Correo Electrónico": "email",
+    "Número de Teléfono": "phoneNumber",
+  }
 
   useEffect(() => {
     if (role === "vendedor") {
@@ -124,26 +144,56 @@ const Personal = () => {
   };
 
   const handleRoleChange = (selectedRole) => {
+    setSearchQuery("");
+    setFilteredData(selectedRole === "proveedor" ? providersData : sellersData)
     setRole(selectedRole);
     navigate(`/personal/${selectedRole}`);
   };
 
   const handleSearch = () => {
-    //TODO
-    if (!selectedFilter || !searchQuery) {
-      alert(
-        "Por favor, selecciona un criterio de búsqueda y escribe algo en la barra de búsqueda."
+    if (role === "proveedor") {  
+      if (!searchQuery || selectedFilter === "Todos") {
+      
+        setFilteredProviderData(providersData);
+        return;
+      }
+      const selectedColumn = providerColumnMap[selectedFilter];
+
+      if (!selectedColumn) {
+        console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+        return;
+      }
+  
+      const filteredResults = providersData.filter((provider) =>
+        provider[selectedColumn]
+          .toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       );
-      return;
-    }
+  
+      setFilteredProviderData(filteredResults);
+    } else {
+      if (!searchQuery || selectedFilter === "Todos") {
+      
+        setFilteredData(sellersData);
+        return;
+      }
+      const selectedColumn = sellerColumnMap[selectedFilter];
 
-    // TODO implementar la lógica de búsqueda según selectedFilter y searchQuery
-    const dataToFilter =
-      role === ENTITIES.PROVEEDOR ? providersData : sellersData;
-
-    if (dataToFilter === ENTITIES.PROVEEDOR) {
+      if (!selectedColumn) {
+        console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+        return;
+      }
+  
+      const filteredResults = sellersData.filter((seller) =>
+        seller[selectedColumn]
+          .toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+  
+      setFilteredData(filteredResults);
     }
-    //setFilteredData(filtered);
   };
 
   const handleNew = () => {
@@ -155,6 +205,12 @@ const Personal = () => {
   const handleFilterSelection = (selectedItem) => {
     setSelectedFilter(selectedItem);
     setButtonText(selectedItem);
+
+    if (selectedItem === "Todos") {
+      setSearchQuery("");
+      setFilteredProviderData(providersData);
+      setFilteredData(sellersData);
+    }
   };
 
   return (
@@ -178,6 +234,7 @@ const Personal = () => {
 
         <div className="search-bar">
           <div className="search-container">
+
             <Dropdown
               buttonText={buttonText}
               content={
@@ -208,6 +265,7 @@ const Personal = () => {
                 )
               }
             />
+
             <input
               type="text"
               placeholder="Ingresa tu búsqueda"
@@ -228,7 +286,7 @@ const Personal = () => {
         <div className="personal-content">
           {role === ENTITIES.PROVEEDOR && (
             <CustomTable
-              data={providersData}
+              data={searchQuery? filteredProviderData : providersData}
               customColumns={columnsProviders}
               role={ENTITIES.PROVEEDOR}
               onDelete={handleDelete}
@@ -237,7 +295,7 @@ const Personal = () => {
           )}
           {role === ENTITIES.VENDEDOR && (
             <CustomTable
-              data={sellersData}
+              data={searchQuery? filteredData : sellersData}
               customColumns={columnsSellers}
               role={ENTITIES.VENDEDOR}
               onDelete={handleDelete}

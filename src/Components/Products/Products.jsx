@@ -89,6 +89,7 @@ const Products = () => {
   ];
 
   const productItems = [
+    "Todos",
     "ID del producto",
     "Nombre",
     "Marca",
@@ -97,6 +98,16 @@ const Products = () => {
     "Unidad",
     "Descripción unidad",
   ];
+
+  const columnMap = {
+    "ID del producto": "idProduct",
+    "Nombre": "productName",
+    "Marca": "brand",
+    "Categoría": "categoryProduct",
+    "Uso": "useProduct",
+    "Unidad": "unitName",
+    "Descripción unidad": "unitDescription",
+  };
 
   useEffect(() => {
     handleUpdateData(categoryProd, selectedUseFilter);
@@ -107,7 +118,27 @@ const Products = () => {
   };
 
   const handleSearch = () => {
-    console.log("Buscar:", searchQuery);
+    if (!searchQuery || selectedSearchFilter === "Todos") {
+      
+      setFilteredData(productsData);
+      return;
+    }
+
+    const selectedColumn = columnMap[selectedSearchFilter];
+
+    if (!selectedColumn) {
+      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      return;
+    }
+
+    const filteredResults = productsData.filter((product) =>
+      product[selectedColumn]
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredData(filteredResults);
   };
 
   const handleNew = () => {
@@ -143,6 +174,11 @@ const Products = () => {
   const handleSearchFilterSelection = (selectedItem) => {
     setSelectedSearchFilter(selectedItem);
     setProductButtonText(selectedItem);
+
+    if (selectedItem === "Todos") {
+      setSearchQuery("");
+      setFilteredData(productsData);
+    }
   };
 
   return (
