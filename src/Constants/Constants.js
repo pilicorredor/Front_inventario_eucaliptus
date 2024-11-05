@@ -25,6 +25,8 @@ export const SERVICES = {
     MODIFY_PRODUCT_SERVICE: "http://localhost:8083/products/updateProduct",
     DELETE_PRODUCT_SERVICE: "http://localhost:8083/products/deleteProduct",
     ADD_UNIT_SERVICE: "http://localhost:8083/products/units/addUnit",
+    GET_PRODUCT_BY_PROVIDER_SERVICE: "http://localhost:8083/products/getProductsByProvider",
+    ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
 }
 
 export const MODAL_TYPES = {
@@ -43,6 +45,7 @@ export const BUTTONS_ACTIONS = {
     REGISTRAR: 'registrar',
     MODIFICAR: 'modificar',
     ELIMINAR: 'eliminar',
+    ANADIR: 'añadir',
 }
 
 export const ROLES = {

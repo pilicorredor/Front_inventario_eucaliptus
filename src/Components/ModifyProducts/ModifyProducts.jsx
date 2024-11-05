@@ -211,7 +211,7 @@ const ModidyProducts = () => {
 
   return (
     <div className="product-section-container">
-      <Header pageTitle="Productos - Registrar" />
+      <Header pageTitle="Productos - Modificar" />
       <div>
         <div className="product-section">
           <label className="product-section-title">Modificar Producto</label>

@@ -20,6 +20,9 @@ import CheckPswdToken from './Components/ChangePassword/CheckPswdToken';
 import RecoveryUpdatePassword from './Components/ChangePassword/RecoveryUpdatePassword';
 import LoginFormChangePswd from './Components/ChangePassword/LoginFormChangePswd';
 import UpdatePassword from './Components/ChangePassword/UpdatePassword';
+import ChooseProviderPurchase from './Components/RegisterPurchase/ChooseProviderPurchase';
+import ChooseProductsPurchase from './Components/RegisterPurchase/ChooseProductsPurchase';
+import FormRegisterDetailsProduct from './Components/RegisterPurchase/FormRegisterDetailsProduct';
 
 
 const AppContent = () => {
@@ -69,6 +72,9 @@ const AppContent = () => {
                 <Route path='/productos/escoger-proveedor' element={<ChooseProvider />} />
                 <Route path="/productos/registrar/:id" element={<RegisterProduct />} />
                 <Route path="/modificar/producto/:id" element={<ModidyProducts />} />
+                <Route path="/compra/proveedor" element={<ChooseProviderPurchase />} />
+                <Route path="/compra/productos/:id" element={<ChooseProductsPurchase />} />
+                <Route path="/compra/info-prod/:id" element={<FormRegisterDetailsProduct />} />
             </Routes>
         </>
     );

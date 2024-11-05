@@ -59,7 +59,14 @@ const CustomTable = ({
   };
 
   const handleSelect = (id) => {
-    navigate(`/productos/registrar/${id}`);
+    console.log(context);
+    if (context === "registerProd") {
+      navigate(`/productos/registrar/${id}`);
+    } else if (context === "registerPurchase") {
+      navigate(`/compra/productos/${id}`);
+    } else if (context === "registerPurchaseAddProd") {
+      navigate(`/compra/info-prod/${id}`);
+    }
   };
 
   const columnNamesLabels = {
@@ -150,7 +157,9 @@ const CustomTable = ({
                         padding: "10px",
                       }}
                     >
-                      {context === "registerProd" ? (
+                      {context === "registerProd" ||
+                      context === "registerPurchase" ||
+                      context === "registerPurchaseAddProd" ? (
                         <button
                           onClick={() => handleSelect(row.id_modify)}
                           style={{
