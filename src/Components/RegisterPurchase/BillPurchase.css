@@ -1,0 +1,36 @@
+.purchas {
+  width: 90vw;
+  margin-left: 60px;
+  height: 100vh;
+}
+
+.table-bill {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-buttons-box {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.modal-button {
+  width: 180px;
+  min-width: 100px;
+  height: 35px;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.check-button {
+  background-color: #227e3c;
+}

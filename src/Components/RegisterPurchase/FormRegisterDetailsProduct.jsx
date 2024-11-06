@@ -103,7 +103,6 @@ const RegisterProduct = () => {
     }
   }, [idProvider]);
 
-  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -316,7 +315,6 @@ const RegisterProduct = () => {
           onClose={() => setIsModalOpen(false)}
           onViewBill={handleViewBill}
           onAddAnother={handleAddAnother}
-          data={sendProducts}
         />
       </form>
     </div>

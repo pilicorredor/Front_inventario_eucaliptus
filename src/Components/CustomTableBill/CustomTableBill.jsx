@@ -11,16 +11,19 @@ import { ProductContext } from "../../Context/ProductContext";
 const CustomTableBill = () => {
   const { productsTable } = useContext(ProductContext);
 
-  const TAX_RATE = 0.19;
-
   const priceRow = (qty, unitPrice) => qty * unitPrice;
 
   const subtotal = (items) =>
     items.map(({ subtotal }) => subtotal).reduce((sum, i) => sum + i, 0);
 
-  const createRow = (name, category, use, unitPrice, qty) => {
+  const taxTotal = (items) =>
+    items
+      .map(({ tax, subtotal }) => subtotal * (tax / 100))
+      .reduce((sum, i) => sum + i, 0);
+
+  const createRow = (name, category, use, unitPrice, qty, tax) => {
     const subtotal = priceRow(qty, unitPrice);
-    return { name, category, use, unitPrice, qty, subtotal };
+    return { name, category, use, unitPrice, qty, subtotal, tax };
   };
 
   const rows = productsTable.map((product) =>
@@ -29,12 +32,13 @@ const CustomTableBill = () => {
       product.category,
       product.use,
       product.inputUnitPrice,
-      product.quantity
+      product.quantity,
+      product.iva
     )
   );
 
   const invoiceSubtotal = subtotal(rows);
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+  const invoiceTaxes = taxTotal(rows);
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
   return (
@@ -58,7 +62,7 @@ const CustomTableBill = () => {
               <TableCell align="center">{row.use}</TableCell>
               <TableCell align="center">{row.unitPrice}</TableCell>
               <TableCell align="center">{row.qty}</TableCell>
-              <TableCell align="right">{row.subtotal}</TableCell>
+              <TableCell align="right">{row.subtotal.toFixed(2)}</TableCell>
             </TableRow>
           ))}
           <TableRow>
@@ -66,19 +70,19 @@ const CustomTableBill = () => {
             <TableCell colSpan={4} align="right">
               Subtotal
             </TableCell>
-            <TableCell align="right">{invoiceSubtotal}</TableCell>
+            <TableCell align="right">{invoiceSubtotal.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell colSpan={4} align="right">
-              IVA ({`${(TAX_RATE * 100).toFixed(0)} %`})
+              IVA
             </TableCell>
-            <TableCell align="right">{invoiceTaxes}</TableCell>
+            <TableCell align="right">{invoiceTaxes.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell colSpan={4} align="right">
               Total
             </TableCell>
-            <TableCell align="right">{invoiceTotal}</TableCell>
+            <TableCell align="right">{invoiceTotal.toFixed(2)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

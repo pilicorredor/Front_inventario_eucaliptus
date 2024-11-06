@@ -1,23 +1,24 @@
 import React from "react";
 import "./PurchaseModal.css";
-import CustomTableBill from "../Components/CustomTableBill/CustomTableBill";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import Box from "@mui/material/Box";
 
-const PurchaseModal = ({ isOpen, onClose, onViewBill, onAddAnother, data }) => {
+const PurchaseModal = ({ isOpen, onClose, onViewBill, onAddAnother }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Producto añadido con éxito</h2>
-        <div className="modal-buttons">
-          <button onClick={onViewBill}>Ver Factura Final</button>
-          <button onClick={onAddAnother}>Añadir Otro Producto</button>
-        </div>
-        <button className="modal-close" onClick={onClose}>
-          X
+    <Box className="modal-box">
+      <h2>Producto añadido con éxito</h2>
+      <CheckCircleOutlineIcon className="modal-icon icon-green" />
+      <div className="modal-buttons-box">
+        <button className="modal-button check-button" onClick={onViewBill}>
+          Ver Factura Final
+        </button>
+        <button className="modal-button check-button" onClick={onAddAnother}>
+          Añadir Otro Producto
         </button>
       </div>
-    </div>
+    </Box>
   );
 };
 
