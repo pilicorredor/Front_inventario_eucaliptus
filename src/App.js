@@ -53,7 +53,7 @@ const AppContent = () => {
             {login && <Navbar login={login} handleLogin={handleLogin} username={username} role={role} handleLogout={handleLogout} />}
             <Routes>
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
-                <Route path='/inicio' element={<HomePage />} />
+                <Route path='/inicio' element={<HomePage username={username} />} />
                 <Route path='/config' element={<Config userRol={role} username={username} handleLogout={handleLogout} />} />
                 <Route path='/config/login-to-change-password' element={<LoginFormChangePswd login={login} handleLogin={handleLogin} />} />
                 <Route path='/config/send-email-password' element={<SendEmailPassword />} />

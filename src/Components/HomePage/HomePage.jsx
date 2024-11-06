@@ -1,61 +1,74 @@
 import React from "react";
 import "./HomePage.css";
 import Header from "../Header/Header.jsx";
-import missionImg from "../Assets/misionImg.png";
-import visionImg from "../Assets/visionImg.png";
-import valuesImg from "../Assets/valuesImg.png";
+import coutionLogo from "../Assets/danger.png";
+import DataTable from "./DataTable.jsx";
 
-const HomePage = () => {
+const HomePage = ({ username }) => {
+
+  const sampleData = [
+    {
+      idProducto: 'PS-001',
+      nombre: 'Aceite de coco',
+      cantidadVencer: 10,
+      fechaVencimiento: '02/11/2024',
+      operacion: 'Editar'
+    },
+    {
+      idProducto: 'PS-002',
+      nombre: 'Semillas de chía',
+      cantidadVencer: 5,
+      fechaVencimiento: '07/12/2024',
+      operacion: 'Eliminar'
+    },
+    {
+      idProducto: 'PS-003',
+      nombre: 'Pastillas de vitamina',
+      cantidadVencer: 7,
+      fechaVencimiento: '07/11/2024',
+      operacion: 'Eliminar'
+    },
+  ];
+
+
+
   return (
     <div className="homepage">
       <Header pageTitle="Inicio" />
       <div className="homepage-content">
-        <div className="home-card mision">
-          <div>
-            <h2>Misión</h2>
-            <p>
-              Naturista Eucaliptus se dedica a promover la salud y el bienestar
-              de las familias a través de la venta de productos naturistas de
-              alta calidad. Nos enfocamos en ofrecer una amplia variedad de
-              alimentos, suplementos y productos de cuidado personal que
-              favorezcan un estilo de vida saludable y en armonía con la
-              naturaleza.
-            </p>
-          </div>
 
-          <img src={missionImg} alt="Mission Icon" />
+        <div className="homepage-welcoming-message">
+          <h2>Hola {username}, estos son algunos datos de la operación durante este mes: </h2>
         </div>
 
-        <div className="home-card vision">
-          <div>
-            <h2>Visión</h2>
-            <p>
-              Convertirnos en un referente lider en el mercado de productos
-              naturistas en Colombia, expandiendo nuestra presencia a otras
-              ciudades y regiones del país, y consolidandonos como la primera
-              opcion para quienes buscan alternativas naturales para el cuidado
-              de su salud y bienestar.
-            </p>
+        <div className="home-card data">
+          <div className="home-data income">
+            <p>Ingreso ventas</p>
+            <h2>$412.000</h2>
           </div>
-
-          <img src={visionImg} alt="Vision Icon" />
+          <div className="home-data expenses">
+            <p>Inversión compra productos</p>
+            <h2>$50.000</h2>
+          </div>
+          <div className="home-data sales">
+            <p>Total ventas realizadas</p>
+            <h2>50</h2>
+          </div>
+          <div className="home-data purchases">
+            <p>Total compras realizadas</p>
+            <h2>2</h2>
+          </div>
         </div>
 
-        <div className="home-card values">
-          <div>
-            <h2>Valores</h2>
-            <div className="values-list">
-              <ul>
-                <li>Salud y bienestar</li>
-                <li>Calidad</li>
-                <li>Responsabilidad ambiental</li>
-                <li>Atención al cliente</li>
-                <li>Integridad</li>
-              </ul>
-            </div>
-          </div>
-          <img src={valuesImg} alt="Values Icon" />
+        <div className="expire-products-label">
+          <img src={coutionLogo} alt="Caution Icon" />
+          <p>Productos a vencer próximamente:</p>
         </div>
+
+        <div className="home-expire-data-content">
+        <DataTable data={sampleData} />
+        </div>
+
       </div>
     </div>
   );
