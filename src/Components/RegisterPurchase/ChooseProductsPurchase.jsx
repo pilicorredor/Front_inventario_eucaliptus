@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
@@ -9,9 +9,10 @@ import {
   CATEGORY_PRODUCT,
   ENTITIES,
 } from "../../Constants/Constants.js";
-
+import { ButtonContext } from "../../Context/ButtonContext";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
+import { ProductContext } from "../../Context/ProductContext";
 
 const ChooseProductsPurchase = () => {
   const { id } = useParams();
@@ -27,8 +28,10 @@ const ChooseProductsPurchase = () => {
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [contextTable, setContextTable] = useState("registerPurchaseAddProd");
+  const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
   const [provider, setProvider] = useState("");
-
+  const { sendProducts, addProduct, productsTable, addProductTable } =
+    useContext(ProductContext);
   const columnsProducts = [
     "idProduct",
     "productName",
@@ -166,6 +169,30 @@ const ChooseProductsPurchase = () => {
     setFilteredData(filteredProducts);
   };
 
+  const handleServiceAddPurchase = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(SERVICES.ADD_PURCHASE_SERVICE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(sendProducts),
+      });
+
+      if (response.ok) {
+        navigate("/compra/factura");
+      } else {
+        const errorData = await response.json();
+        console.error("Error al registrar la compra:", errorData);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
   const handleUseFilterSelection = (selectedItem) => {
     setSelectedUseFilter(selectedItem);
     setUseButtonText(selectedItem);
@@ -174,6 +201,11 @@ const ChooseProductsPurchase = () => {
   const handleSearchFilterSelection = (selectedItem) => {
     setSelectedSearchFilter(selectedItem);
     setProductButtonText(selectedItem);
+  };
+
+  const handleFinishPurchase = () => {
+    setIsButtonActive(false);
+    handleServiceAddPurchase();
   };
 
   return (
@@ -189,12 +221,14 @@ const ChooseProductsPurchase = () => {
           </div>
           <div className="stepTwo-title-right">
             <label>Proveedor: {provider}</label>
-            <button
-              className="change-btn"
-              onClick={() => navigate("/compra/proveedor")}
-            >
-              Cambiar
-            </button>
+            {!isButtonActive && (
+              <button
+                className="change-btn"
+                onClick={() => navigate("/compra/proveedor")}
+              >
+                Cambiar
+              </button>
+            )}
           </div>
         </div>
         <div className="products-header">
@@ -290,6 +324,17 @@ const ChooseProductsPurchase = () => {
           />
         </div>
       </div>
+      {/* Botón "Terminar compra" solo si isButtonActive es true */}
+      {isButtonActive && (
+        <div className="finish-purchase-btn-container">
+          <button
+            className="finish-purchase-btn"
+            onClick={handleFinishPurchase}
+          >
+            Terminar compra
+          </button>
+        </div>
+      )}
     </div>
   );
 };

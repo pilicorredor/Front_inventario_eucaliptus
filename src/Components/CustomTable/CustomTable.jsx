@@ -59,7 +59,6 @@ const CustomTable = ({
   };
 
   const handleSelect = (id) => {
-    console.log(context);
     if (context === "registerProd") {
       navigate(`/productos/registrar/${id}`);
     } else if (context === "registerPurchase") {

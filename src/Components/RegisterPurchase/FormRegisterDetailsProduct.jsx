@@ -1,35 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from "../Assets/logo2.png";
 import Header from "../Header/Header";
-import CustomModal from "../../Modales/CustomModal";
 import "./FormRegisterDetailsProduct.css";
 import {
-  USE_PRODUCTS,
-  CATEGORY_PRODUCT,
   BUTTONS_ACTIONS,
   SERVICES,
-  ENTITIES,
+  CATEGORY_PRODUCT,
 } from "../../Constants/Constants";
+import PurchaseModal from "../../Modales/PurchaseModal";
+import CustomTableBill from "../CustomTableBill/CustomTableBill";
+import { ButtonContext } from "../../Context/ButtonContext";
+import { ProductContext } from "../../Context/ProductContext";
 
 const RegisterProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [provider, setProvider] = useState("");
   const [idProvider, setIdProvider] = useState("");
-  const [send, setSend] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [entity, setEntity] = useState("producto");
-  const [action, setAction] = useState("registrar");
-  const [selectedDate, setSelectedDate] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
+  const { sendProducts, addProduct, productsTable, addProductTable } =
+    useContext(ProductContext);
+  // Estado del producto
   const [product, setProduct] = useState({
     idProduct: id,
     productName: "",
+    category: "",
+    use: "",
   });
 
+  // Estado del producto a enviar
   const [sendProduct, setSendProduct] = useState({
-    idProduct: "",
+    idProduct: id,
     quantity: "",
     inputUnitPrice: "",
     outputUnitPrice: "",
@@ -38,30 +41,12 @@ const RegisterProduct = () => {
     dueDate: "",
   });
 
-  const [sendProducts, setSendProducts] = useState([
-    {
-      productDTO: {
-        idProduct: "",
-      },
-      quantity: "",
-      inputUnitPrice: "",
-      outputUnitPrice: "",
-      iva: "",
-      batch: "",
-      dueDate: "",
-    },
-  ]);
-
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-  };
-
+  // Fetch del producto por ID
   useEffect(() => {
     const fetchProductById = async () => {
       try {
         const token = localStorage.getItem("token");
         const url = `${SERVICES.GET_PRODUCT_BY_ID_SERVICE}/${id}`;
-
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -72,8 +57,11 @@ const RegisterProduct = () => {
 
         if (response.ok) {
           const data = await response.json();
-          const productName = data.productName;
-          setProduct({ productName: productName });
+          setProduct({
+            productName: data.productName,
+            category: data.category,
+            use: data.use,
+          });
           setIdProvider(data.idProvider);
         } else {
           console.error("Error al traer el producto:", await response.json());
@@ -85,12 +73,12 @@ const RegisterProduct = () => {
     fetchProductById();
   }, [id]);
 
+  // Fetch del proveedor por ID
   useEffect(() => {
     const fetchProviderById = async () => {
       try {
         const token = localStorage.getItem("token");
         const url = `${SERVICES.GET_PROVIDER_BY_ID}/${idProvider}`;
-
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -104,111 +92,89 @@ const RegisterProduct = () => {
           const providerName = `${data.personDTO.firstName} ${data.personDTO.lastName}`;
           setProvider(providerName);
         } else {
-          console.error("Error al traer el vendedor:", await response.json());
+          console.error("Error al traer el proveedor:", await response.json());
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
     };
-    fetchProviderById();
+    if (idProvider) {
+      fetchProviderById();
+    }
   }, [idProvider]);
 
+  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setSendProduct({
-      idProduct: product.idProduct,
+    // Crear un nuevo producto basado en el estado actual
+    const newProduct = {
+      productDTO: {
+        idProduct: sendProduct.idProduct,
+      },
+      quantity: sendProduct.quantity,
+      inputUnitPrice: sendProduct.inputUnitPrice,
+      outputUnitPrice: sendProduct.outputUnitPrice,
+      iva: sendProduct.iva,
+      batch: sendProduct.batch,
+      dueDate: sendProduct.dueDate,
+    };
+
+    const productTable = {
+      idProduct: sendProduct.idProduct,
       productName: product.productName,
-      brand: product.brand,
       category: product.category,
       use: product.use,
-      idProvider: id,
-      description: product.description,
-      unitDTO: {
-        unitName: product.unitName,
-        description: product.descriptionUnit,
-      },
-      minimumProductAmount: product.minimumProductAmount,
-      maximumProductAmount: product.maximumProductAmount,
-    });
-    setSend(true);
-    setLoading(true);
+      inputUnitPrice: sendProduct.inputUnitPrice,
+      quantity: sendProduct.quantity,
+      iva: sendProduct.iva,
+    };
+
+    // Usar el contexto para agregar el producto
+    addProduct(newProduct);
+    addProductTable(productTable);
+    setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    if (send) {
-      handleService();
-    }
-  }, [send]);
-
-  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
-    setEntity(selectedEntity);
-    setAction(selectedAction);
-    setOpenModal(true);
-  };
-
-  // Cerrar el modal
-  const handleModalClose = () => {
-    setProduct({
-      idProduct: "",
-      productName: "",
-      brand: "",
-      category: CATEGORY_PRODUCT.PERISHABLE,
-      use: USE_PRODUCTS.SUPPLEMENTS,
-      idProvider: id,
-      description: "",
-      unitName: "",
-      descriptionUnit: "",
-      minimumProductAmount: "",
-      maximumProductAmount: "",
-    });
-    setOpenModal(false);
-    setSend(false);
-    navigate("/productos");
-  };
-
-  const handleService = async () => {
+  const handleServiceAddPurchase = async () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(SERVICES.REGISTER_PRODUCT_SERVICE, {
+      const response = await fetch(SERVICES.ADD_PURCHASE_SERVICE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(sendProduct),
+        body: JSON.stringify(sendProducts),
       });
 
       if (response.ok) {
-        handleModalOpen({
-          selectedEntity: ENTITIES.PRODUCTO,
-          selectedAction: BUTTONS_ACTIONS.REGISTRAR,
-          success: true,
-        });
-        setLoading(false);
-        setSend(false);
+        navigate("/compra/factura");
       } else {
         const errorData = await response.json();
-        console.error("Error al registrar el producto:", errorData);
-        setLoading(false);
-        setSend(false);
+        console.error("Error al registrar la compra:", errorData);
       }
     } catch (error) {
-      handleModalOpen({
-        selectedEntity: ENTITIES.PRODUCTO,
-        selectedAction: BUTTONS_ACTIONS.REGISTRAR,
-        success: false,
-      });
       console.error("Error en la solicitud:", error);
-      setLoading(false);
-      setSend(false);
     }
+  };
+
+  const handleViewBill = () => {
+    setIsModalOpen(false);
+    setIsButtonActive(false);
+    handleServiceAddPurchase();
+  };
+
+  const handleAddAnother = () => {
+    setIsModalOpen(false);
+    setIsButtonActive(true);
+    navigate(`/compra/productos/${idProvider}`);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProduct((prevProduct) => ({
+    setSendProduct((prevProduct) => ({
       ...prevProduct,
       [name]: value,
     }));
@@ -234,7 +200,7 @@ const RegisterProduct = () => {
               <input
                 type="text"
                 name="idProduct"
-                value={product.idProduct}
+                value={sendProduct.idProduct}
                 onChange={handleInputChange}
                 disabled
                 required
@@ -256,12 +222,14 @@ const RegisterProduct = () => {
           </div>
           <div className="productForm-row">
             <div className="productForm-item">
-              <label htmlFor="date-picker">Lote (fecha)</label>
+              <label htmlFor="date-picker">
+                Lote (fecha) <span className="red">*</span>
+              </label>
               <input
                 type="date"
-                id="date-picker"
-                value={selectedDate}
-                onChange={handleDateChange}
+                name="batch"
+                value={sendProduct.batch}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -308,16 +276,20 @@ const RegisterProduct = () => {
             </div>
           </div>
           <div className="productForm-row">
-            <div className="productForm-item">
-              <label htmlFor="date-picker">Fecha de vencimiento</label>
-              <input
-                type="date"
-                id="date-picker"
-                value={selectedDate}
-                onChange={handleDateChange}
-                required
-              />
-            </div>
+            {product.category !== CATEGORY_PRODUCT.NON_PERISHABLE && (
+              <div className="productForm-item">
+                <label htmlFor="date-picker">
+                  Fecha de vencimiento <span className="red">*</span>
+                </label>
+                <input
+                  type="date"
+                  name="dueDate"
+                  value={sendProduct.dueDate}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            )}
             <div className="productForm-item">
               <label>
                 Porcentaje del IVA <span className="red">*</span>
@@ -339,11 +311,12 @@ const RegisterProduct = () => {
         </button>
         <img src={logo} alt="logo" className="product-logo" />
         {/* Componente del modal */}
-        <CustomModal
-          entity={entity}
-          action={action}
-          openModal={openModal}
-          onClose={handleModalClose}
+        <PurchaseModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onViewBill={handleViewBill}
+          onAddAnother={handleAddAnother}
+          data={sendProducts}
         />
       </form>
     </div>

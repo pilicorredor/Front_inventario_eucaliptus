@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { EmailProvider } from './Context/EmailContext';
 import { VerifCodeProvider } from './Context/VerificationCodeContext';
+import { ButtonContext, ButtonProvider } from './Context/ButtonContext';
+import { ProductContext, ProductProvider } from './Context/ProductContext';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
 import Personal from './Components/Personal/Personal';
@@ -23,6 +25,7 @@ import UpdatePassword from './Components/ChangePassword/UpdatePassword';
 import ChooseProviderPurchase from './Components/RegisterPurchase/ChooseProviderPurchase';
 import ChooseProductsPurchase from './Components/RegisterPurchase/ChooseProductsPurchase';
 import FormRegisterDetailsProduct from './Components/RegisterPurchase/FormRegisterDetailsProduct';
+import BillPurchase from './Components/RegisterPurchase/BillPurchase';
 
 
 const AppContent = () => {
@@ -75,6 +78,7 @@ const AppContent = () => {
                 <Route path="/compra/proveedor" element={<ChooseProviderPurchase />} />
                 <Route path="/compra/productos/:id" element={<ChooseProductsPurchase />} />
                 <Route path="/compra/info-prod/:id" element={<FormRegisterDetailsProduct />} />
+                <Route path="/compra/factura" element={<BillPurchase />} />
             </Routes>
         </>
     );
@@ -85,7 +89,11 @@ const App = () => {
         <Router>
             <EmailProvider>
                 <VerifCodeProvider>
-                    <AppContent />
+                    <ButtonProvider>
+                        <ProductProvider>
+                            <AppContent />
+                        </ProductProvider>
+                    </ButtonProvider>
                 </VerifCodeProvider>
             </EmailProvider>
         </Router>
