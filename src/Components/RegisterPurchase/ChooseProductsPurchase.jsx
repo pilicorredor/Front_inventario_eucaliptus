@@ -13,10 +13,12 @@ import { ButtonContext } from "../../Context/ButtonContext";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import { ProductContext } from "../../Context/ProductContext";
+import RegisterProductModal from "../../Modales/RegisterProductModal.jsx";
 
 const ChooseProductsPurchase = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryProd, setCategoryProd] = useState(
     CATEGORY_PRODUCT.ALL_PRODUCTS
   );
@@ -208,6 +210,20 @@ const ChooseProductsPurchase = () => {
     handleServiceAddPurchase();
   };
 
+  const handleNewButtonClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    fetchProductsData();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="products">
       <Header pageTitle="Registrar Compra" />
@@ -290,6 +306,9 @@ const ChooseProductsPurchase = () => {
               Buscar
             </button>
           </div>
+          <button className="btn new-btn" onClick={handleNewButtonClick}>
+            Nuevo
+          </button>
         </div>
 
         {/* Nuevo filtro por uso */}
@@ -335,6 +354,13 @@ const ChooseProductsPurchase = () => {
           </button>
         </div>
       )}
+      {/* Modal de Proveedor */}
+      <RegisterProductModal
+        id={id}
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        handleSubmit={handleSubmit}
+      />
     </div>
   );
 };
