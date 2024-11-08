@@ -9,7 +9,7 @@ import {
   CATEGORY_PRODUCT,
 } from "../../Constants/Constants";
 import PurchaseModal from "../../Modales/PurchaseModal";
-import CustomTableBill from "../CustomTableBill/CustomTableBill";
+import VerifyPurchaseModal from "../../Modales/VerifyPurchaseModal";
 import { ButtonContext } from "../../Context/ButtonContext";
 import { ProductContext } from "../../Context/ProductContext";
 
@@ -19,7 +19,9 @@ const RegisterProduct = () => {
   const [provider, setProvider] = useState("");
   const [idProvider, setIdProvider] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false);
   const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
+  const [messageModal, setMessageModal] = useState("");
   const { sendProducts, addProduct, productsTable, addProductTable } =
     useContext(ProductContext);
   // Estado del producto
@@ -103,10 +105,9 @@ const RegisterProduct = () => {
     }
   }, [idProvider]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Crear un nuevo producto basado en el estado actual
     const newProduct = {
       productDTO: {
         idProduct: sendProduct.idProduct,
@@ -129,10 +130,30 @@ const RegisterProduct = () => {
       iva: sendProduct.iva,
     };
 
-    // Usar el contexto para agregar el producto
-    addProduct(newProduct);
-    addProductTable(productTable);
-    setIsModalOpen(true);
+    const auxProductList = [...sendProducts, newProduct];
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.VALIDATE_PURCHASE_SERVICE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(auxProductList),
+      });
+      const result = await response.json();
+      if (result.message === "Compra valida") {
+        addProduct(newProduct);
+        addProductTable(productTable);
+        setIsModalOpen(true);
+      } else {
+        setIsDuplicateModalOpen(true);
+        setMessageModal(result.message);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud de verificación:", error);
+    }
   };
 
   const handleServiceAddPurchase = async () => {
@@ -315,6 +336,12 @@ const RegisterProduct = () => {
           onClose={() => setIsModalOpen(false)}
           onViewBill={handleViewBill}
           onAddAnother={handleAddAnother}
+        />
+        <VerifyPurchaseModal
+          isOpen={isDuplicateModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          message={messageModal}
+          onNavigate={handleAddAnother}
         />
       </form>
     </div>

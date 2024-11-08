@@ -27,6 +27,7 @@ export const SERVICES = {
     ADD_UNIT_SERVICE: "http://localhost:8083/products/units/addUnit",
     GET_PRODUCT_BY_PROVIDER_SERVICE: "http://localhost:8083/products/getProductsByProvider",
     ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
+    VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/details/validatePurchase",
 }
 
 export const MODAL_TYPES = {

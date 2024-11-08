@@ -4,18 +4,24 @@ import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import "./ChooseProviderPurchase.css";
 import Header from "../Header/Header.jsx";
+import Dropdown from "../Dropdown/Dropdown.jsx";
+import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import {
   SERVICES,
   CATEGORY_PRODUCT,
   ENTITIES,
 } from "../../Constants/Constants.js";
+import RegisterProviderModal from "../../Modales/RegisterProviderModal";
 
 const ChooseProviderPurchase = () => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [role, setRole] = useState("proveedor");
   const [contextTable, setContextTable] = useState("registerPurchase");
   const [searchQuery, setSearchQuery] = useState("");
   const [providersData, setProvidersData] = useState([]);
+  const [buttonText, setButtonText] = useState("Buscar por...");
+  const [selectedFilter, setSelectedFilter] = useState("");
 
   useEffect(() => {
     fetchProvidersData();
@@ -62,8 +68,36 @@ const ChooseProviderPurchase = () => {
     "banckAccount",
   ];
 
+  const providerItems = [
+    "Nombre",
+    "Dirección Empresarial",
+    "Correo Electrónico",
+    "Número de Teléfono",
+    "Nombre de la Empresa",
+    "Cuenta Bancaria",
+  ];
+
   const handleSearch = () => {
     console.log("Buscar:", searchQuery);
+  };
+
+  const handleFilterSelection = (selectedItem) => {
+    setSelectedFilter(selectedItem);
+    setButtonText(selectedItem);
+  };
+
+  const handleNewButtonClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    fetchProvidersData();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsModalOpen(false);
   };
 
   return (
@@ -76,6 +110,22 @@ const ChooseProviderPurchase = () => {
         </div>
         <div className="search-bar">
           <div className="search-container">
+            <Dropdown
+              buttonText={buttonText}
+              content={
+                <>
+                  {" "}
+                  {providerItems.map((item) => (
+                    <DropdownItem
+                      key={item}
+                      onClick={() => handleFilterSelection(item)}
+                    >
+                      {`${item}`}
+                    </DropdownItem>
+                  ))}{" "}
+                </>
+              }
+            />
             <input
               type="text"
               placeholder="Ingresa tu búsqueda"
@@ -88,6 +138,9 @@ const ChooseProviderPurchase = () => {
               Buscar
             </button>
           </div>
+          <button className="btn new-btn" onClick={handleNewButtonClick}>
+            Nuevo
+          </button>
         </div>
 
         <div className="products-content">
@@ -100,6 +153,12 @@ const ChooseProviderPurchase = () => {
             />
           )}
         </div>
+        {/* Modal de Proveedor */}
+        <RegisterProviderModal
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </div>
   );
