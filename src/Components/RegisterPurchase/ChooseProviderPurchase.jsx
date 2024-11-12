@@ -6,11 +6,7 @@ import "./ChooseProviderPurchase.css";
 import Header from "../Header/Header.jsx";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
-import {
-  SERVICES,
-  CATEGORY_PRODUCT,
-  ENTITIES,
-} from "../../Constants/Constants.js";
+import { SERVICES, ENTITIES } from "../../Constants/Constants.js";
 import RegisterProviderModal from "../../Modales/RegisterProviderModal";
 
 const ChooseProviderPurchase = () => {
@@ -41,13 +37,13 @@ const ChooseProviderPurchase = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
-          id_modify: provider.idProvider,
+          id_modify: provider.personDTO.idPerson,
           name: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
-          addressCompany: provider.companyDTO.companyAddress,
+          addressCompany: provider.companyDTO?.companyAddress || "N/A",
           email: provider.personDTO.email,
           phoneNumber: provider.personDTO.phoneNumber,
-          companyName: provider.companyDTO.companyName,
-          banckAccount: provider.companyDTO.bankAccountNumber,
+          companyName: provider.companyDTO?.companyName || "N/A",
+          bankAccount: provider.bankAccountNumber,
         }));
         setProvidersData(formattedProviders);
       } else {
@@ -60,12 +56,13 @@ const ChooseProviderPurchase = () => {
   };
 
   const columnsProviders = [
+    "id_modify",
     "name",
     "addressCompany",
     "email",
     "phoneNumber",
     "companyName",
-    "banckAccount",
+    "bankAccount",
   ];
 
   const providerItems = [

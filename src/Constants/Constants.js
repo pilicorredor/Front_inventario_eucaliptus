@@ -6,6 +6,8 @@ export const SERVICES = {
     CONFIG_CHANGE_PASSWORD: 'http://localhost:8081/auth/changePassword',
     GET_SELLERS_ALL_SERVICE: 'http://localhost:8082/person/sellers/all',
     GET_PROVIDERS_ALL_SERVICE: 'http://localhost:8082/person/providers/all',
+    VALIDATE_PROVIDER_SERVICE: 'http://localhost:8082/person/providers/validateNewProvider',
+    GET_COMPANY_BY_NIT_SERVICE: 'http://localhost:8082/person/providers/getCompanyByNit',
     REGISTER_SELLER_SERVICE: "http://localhost:8082/person/sellers/addSeller",
     REGISTER_PROVIDER_SERVICE: "http://localhost:8082/person/providers/addProvider",
     GET_PROVIDER_BY_ID: "http://localhost:8082/person/providers/getProviderById",
@@ -81,4 +83,12 @@ export const USE_PRODUCTS = {
     ESOTERIC: "ESOTERICOS",
     PERSONAL_CARE: "CUIDADO_PERSONAL",
     OTHER: "OTROS",
+}
+
+export const ERRORS = {
+    ERROR_400: 400,
+    ERROR_409: 409,
+    ERROR_404: 404,
+    ERROR_500: 500,
+    ERROR_302: 302,
 }
