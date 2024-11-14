@@ -21,18 +21,26 @@ const Personal = () => {
 
 
   const columnsProviders = [
+    "id_modify",
     "name",
     "addressCompany",
     "email",
     "phoneNumber",
     "companyName",
-    "banckAccount",
+    "bankAccount",
   ];
 
-  const columnsSellers = ["name", "homeAddress", "email", "phoneNumber"];
+  const columnsSellers = [
+    "id_modify",
+    "name",
+    "homeAddress",
+    "email",
+    "phoneNumber",
+  ];
 
   const providerItems = [
     "Todos",
+    "ID",
     "Nombre",
     "Dirección Empresarial",
     "Correo Electrónico",
@@ -43,6 +51,7 @@ const Personal = () => {
 
   const sellerItems = [
     "Todos",
+    "ID",
     "Nombre",
     "Dirección de domicilio",
     "Correo Electrónico",
@@ -71,7 +80,7 @@ const Personal = () => {
     } else if (role === "proveedor") {
       fetchProvidersData();
     }
-  }, [role, sellersData]);
+  }, [role]);
 
   const fetchSellersData = async () => {
     try {
@@ -87,9 +96,9 @@ const Personal = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedSellers = data.map((seller) => ({
-          id_modify: seller.idSeller,
+          id_modify: seller.personDTO.idPerson,
           name: `${seller.personDTO.firstName} ${seller.personDTO.lastName}`,
-          homeAddress: seller.homeAddress,
+          homeAddress: seller.personDTO.address,
           email: seller.personDTO.email,
           phoneNumber: seller.personDTO.phoneNumber,
         }));
@@ -117,21 +126,21 @@ const Personal = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
-          id_modify: provider.idProvider,
+          id_modify: provider.personDTO.idPerson,
           name: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
-          addressCompany: provider.companyDTO.companyAddress,
+          addressCompany: provider.companyDTO?.companyAddress || "N/A",
           email: provider.personDTO.email,
           phoneNumber: provider.personDTO.phoneNumber,
-          companyName: provider.companyDTO.companyName,
-          banckAccount: provider.companyDTO.bankAccountNumber,
+          companyName: provider.companyDTO?.companyName || "N/A",
+          bankAccount: provider.bankAccountNumber,
         }));
         setProvidersData(formattedProviders);
       } else {
         const errorMessage = await response.text();
-        console.error("Error al obtener los vendedores:", errorMessage);
+        console.error("Error al obtener los proveedores:", errorMessage);
       }
     } catch (error) {
-      console.error("Error en la solicitud de vendedores:", error);
+      console.error("Error en la solicitud de proveedores:", error);
     }
   };
 

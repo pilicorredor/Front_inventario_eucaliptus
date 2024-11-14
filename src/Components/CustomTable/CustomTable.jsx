@@ -69,13 +69,14 @@ const CustomTable = ({
   };
 
   const columnNamesLabels = {
+    id_modify: "ID",
     name: "Nombre",
     addressCompany: "Dirección Empresarial",
     homeAddress: "Dirección de domicilio",
     email: "Correo Electrónico",
     phoneNumber: "Número de Teléfono",
     companyName: "Nombre de la Empresa",
-    banckAccount: "Cuenta Bancaria",
+    bankAccount: "Cuenta Bancaria",
     productName: "Nombre",
     brand: "Marca",
     categoryProduct: "Categoría",
@@ -97,7 +98,7 @@ const CustomTable = ({
             sx={{
               tableLayout: "fixed",
               width: "100%",
-              minWidth: 600,
+              minWidth: 400,
             }}
           >
             <TableHead>

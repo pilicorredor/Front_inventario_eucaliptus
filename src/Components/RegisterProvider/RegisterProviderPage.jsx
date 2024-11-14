@@ -3,23 +3,27 @@ import { useNavigate } from "react-router-dom";
 import "./RegisterProvider.css";
 import logo from "../Assets/logo2.png";
 import CustomModal from "../../Modales/CustomModal";
+import ErrorSpecificModal from "../../Modales/ErrorSpecificModal";
 import Header from "../Header/Header";
 import {
   BUTTONS_ACTIONS,
   ENTITIES,
-  ROLES,
   PERSON_TYPE,
   SERVICES,
   DOCUMENT_TYPE,
+  ERRORS,
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const RegisterProvider = ({ providerData }) => {
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
+  const [validationProvider, setValidationProvider] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [update, setUpdate] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalValidation, setOpenModalValidation] = useState(false);
+  const [errorValidate, setErrorValidate] = useState("");
+  const [messageErrorValidate, setMessageErrorValidate] = useState("");
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("registrar");
   const [legalPerson, setLegalPerson] = useState(false);
@@ -31,17 +35,16 @@ const RegisterProvider = ({ providerData }) => {
       email: "",
       phoneNumber: "",
       documentType: DOCUMENT_TYPE.CEDULA,
-      role: ROLES.PROVIDER,
     },
     personType: PERSON_TYPE.NATURAL,
+    bankName: "",
+    bankAccountNumber: "",
     companyDTO: {
       nit: "",
       companyName: "",
       companyPhoneNumber: "",
       companyEmail: "",
       companyAddress: "",
-      bankName: "",
-      bankAccountNumber: "",
     },
   });
 
@@ -69,6 +72,15 @@ const RegisterProvider = ({ providerData }) => {
     setOpenModal(true);
   };
 
+  const handleModalValidationOpen = ({
+    errorValidate,
+    messageErrorValidate,
+  }) => {
+    setErrorValidate(errorValidate);
+    setMessageErrorValidate(messageErrorValidate);
+    setOpenModalValidation(true);
+  };
+
   // Cerrar el modal
   const handleModalClose = () => {
     setProvider({
@@ -87,15 +99,14 @@ const RegisterProvider = ({ providerData }) => {
       bankName: "",
       bankAccountNumber: "",
     });
+    setOpenModalValidation(false);
     setOpenModal(false);
     setSend(false);
     navigate("/personal");
   };
 
-  // Efecto para cargar los datos si se pasa providerData como props
   useEffect(() => {
     if (providerData) {
-      setUpdate(true);
       setProvider(providerData);
     }
   }, [providerData]);
@@ -103,7 +114,7 @@ const RegisterProvider = ({ providerData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setProviderSend({
+    const updatedProviderSend = {
       personDTO: {
         idPerson: provider.idPerson,
         firstName: provider.firstName,
@@ -111,22 +122,23 @@ const RegisterProvider = ({ providerData }) => {
         email: provider.email,
         phoneNumber: provider.phoneNumber,
         documentType: provider.documentType,
-        role: ROLES.PROVIDER,
       },
       personType: provider.personType,
-      companyDTO: {
+      bankName: provider.bankName,
+      bankAccountNumber: provider.bankAccountNumber,
+    };
+
+    if (provider.personType === PERSON_TYPE.LEGAL) {
+      updatedProviderSend.companyDTO = {
         nit: provider.nit,
         companyName: provider.companyName,
         companyPhoneNumber: provider.companyPhoneNumber,
         companyEmail: provider.companyEmail,
         companyAddress: provider.companyAddress,
-        bankName: provider.bankName,
-        bankAccountNumber: provider.bankAccountNumber,
-      },
-    });
-
-    setSend(true);
-    setLoading(true);
+      };
+    }
+    setProviderSend(updatedProviderSend);
+    setValidationProvider(true);
   };
 
   useEffect(() => {
@@ -134,6 +146,54 @@ const RegisterProvider = ({ providerData }) => {
       handleService();
     }
   }, [send]);
+
+  useEffect(() => {
+    if (validationProvider) {
+      handleValidateProvider();
+    }
+  }, [validationProvider]);
+
+  const handleValidateProvider = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(SERVICES.VALIDATE_PROVIDER_SERVICE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(providerSend),
+      });
+      if (response.ok) {
+        setSend(true);
+        setLoading(true);
+      } else {
+        const errorData = await response.json();
+        setErrorValidate(response.status);
+
+        if (response.status === ERRORS.ERROR_302) {
+          handleModalValidationOpen({
+            errorValidate: response.status,
+            messageErrorValidate:
+              "La empresa ya se había registrado anteriormente. ¿Desea recuperar los datos o sobreescribirlos?",
+          });
+        } else {
+          handleModalValidationOpen({
+            errorValidate: response.status,
+            messageErrorValidate: errorData.message,
+          });
+        }
+
+        setLoading(false);
+        setSend(false);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      setLoading(false);
+      setSend(false);
+    }
+  };
 
   const handleService = async () => {
     try {
@@ -151,9 +211,7 @@ const RegisterProvider = ({ providerData }) => {
       if (response.ok) {
         handleModalOpen({
           selectedEntity: ENTITIES.PROVEEDOR,
-          selectedAction: update
-            ? BUTTONS_ACTIONS.MODIFICAR
-            : BUTTONS_ACTIONS.REGISTRAR,
+          selectedAction: BUTTONS_ACTIONS.REGISTRAR,
           success: true,
         });
         setLoading(false);
@@ -167,15 +225,62 @@ const RegisterProvider = ({ providerData }) => {
     } catch (error) {
       handleModalOpen({
         selectedEntity: ENTITIES.PROVEEDOR,
-        selectedAction: update
-          ? BUTTONS_ACTIONS.MODIFICAR
-          : BUTTONS_ACTIONS.REGISTRAR,
+        selectedAction: BUTTONS_ACTIONS.REGISTRAR,
         success: false,
       });
       console.error("Error en la solicitud:", error);
       setLoading(false);
       setSend(false);
     }
+  };
+
+  const handleRecoverData = () => {
+    const fetchCompanyById = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const url = `${SERVICES.GET_COMPANY_BY_NIT_SERVICE}/${provider.nit}`;
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProviderSend((prevProviderSend) => ({
+            ...prevProviderSend,
+            companyDTO: {
+              nit: provider.nit,
+              companyAddress: data.companyAddress,
+              companyName: data.companyName,
+              companyPhoneNumber: data.companyPhoneNumber,
+              companyEmail: data.companyEmail,
+            },
+          }));
+          setLoading(false);
+          setSend(true);
+        } else {
+          setLoading(false);
+          console.error("Error al traer la compañia:", await response.json());
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error("Error en la solicitud:", error);
+      }
+    };
+    fetchCompanyById();
+    setOpenModalValidation(false);
+    setLoading(true);
+  };
+
+  const handleOverwriteData = () => {
+    setOpenModalValidation(false);
+    setLoading(true);
+    setSend(true);
   };
 
   useEffect(() => {
@@ -195,6 +300,10 @@ const RegisterProvider = ({ providerData }) => {
       return value.replace(/\D/g, "");
     };
 
+    const validateAlphaNumericInput = (value) => {
+      return value.replace(/[^A-Za-z0-9]/g, "");
+    };
+
     if (
       name === "phoneNumber" ||
       name === "idPerson" ||
@@ -202,11 +311,14 @@ const RegisterProvider = ({ providerData }) => {
       name === "bankAccountNumber" ||
       name === "companyPhoneNumber"
     ) {
-      const numericValue = validateNumericInput(value);
+      const processedValue =
+        name === "idPerson" && provider.documentType === DOCUMENT_TYPE.PASSPORT
+          ? validateAlphaNumericInput(value)
+          : validateNumericInput(value);
 
       setProvider((prevProvider) => ({
         ...prevProvider,
-        [name]: numericValue,
+        [name]: processedValue,
       }));
     } else {
       setProvider((prevProvider) => ({
@@ -250,13 +362,7 @@ const RegisterProvider = ({ providerData }) => {
             <CircularProgress className="page-loading-icon" />
           </div>
         )}
-        {update ? (
-          <label className="providerSection-title">Modificar Proveedor</label>
-        ) : (
-          <label className="providerSection-title">
-            Agregar Nuevo Proveedor
-          </label>
-        )}
+        <label className="providerSection-title">Agregar Nuevo Proveedor</label>
         <form className="providerForm" onSubmit={handleSubmit}>
           <div className="providerForm-section">
             <h3 className="providerForm-title">
@@ -376,23 +482,24 @@ const RegisterProvider = ({ providerData }) => {
                   <option value={PERSON_TYPE.LEGAL}>Jurídica</option>
                 </select>
               </div>
-              <div className="providerForm-item">
-                <label>
-                  Número de documento (NIT o cédula){" "}
-                  <span className="red">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="nit"
-                  value={provider.nit}
-                  onChange={handleInputChange}
-                  minLength="9"
-                  maxLength="10"
-                  required
-                  onInvalid={handleValidation}
-                  onInput={handleInputReset}
-                />
-              </div>
+              {legalPerson && (
+                <div className="providerForm-item">
+                  <label>
+                    Número de NIT <span className="red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="nit"
+                    value={provider.nit}
+                    onChange={handleInputChange}
+                    minLength="9"
+                    maxLength="10"
+                    required
+                    onInvalid={handleValidation}
+                    onInput={handleInputReset}
+                  />
+                </div>
+              )}
             </div>
             {legalPerson && (
               <div className="companyFrom-container">
@@ -482,14 +589,19 @@ const RegisterProvider = ({ providerData }) => {
           </div>
 
           <button type="submit" className="provider-button">
-            {update
-              ? BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
-                BUTTONS_ACTIONS.MODIFICAR.slice(1)
-              : BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
-                BUTTONS_ACTIONS.REGISTRAR.slice(1)}
+            {BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
+              BUTTONS_ACTIONS.REGISTRAR.slice(1)}
           </button>
           <img src={logo} alt="logo" className="provider-logo" />
 
+          <ErrorSpecificModal
+            error={errorValidate}
+            message={messageErrorValidate}
+            isOpen={openModalValidation}
+            onClose={handleModalClose}
+            onOverwrite={handleOverwriteData}
+            onRecover={handleRecoverData}
+          />
           {/* Componente del modal */}
           <CustomModal
             entity={entity}

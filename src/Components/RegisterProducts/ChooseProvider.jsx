@@ -4,11 +4,7 @@ import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./ChooseProvider.css";
 import Header from "../Header/Header.jsx";
-import {
-  SERVICES,
-  CATEGORY_PRODUCT,
-  ENTITIES,
-} from "../../Constants/Constants";
+import { SERVICES, ENTITIES } from "../../Constants/Constants";
 
 const ChooseProvider = () => {
   const navigate = useNavigate();
@@ -35,14 +31,15 @@ const ChooseProvider = () => {
       if (response.ok) {
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
-          id_modify: provider.idProvider,
+          id_modify: provider.personDTO.idPerson,
           name: `${provider.personDTO.firstName} ${provider.personDTO.lastName}`,
-          addressCompany: provider.companyDTO.companyAddress,
+          addressCompany: provider.companyDTO?.companyAddress || "N/A",
           email: provider.personDTO.email,
           phoneNumber: provider.personDTO.phoneNumber,
-          companyName: provider.companyDTO.companyName,
-          banckAccount: provider.companyDTO.bankAccountNumber,
+          companyName: provider.companyDTO?.companyName || "N/A",
+          bankAccount: provider.bankAccountNumber,
         }));
+        console.log(formattedProviders);
         setProvidersData(formattedProviders);
       } else {
         const errorMessage = await response.text();
@@ -54,12 +51,13 @@ const ChooseProvider = () => {
   };
 
   const columnsProviders = [
+    "id_modify",
     "name",
     "addressCompany",
     "email",
     "phoneNumber",
     "companyName",
-    "banckAccount",
+    "bankAccount",
   ];
 
   const handleSearch = () => {

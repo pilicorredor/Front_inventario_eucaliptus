@@ -7,10 +7,8 @@ import Header from "../Header/Header";
 import {
   BUTTONS_ACTIONS,
   ENTITIES,
-  ROLES,
   PERSON_TYPE,
   SERVICES,
-  DOCUMENT_TYPE,
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -18,7 +16,6 @@ const ModifyProvider = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
-  const [update, setUpdate] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("modificar");
@@ -32,17 +29,16 @@ const ModifyProvider = () => {
       lastName: "",
       email: "",
       phoneNumber: "",
-      role: ROLES.PROVIDER,
     },
     personType: PERSON_TYPE.NATURAL,
+    bankName: "",
+    bankAccountNumber: "",
     companyDTO: {
       nit: "",
       companyName: "",
       companyPhoneNumber: "",
       companyEmail: "",
       companyAddress: "",
-      bankName: "",
-      bankAccountNumber: "",
     },
   });
 
@@ -228,11 +224,7 @@ const ModifyProvider = () => {
             <CircularProgress className="page-loading-icon" />
           </div>
         )}
-        {update ? (
-          <label className="providerSection-title">Modificar Proveedor</label>
-        ) : (
-          <label className="providerSection-title">Modificar Proveedor</label>
-        )}
+        <label className="providerSection-title">Modificar Proveedor</label>
         <form className="providerForm" onSubmit={handleSubmit}>
           <div className="providerForm-section">
             <h3 className="providerForm-title">
@@ -342,20 +334,21 @@ const ModifyProvider = () => {
                   <option>{providerSend.personType}</option>
                 </select>
               </div>
-              <div className="providerForm-item">
-                <label>
-                  Número de documento (NIT o cédula){" "}
-                  <span className="red">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="nit"
-                  value={providerSend.companyDTO.nit}
-                  onChange={handleInputChange}
-                  required
-                  disabled
-                />
-              </div>
+              {legalPerson && (
+                <div className="providerForm-item">
+                  <label>
+                    Número de NIT <span className="red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="nit"
+                    value={providerSend.companyDTO.nit}
+                    onChange={handleInputChange}
+                    required
+                    disabled
+                  />
+                </div>
+              )}
             </div>
             {legalPerson && (
               <div className="companyFrom-container">
@@ -419,7 +412,7 @@ const ModifyProvider = () => {
                 <input
                   type="text"
                   name="bankName"
-                  value={providerSend.companyDTO.bankName}
+                  value={providerSend.bankName}
                   onChange={handleInputChange}
                   required
                 />
@@ -431,7 +424,7 @@ const ModifyProvider = () => {
                 <input
                   type="text"
                   name="bankAccountNumber"
-                  value={providerSend.companyDTO.bankAccountNumber}
+                  value={providerSend.bankAccountNumber}
                   onChange={handleInputChange}
                   minLength="10"
                   maxLength="20"
@@ -444,11 +437,8 @@ const ModifyProvider = () => {
           </div>
 
           <button type="submit" className="provider-button">
-            {update
-              ? BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
-                BUTTONS_ACTIONS.MODIFICAR.slice(1)
-              : BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
-                BUTTONS_ACTIONS.MODIFICAR.slice(1)}
+            {BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
+              BUTTONS_ACTIONS.MODIFICAR.slice(1)}
           </button>
           <img src={logo} alt="logo" className="provider-logo" />
 
