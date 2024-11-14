@@ -30,6 +30,7 @@ export const SERVICES = {
     GET_PRODUCT_BY_PROVIDER_SERVICE: "http://localhost:8083/products/getProductsByProvider",
     ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
     VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/details/validatePurchase",
+    GET_EXPIRING_PRODUCTS: "http://localhost:8083/products/expiring-soon",
 }
 
 export const MODAL_TYPES = {

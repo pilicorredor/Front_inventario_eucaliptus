@@ -88,7 +88,13 @@ const Config = ({ userRol, username, handleLogout }) => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data)
+                    setPersonData({
+                        idPerson: data.personDTO.idPerson,
+                        firstName: data.personDTO.firstName,
+                        lastName: data.personDTO.lastName,
+                        email: data.personDTO.email,
+                        username,
+                    });
                 } else {
                     console.error(response)
                 }
