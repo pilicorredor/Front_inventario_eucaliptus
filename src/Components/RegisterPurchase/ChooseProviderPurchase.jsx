@@ -66,6 +66,7 @@ const ChooseProviderPurchase = () => {
   ];
 
   const providerItems = [
+    "Todos",
     "Nombre",
     "Dirección Empresarial",
     "Correo Electrónico",
