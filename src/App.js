@@ -26,6 +26,9 @@ import ChooseProviderPurchase from './Components/RegisterPurchase/ChooseProvider
 import ChooseProductsPurchase from './Components/RegisterPurchase/ChooseProductsPurchase';
 import FormRegisterDetailsProduct from './Components/RegisterPurchase/FormRegisterDetailsProduct';
 import BillPurchase from './Components/RegisterPurchase/BillPurchase';
+import AddProductSale from './Components/RegisterSale/AddProductSale';
+import RegisterSale from './Components/RegisterSale/RegisterSale';
+import BillSale from './Components/RegisterSale/BillSale';
 
 
 const AppContent = () => {
@@ -79,6 +82,9 @@ const AppContent = () => {
                 <Route path="/compra/productos/:id" element={<ChooseProductsPurchase />} />
                 <Route path="/compra/info-prod/:id" element={<FormRegisterDetailsProduct />} />
                 <Route path="/compra/factura" element={<BillPurchase />} />
+                <Route path="/nueva-venta" element={<AddProductSale />} />
+                <Route path="/registrar-venta" element={<RegisterSale />} />
+                <Route path="/factura-venta" element={<BillSale />} />
             </Routes>
         </>
     );

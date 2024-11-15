@@ -114,3 +114,27 @@
   width: 150px;
   text-align: left;
 }
+
+.finish-purchase-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.finish-purchase-btn {
+  padding: 9px 16px;
+  background-color: #227e3c;
+  border-radius: 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  width: 200px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.finish-purchase-btn:hover {
+  background-color: #125e28;
+}

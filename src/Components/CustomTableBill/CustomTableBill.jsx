@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,9 +7,16 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ProductContext } from "../../Context/ProductContext";
+import { useLocation } from "react-router-dom";
 
-const CustomTableBill = () => {
+const CustomTableBill = ({ isSale }) => {
   const { productsTable } = useContext(ProductContext);
+  const location = useLocation();
+
+  const [rows, setRows] = useState([]);
+  const [invoiceSubtotal, setInvoiceSubtotal] = useState(0);
+  const [invoiceTaxes, setInvoiceTaxes] = useState(0);
+  const [invoiceTotal, setInvoiceTotal] = useState(0);
 
   const priceRow = (qty, unitPrice) => qty * unitPrice;
 
@@ -26,20 +33,54 @@ const CustomTableBill = () => {
     return { name, category, use, unitPrice, qty, subtotal, tax };
   };
 
-  const rows = productsTable.map((product) =>
-    createRow(
-      product.productName,
-      product.category,
-      product.use,
-      product.inputUnitPrice,
-      product.quantity,
-      product.iva
-    )
-  );
+  useEffect(() => {
+    if (isSale) {
+      // Datos de venta: obtener de summaryData y consumerData
+      const summaryData = location.state?.summaryData || [];
+      const consumerData = location.state?.consumerData || {};
 
-  const invoiceSubtotal = subtotal(rows);
-  const invoiceTaxes = taxTotal(rows);
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+      const saleRows = summaryData.map((product) =>
+        createRow(
+          product.productName,
+          product.categoryProduct,
+          product.useProduct,
+          product.unitPrice,
+          product.quantitySelected,
+          product.tax || 0 // Asegura que tenga un IVA, si es aplicable
+        )
+      );
+
+      const subtotalSale = subtotal(saleRows);
+      const taxesSale = taxTotal(saleRows);
+
+      setRows(saleRows);
+      setInvoiceSubtotal(subtotalSale);
+      setInvoiceTaxes(taxesSale);
+      setInvoiceTotal(subtotalSale + taxesSale);
+
+      console.log("Datos del cliente:", consumerData); // Opcional: muestra los datos del cliente en la consola para revisión
+    } else {
+      // Datos de compra
+      const purchaseRows = productsTable.map((product) =>
+        createRow(
+          product.productName,
+          product.category,
+          product.use,
+          product.inputUnitPrice,
+          product.quantity,
+          product.iva
+        )
+      );
+
+      const subtotalPurchase = subtotal(purchaseRows);
+      const taxesPurchase = taxTotal(purchaseRows);
+
+      setRows(purchaseRows);
+      setInvoiceSubtotal(subtotalPurchase);
+      setInvoiceTaxes(taxesPurchase);
+      setInvoiceTotal(subtotalPurchase + taxesPurchase);
+    }
+  }, [isSale, location.state, productsTable]);
 
   return (
     <TableContainer component={Paper}>
