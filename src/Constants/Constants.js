@@ -93,3 +93,9 @@ export const ERRORS = {
     ERROR_500: 500,
     ERROR_302: 302,
 }
+
+export const REPORT_PERIOD = {
+    DAILY: "Diario",
+    WEEKLY: "Semanal",
+    MONTHLY: "Mensual"
+}

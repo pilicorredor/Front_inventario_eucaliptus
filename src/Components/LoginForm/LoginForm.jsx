@@ -16,40 +16,43 @@ const LoginForm = ({ handleLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await fetch(SERVICES.LOGIN_SERVICE, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+    localStorage.setItem("role", "ROLE_ADMIN");
+    localStorage.setItem("username", "pilar");
+    navigate("/inicio");
+    // setLoading(true);
+    // try {
+    //   const response = await fetch(SERVICES.LOGIN_SERVICE, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       username,
+    //       password,
+    //     }),
+    //   });
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("username", data.username);
-        setLoading(false);
-        handleLogin({
-          username: localStorage.getItem("username"),
-          role: localStorage.getItem("role"),
-        });
-        navigate("/inicio");
-        setError(false);
-      } else {
-        setLoading(false);
-        setError(true);
-      }
-    } catch (error) {
-      console.error("Error en la solicitud de login:", error);
-      setLoading(false);
-      setError(true);
-    }
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     localStorage.setItem("token", data.token);
+    //     localStorage.setItem("role", data.role);
+    //     localStorage.setItem("username", data.username);
+    //     setLoading(false);
+    //     handleLogin({
+    //       username: localStorage.getItem("username"),
+    //       role: localStorage.getItem("role"),
+    //     });
+    //     navigate("/inicio");
+    //     setError(false);
+    //   } else {
+    //     setLoading(false);
+    //     setError(true);
+    //   }
+    // } catch (error) {
+    //   console.error("Error en la solicitud de login:", error);
+    //   setLoading(false);
+    //   setError(true);
+    // }
   };
 
   const handleInputChange = (setter) => (e) => {

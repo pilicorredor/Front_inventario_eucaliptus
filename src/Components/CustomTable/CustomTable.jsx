@@ -85,6 +85,9 @@ const CustomTable = ({
     idProduct: "ID del producto",
     unitName: "Unidad",
     unitDescription: "Descripción Unidad",
+    quantity: "Cantidad",
+    priceUnit: "Precio Unitario",
+    subTotal: "SubTotal",
     //Poner despues las columnas de productos
   };
 
@@ -119,16 +122,18 @@ const CustomTable = ({
                     {columnNamesLabels[column]}
                   </TableCell>
                 ))}
-                <TableCell
-                  sx={{
-                    backgroundColor: "#F8DEC4",
-                    color: "#000000",
-                    textAlign: "center",
-                    borderRight: "1px solid #ddd",
-                  }}
-                >
-                  Operación
-                </TableCell>
+                {context !== "report" && (
+                  <TableCell
+                    sx={{
+                      backgroundColor: "#F8DEC4",
+                      color: "#000000",
+                      textAlign: "center",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    Operación
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -150,53 +155,55 @@ const CustomTable = ({
                         {row[item]}
                       </TableCell>
                     ))}
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
-                        borderRight: "1px solid #ddd",
-                        padding: "10px",
-                      }}
-                    >
-                      {context === "registerProd" ||
-                      context === "registerPurchase" ||
-                      context === "registerPurchaseAddProd" ? (
-                        <button
-                          onClick={() => handleSelect(row.id_modify)}
-                          style={{
-                            backgroundColor: "#227e3c",
-                            color: "white",
-                            padding: "8px 16px",
-                            borderRadius: "8px",
-                            border: "none",
-                            cursor: "pointer",
-                            fontSize: "16px",
-                          }}
-                        >
-                          Seleccionar
-                        </button>
-                      ) : (
-                        <>
-                          <IconButton
-                            aria-label="edit"
-                            onClick={() => handleEdit(row.id_modify)}
+                    {context !== "report" && (
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                          borderRight: "1px solid #ddd",
+                          padding: "10px",
+                        }}
+                      >
+                        {context === "registerProd" ||
+                        context === "registerPurchase" ||
+                        context === "registerPurchaseAddProd" ? (
+                          <button
+                            onClick={() => handleSelect(row.id_modify)}
+                            style={{
+                              backgroundColor: "#227e3c",
+                              color: "white",
+                              padding: "8px 16px",
+                              borderRadius: "8px",
+                              border: "none",
+                              cursor: "pointer",
+                              fontSize: "16px",
+                            }}
                           >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() =>
-                              handleModalOpen({
-                                selectedEntity: role,
-                                selectedAction: BUTTONS_ACTIONS.ELIMINAR,
-                                id: row.id_modify,
-                              })
-                            }
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </>
-                      )}
-                    </TableCell>
+                            Seleccionar
+                          </button>
+                        ) : (
+                          <>
+                            <IconButton
+                              aria-label="edit"
+                              onClick={() => handleEdit(row.id_modify)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() =>
+                                handleModalOpen({
+                                  selectedEntity: role,
+                                  selectedAction: BUTTONS_ACTIONS.ELIMINAR,
+                                  id: row.id_modify,
+                                })
+                              }
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        )}
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
             </TableBody>
