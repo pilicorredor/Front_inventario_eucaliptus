@@ -72,7 +72,7 @@ const CustomTable = ({
     id_modify: "ID",
     name: "Nombre",
     addressCompany: "Dirección Empresarial",
-    homeAddress: "Dirección de domicilio",
+    address: "Dirección de domicilio",
     email: "Correo Electrónico",
     phoneNumber: "Número de Teléfono",
     companyName: "Nombre de la Empresa",

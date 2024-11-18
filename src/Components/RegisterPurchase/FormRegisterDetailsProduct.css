@@ -123,6 +123,7 @@
   height: 30px;
   border-radius: 5px;
   border: 1px solid;
+  padding: 0px 10px;
 }
 
 .product-logo {
@@ -196,4 +197,11 @@
 
 .add-unit-btn:hover {
   background-color: #125e28;
+}
+
+.calenar-input-form-product {
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #000000;
+  padding: 0px 10px;
 }

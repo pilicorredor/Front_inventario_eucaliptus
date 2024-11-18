@@ -18,6 +18,10 @@ const CustomTableBill = ({ isSale }) => {
   const [invoiceTaxes, setInvoiceTaxes] = useState(0);
   const [invoiceTotal, setInvoiceTotal] = useState(0);
 
+  const removeTax = (priceWithTax, taxRate) => {
+    return priceWithTax / (1 + taxRate / 100);
+  };
+
   const priceRow = (qty, unitPrice) => qty * unitPrice;
 
   const subtotal = (items) =>
@@ -35,20 +39,23 @@ const CustomTableBill = ({ isSale }) => {
 
   useEffect(() => {
     if (isSale) {
-      // Datos de venta: obtener de summaryData y consumerData
       const summaryData = location.state?.summaryData || [];
       const consumerData = location.state?.consumerData || {};
 
-      const saleRows = summaryData.map((product) =>
-        createRow(
+      const saleRows = summaryData.map((product) => {
+        const unitPriceWithoutTax = removeTax(
+          product.unitPrice,
+          product.tax || 0
+        );
+        return createRow(
           product.productName,
           product.categoryProduct,
           product.useProduct,
-          product.unitPrice,
+          unitPriceWithoutTax,
           product.quantitySelected,
-          product.tax || 0 // Asegura que tenga un IVA, si es aplicable
-        )
-      );
+          product.tax || 0
+        );
+      });
 
       const subtotalSale = subtotal(saleRows);
       const taxesSale = taxTotal(saleRows);
@@ -58,19 +65,22 @@ const CustomTableBill = ({ isSale }) => {
       setInvoiceTaxes(taxesSale);
       setInvoiceTotal(subtotalSale + taxesSale);
 
-      console.log("Datos del cliente:", consumerData); // Opcional: muestra los datos del cliente en la consola para revisión
+      console.log("Datos del cliente:", consumerData);
     } else {
-      // Datos de compra
-      const purchaseRows = productsTable.map((product) =>
-        createRow(
+      const purchaseRows = productsTable.map((product) => {
+        const unitPriceWithoutTax = removeTax(
+          product.purchasePrice,
+          product.iva || 0
+        );
+        return createRow(
           product.productName,
           product.category,
           product.use,
-          product.inputUnitPrice,
-          product.quantity,
+          unitPriceWithoutTax,
+          product.quantityPurchased,
           product.iva
-        )
-      );
+        );
+      });
 
       const subtotalPurchase = subtotal(purchaseRows);
       const taxesPurchase = taxTotal(purchaseRows);
@@ -101,7 +111,7 @@ const CustomTableBill = ({ isSale }) => {
               <TableCell align="center">{row.name}</TableCell>
               <TableCell align="center">{row.category}</TableCell>
               <TableCell align="center">{row.use}</TableCell>
-              <TableCell align="center">{row.unitPrice}</TableCell>
+              <TableCell align="center">{row.unitPrice.toFixed(2)}</TableCell>
               <TableCell align="center">{row.qty}</TableCell>
               <TableCell align="right">{row.subtotal.toFixed(2)}</TableCell>
             </TableRow>

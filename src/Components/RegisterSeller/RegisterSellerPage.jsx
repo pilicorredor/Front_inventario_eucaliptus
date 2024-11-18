@@ -23,13 +23,12 @@ const RegisterSeller = ({ sellerData }) => {
       firstName: "",
       lastName: "",
       email: "",
+      address: "",
       phoneNumber: "",
       documentType: DOCUMENT_TYPE.CEDULA,
-      role: ROLES.SELLER,
     },
     username: "",
     password: "",
-    homeAddress: "",
   });
 
   const [seller, setSeller] = useState({
@@ -41,7 +40,7 @@ const RegisterSeller = ({ sellerData }) => {
     documentType: DOCUMENT_TYPE.CEDULA,
     username: "",
     password: "",
-    homeAddress: "",
+    address: "",
   });
 
   const [update, setUpdate] = useState(false);
@@ -65,13 +64,12 @@ const RegisterSeller = ({ sellerData }) => {
         firstName: seller.firstName,
         lastName: seller.lastName,
         email: seller.email,
+        address: seller.address,
         phoneNumber: seller.phoneNumber,
         documentType: seller.documentType,
-        role: ROLES.SELLER,
       },
       username: seller.username,
       password: seller.password,
-      homeAddress: seller.homeAddress,
     });
 
     setSend(true);
@@ -151,7 +149,7 @@ const RegisterSeller = ({ sellerData }) => {
       documentType: DOCUMENT_TYPE.CEDULA,
       username: "",
       password: "",
-      homeAddress: "",
+      address: "",
     });
     setOpenModal(false);
     setSend(false);
@@ -253,13 +251,16 @@ const RegisterSeller = ({ sellerData }) => {
             </div>
             <div className="sellerForm-row">
               <div className="sellerForm-item">
-                <label>Correo electrónico</label>
+                <label>
+                  Correo electrónico <span className="red">*</span>
+                </label>
                 <input
                   type="email"
                   name="email"
                   placeholder="usuario@example.com"
                   value={seller.email}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="sellerForm-item">
@@ -354,8 +355,8 @@ const RegisterSeller = ({ sellerData }) => {
                 </label>
                 <input
                   type="text"
-                  name="homeAddress"
-                  value={seller.homeAddress}
+                  name="address"
+                  value={seller.address}
                   onChange={handleInputChange}
                   required
                 />
