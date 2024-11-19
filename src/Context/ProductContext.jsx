@@ -2,7 +2,6 @@ import React, { createContext, useState } from "react";
 
 export const ProductContext = createContext();
 
-// Proveedor del contexto
 export const ProductProvider = ({ children }) => {
   const [productsTable, setProductsTable] = useState([]);
   const [sendProducts, setSendProducts] = useState([]);
@@ -23,7 +22,13 @@ export const ProductProvider = ({ children }) => {
 
   return (
     <ProductContext.Provider
-      value={{ sendProducts, addProduct, productsTable, addProductTable, clearProducts }}
+      value={{
+        sendProducts,
+        addProduct,
+        productsTable,
+        addProductTable,
+        clearProducts,
+      }}
     >
       {children}
     </ProductContext.Provider>

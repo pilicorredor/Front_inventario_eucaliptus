@@ -30,7 +30,7 @@ export const SidebarData = [
   },
   {
     title: "Registrar venta",
-    path: "/venta",
+    path: "/nueva-venta",
     icon: <Io5Icons.IoBagRemove className="nav-menu-item-icon" />,
     cName: "nav-text",
   },

@@ -9,6 +9,7 @@ import {
   CATEGORY_PRODUCT,
 } from "../../Constants/Constants";
 import PurchaseModal from "../../Modales/PurchaseModal";
+import CalendarModal from "../../Modales/CalendarModal";
 import VerifyPurchaseModal from "../../Modales/VerifyPurchaseModal";
 import { ButtonContext } from "../../Context/ButtonContext";
 import { ProductContext } from "../../Context/ProductContext";
@@ -19,8 +20,10 @@ const RegisterProduct = () => {
   const [provider, setProvider] = useState("");
   const [idProvider, setIdProvider] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false);
   const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
+  const [loading, setLoading] = useState(false);
   const [messageModal, setMessageModal] = useState("");
   const { sendProducts, addProduct, productsTable, addProductTable } =
     useContext(ProductContext);
@@ -35,12 +38,12 @@ const RegisterProduct = () => {
   // Estado del producto a enviar
   const [sendProduct, setSendProduct] = useState({
     idProduct: id,
-    quantity: "",
-    inputUnitPrice: "",
-    outputUnitPrice: "",
+    batchPurchase: "",
+    quantityPurchased: "",
+    purchasePrice: "",
+    salePrice: "",
     iva: "",
-    batch: "",
-    dueDate: "",
+    purchaseDueDate: "",
   });
 
   // Fetch del producto por ID
@@ -109,15 +112,13 @@ const RegisterProduct = () => {
     e.preventDefault();
 
     const newProduct = {
-      productDTO: {
-        idProduct: sendProduct.idProduct,
-      },
-      quantity: sendProduct.quantity,
-      inputUnitPrice: sendProduct.inputUnitPrice,
-      outputUnitPrice: sendProduct.outputUnitPrice,
+      idProduct: sendProduct.idProduct,
+      quantityPurchased: sendProduct.quantityPurchased,
+      purchasePrice: sendProduct.purchasePrice,
+      salePrice: sendProduct.salePrice,
       iva: sendProduct.iva,
-      batch: sendProduct.batch,
-      dueDate: sendProduct.dueDate,
+      batchPurchase: sendProduct.batchPurchase,
+      purchaseDueDate: sendProduct.purchaseDueDate,
     };
 
     const productTable = {
@@ -125,12 +126,27 @@ const RegisterProduct = () => {
       productName: product.productName,
       category: product.category,
       use: product.use,
-      inputUnitPrice: sendProduct.inputUnitPrice,
-      quantity: sendProduct.quantity,
+      purchasePrice: sendProduct.purchasePrice,
+      quantityPurchased: sendProduct.quantityPurchased,
       iva: sendProduct.iva,
     };
 
-    const auxProductList = [...sendProducts, newProduct];
+    const auxProductList = [
+      ...sendProducts.map((product) => ({
+        idProduct: product.idProduct,
+        quantityPurchased: product.quantityPurchased,
+        salePrice: product.salePrice,
+        batchPurchase: product.batchPurchase,
+        purchaseDueDate: product.purchaseDueDate,
+      })),
+      {
+        idProduct: newProduct.idProduct,
+        quantityPurchased: newProduct.quantityPurchased,
+        salePrice: newProduct.salePrice,
+        batchPurchase: newProduct.batchPurchase,
+        purchaseDueDate: newProduct.purchaseDueDate,
+      },
+    ];
 
     try {
       const token = localStorage.getItem("token");
@@ -142,7 +158,9 @@ const RegisterProduct = () => {
         },
         body: JSON.stringify(auxProductList),
       });
+
       const result = await response.json();
+
       if (result.message === "Compra valida") {
         addProduct(newProduct);
         addProductTable(productTable);
@@ -156,9 +174,15 @@ const RegisterProduct = () => {
     }
   };
 
-  const handleServiceAddPurchase = async () => {
+  const handleServiceAddPurchase = async (selectedDate) => {
     try {
       const token = localStorage.getItem("token");
+
+      const purchaseData = {
+        providerId: idProvider,
+        purchaseDate: selectedDate,
+        purchaseDetails: sendProducts,
+      };
 
       const response = await fetch(SERVICES.ADD_PURCHASE_SERVICE, {
         method: "POST",
@@ -166,10 +190,13 @@ const RegisterProduct = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(sendProducts),
+        body: JSON.stringify(purchaseData),
       });
 
       if (response.ok) {
+        setLoading(false);
+        setIsCalendarOpen(false);
+        setIsButtonActive(false);
         navigate("/compra/factura");
       } else {
         const errorData = await response.json();
@@ -180,16 +207,25 @@ const RegisterProduct = () => {
     }
   };
 
-  const handleViewBill = () => {
+  const handleSelectDate = () => {
     setIsModalOpen(false);
-    setIsButtonActive(false);
-    handleServiceAddPurchase();
+    setIsCalendarOpen(true);
+    setLoading(true);
   };
 
   const handleAddAnother = () => {
     setIsModalOpen(false);
     setIsButtonActive(true);
     navigate(`/compra/productos/${idProvider}`);
+  };
+
+  const handleCalendarConfirm = async (selectedDate) => {
+    await handleServiceAddPurchase(selectedDate);
+  };
+
+  const handleCalendarCancel = () => {
+    setIsCalendarOpen(false);
+    setIsModalOpen(true);
   };
 
   const handleInputChange = (e) => {
@@ -246,9 +282,10 @@ const RegisterProduct = () => {
                 Lote (fecha) <span className="red">*</span>
               </label>
               <input
+                className="calenar-input-form-product"
                 type="date"
-                name="batch"
-                value={sendProduct.batch}
+                name="batchPurchase"
+                value={sendProduct.batchPurchase}
                 onChange={handleInputChange}
                 required
               />
@@ -259,8 +296,8 @@ const RegisterProduct = () => {
               </label>
               <input
                 type="number"
-                name="quantity"
-                value={sendProduct.quantity}
+                name="quantityPurchased"
+                value={sendProduct.quantityPurchased}
                 onChange={handleInputChange}
                 min="1"
                 required
@@ -274,8 +311,8 @@ const RegisterProduct = () => {
               </label>
               <input
                 type="number"
-                name="inputUnitPrice"
-                value={sendProduct.inputUnitPrice}
+                name="purchasePrice"
+                value={sendProduct.purchasePrice}
                 onChange={handleInputChange}
                 min="1"
                 required
@@ -287,8 +324,8 @@ const RegisterProduct = () => {
               </label>
               <input
                 type="number"
-                name="outputUnitPrice"
-                value={sendProduct.outputUnitPrice}
+                name="salePrice"
+                value={sendProduct.salePrice}
                 onChange={handleInputChange}
                 min="1"
                 required
@@ -302,9 +339,10 @@ const RegisterProduct = () => {
                   Fecha de vencimiento <span className="red">*</span>
                 </label>
                 <input
+                  className="calenar-input-form-product"
                   type="date"
-                  name="dueDate"
-                  value={sendProduct.dueDate}
+                  name="purchaseDueDate"
+                  value={sendProduct.purchaseDueDate}
                   onChange={handleInputChange}
                   required
                 />
@@ -334,7 +372,7 @@ const RegisterProduct = () => {
         <PurchaseModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onViewBill={handleViewBill}
+          onSelectDate={handleSelectDate}
           onAddAnother={handleAddAnother}
         />
         <VerifyPurchaseModal
@@ -342,6 +380,12 @@ const RegisterProduct = () => {
           onClose={() => setIsModalOpen(false)}
           message={messageModal}
           onNavigate={handleAddAnother}
+        />
+        <CalendarModal
+          isOpen={isCalendarOpen}
+          onClose={handleCalendarCancel}
+          onConfirm={handleCalendarConfirm}
+          onLoading={loading}
         />
       </form>
     </div>

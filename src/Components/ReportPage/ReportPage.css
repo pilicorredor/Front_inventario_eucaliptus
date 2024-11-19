@@ -1,4 +1,4 @@
-.products {
+.reports-page {
   width: 90%;
   margin-left: 100px;
   display: flex;
@@ -6,7 +6,7 @@
   height: 100vh;
 }
 
-.products-header {
+.reports-header {
   display: flex;
   justify-content: flex-start;
   border-bottom: 2px solid #ccc;
@@ -14,7 +14,7 @@
   margin-top: 20px;
 }
 
-.products-header button {
+.reports-header button {
   margin-right: 20px;
   padding: 10px;
   font-size: 16px;
@@ -26,11 +26,11 @@
   transition: border-bottom 0.3s ease;
 }
 
-.products-header button.selected {
+.reports-header button.selected {
   border-bottom: 3px solid #05972e;
 }
 
-.products-header button:hover {
+.reports-header button:hover {
   border-bottom: 2px solid #ccc;
 }
 
@@ -83,77 +83,27 @@
   background-color: #125e28;
 }
 
-.new-btn {
-  padding: 9px 16px;
-  background-color: #227e3c;
-  border-radius: 8px;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  width: 120px;
-  transition: background-color 0.3s ease;
-}
-
-.new-btn:hover {
-  background-color: #125e28;
-}
-
-.filter-use {
+.calendar-container {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
+  width: 560px;
+  gap: 5px;
   margin-bottom: 20px;
 }
 
-.filter-use label {
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.filter-use .dropdown-button {
-  width: 150px;
-  text-align: left;
-}
-
-.finish-purchase-btn-container {
+.calenar-input-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  gap: 10px;
   align-items: center;
-  margin-top: 10px;
-  gap: 100px;
 }
 
-.finish-purchase-btn {
-  padding: 9px 16px;
-  background-color: #227e3c;
+.calenar-input-container input {
+  height: 35px;
+  width: 250px;
   border-radius: 8px;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  width: 200px;
-  transition: background-color 0.3s ease;
-  text-align: center;
-}
-
-.finish-purchase-btn:hover {
-  background-color: #125e28;
-}
-
-.cancel-purchase-btn {
-  padding: 9px 16px;
-  background-color: #ff0303;
-  border-radius: 8px;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  width: 200px;
-  transition: background-color 0.3s ease;
-  text-align: center;
-}
-
-.cancel-purchase-btn:hover {
-  background-color: #ff0000cc;
+  border: 1px solid #000000;
+  padding: 0px 10px;
 }

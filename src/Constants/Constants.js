@@ -28,6 +28,10 @@ export const SERVICES = {
     DELETE_PRODUCT_SERVICE: "http://localhost:8083/products/deleteProduct",
     ADD_UNIT_SERVICE: "http://localhost:8083/products/units/addUnit",
     GET_PRODUCT_BY_PROVIDER_SERVICE: "http://localhost:8083/products/getProductsByProvider",
+    ADD_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/add",
+    VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/stock/validatePurchase",
+    GET_STOCK_SERVICE: "http://localhost:8083/products/stock/all",
+    ADD_SALE_SERVICE: "http://localhost:8084/billing/sale/addSale",
     ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
     VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/details/validatePurchase",
     GET_EXPIRING_PRODUCTS: "http://localhost:8083/products/expiring-soon",
@@ -43,6 +47,7 @@ export const ENTITIES = {
     PROVEEDOR: 'proveedor',
     VENDEDOR: 'vendedor',
     PRODUCTO: 'producto',
+    VENTA: 'movimiento (venta)',
 };
 
 export const BUTTONS_ACTIONS = {
@@ -92,4 +97,10 @@ export const ERRORS = {
     ERROR_404: 404,
     ERROR_500: 500,
     ERROR_302: 302,
+}
+
+export const REPORT_PERIOD = {
+    DAILY: "Diario",
+    WEEKLY: "Semanal",
+    MONTHLY: "Mensual"
 }

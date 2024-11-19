@@ -33,7 +33,7 @@ const Personal = () => {
   const columnsSellers = [
     "id_modify",
     "name",
-    "homeAddress",
+    "address",
     "email",
     "phoneNumber",
   ];
@@ -98,7 +98,7 @@ const Personal = () => {
         const formattedSellers = data.map((seller) => ({
           id_modify: seller.personDTO.idPerson,
           name: `${seller.personDTO.firstName} ${seller.personDTO.lastName}`,
-          homeAddress: seller.personDTO.address,
+          address: seller.personDTO.address,
           email: seller.personDTO.email,
           phoneNumber: seller.personDTO.phoneNumber,
         }));

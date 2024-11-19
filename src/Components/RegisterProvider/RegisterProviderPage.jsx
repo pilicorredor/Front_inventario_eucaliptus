@@ -170,6 +170,7 @@ const RegisterProvider = ({ providerData }) => {
         setLoading(true);
       } else {
         const errorData = await response.json();
+        console.log("error: ", errorData);
         setErrorValidate(response.status);
 
         if (response.status === ERRORS.ERROR_302) {

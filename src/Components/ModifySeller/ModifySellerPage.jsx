@@ -29,14 +29,12 @@ const ModifySeller = () => {
       firstName: "",
       lastName: "",
       email: "",
+      address: "",
       phoneNumber: "",
-      role: ROLES.SELLER,
+      documentType: DOCUMENT_TYPE.CEDULA,
     },
-    documentType: DOCUMENT_TYPE.CEDULA,
-    documentNumber: "",
     username: "",
     password: "******",
-    homeAddress: "",
   });
 
   const fillSeller = (dataSeller) => {
@@ -61,6 +59,7 @@ const ModifySeller = () => {
         if (response.ok) {
           setLoading(false);
           const data = await response.json();
+          console.log(data);
           fillSeller(data);
         } else {
           setLoading(false);
@@ -338,8 +337,8 @@ const ModifySeller = () => {
                 </label>
                 <input
                   type="text"
-                  name="homeAddress"
-                  value={sellerSend.homeAddress}
+                  name="address"
+                  value={sellerSend.address}
                   onChange={handleInputChange}
                   required
                 />
