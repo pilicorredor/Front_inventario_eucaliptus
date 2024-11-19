@@ -14,6 +14,7 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import { ProductContext } from "../../Context/ProductContext";
 import RegisterProductModal from "../../Modales/RegisterProductModal.jsx";
+import CalendarModal from "../../Modales/CalendarModal";
 
 const ChooseProductsPurchase = () => {
   const { id } = useParams();
@@ -31,9 +32,10 @@ const ChooseProductsPurchase = () => {
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [contextTable, setContextTable] = useState("registerPurchaseAddProd");
   const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
+  const [loading, setLoading] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [provider, setProvider] = useState("");
-  const { sendProducts, addProduct, productsTable, addProductTable } =
-    useContext(ProductContext);
+  const { sendProducts, clearProducts } = useContext(ProductContext);
   const columnsProducts = [
     "idProduct",
     "productName",
@@ -171,9 +173,17 @@ const ChooseProductsPurchase = () => {
     setFilteredData(filteredProducts);
   };
 
-  const handleServiceAddPurchase = async () => {
+  const handleServiceAddPurchase = async (selectedDate) => {
     try {
       const token = localStorage.getItem("token");
+
+      const purchaseData = {
+        providerId: id,
+        purchaseDate: selectedDate,
+        purchaseDetails: sendProducts,
+      };
+
+      console.log(purchaseData);
 
       const response = await fetch(SERVICES.ADD_PURCHASE_SERVICE, {
         method: "POST",
@@ -181,10 +191,13 @@ const ChooseProductsPurchase = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(sendProducts),
+        body: JSON.stringify(purchaseData),
       });
 
       if (response.ok) {
+        setLoading(false);
+        setIsCalendarOpen(false);
+        setIsButtonActive(false);
         navigate("/compra/factura");
       } else {
         const errorData = await response.json();
@@ -193,6 +206,21 @@ const ChooseProductsPurchase = () => {
     } catch (error) {
       console.error("Error en la solicitud:", error);
     }
+  };
+
+  const handleSelectDate = () => {
+    setIsModalOpen(false);
+    setIsCalendarOpen(true);
+    setLoading(true);
+  };
+
+  const handleCalendarConfirm = async (selectedDate) => {
+    await handleServiceAddPurchase(selectedDate);
+  };
+
+  const handleCalendarCancel = () => {
+    setIsCalendarOpen(false);
+    setIsModalOpen(true);
   };
 
   const handleUseFilterSelection = (selectedItem) => {
@@ -208,6 +236,12 @@ const ChooseProductsPurchase = () => {
   const handleFinishPurchase = () => {
     setIsButtonActive(false);
     handleServiceAddPurchase();
+  };
+
+  const handleClearProducts = () => {
+    clearProducts();
+    setIsButtonActive(false);
+    navigate("/compra/proveedor");
   };
 
   const handleNewButtonClick = () => {
@@ -346,6 +380,9 @@ const ChooseProductsPurchase = () => {
       {/* Botón "Terminar compra" solo si isButtonActive es true */}
       {isButtonActive && (
         <div className="finish-purchase-btn-container">
+          <button className="cancel-purchase-btn" onClick={handleClearProducts}>
+            Cancelar compra
+          </button>
           <button
             className="finish-purchase-btn"
             onClick={handleFinishPurchase}
@@ -360,6 +397,12 @@ const ChooseProductsPurchase = () => {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         handleSubmit={handleSubmit}
+      />
+      <CalendarModal
+        isOpen={isCalendarOpen}
+        onClose={handleCalendarCancel}
+        onConfirm={handleCalendarConfirm}
+        onLoading={loading}
       />
     </div>
   );

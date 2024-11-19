@@ -19,7 +19,7 @@ const SummaryTable = ({ summaryData, onRemove }) => {
             {summaryData.map((item) => (
               <tr key={item.id_modify}>
                 <td className="left-align">{item.productName}</td>
-                <td className="center-align">{item.quantitySelected}</td>
+                <td className="center-align">{item.quantitySold}</td>
                 <td>
                   <button
                     className="delete-button"

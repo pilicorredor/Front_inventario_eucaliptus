@@ -30,6 +30,8 @@ export const SERVICES = {
     GET_PRODUCT_BY_PROVIDER_SERVICE: "http://localhost:8083/products/getProductsByProvider",
     ADD_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/add",
     VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/stock/validatePurchase",
+    GET_STOCK_SERVICE: "http://localhost:8083/products/stock/all",
+    ADD_SALE_SERVICE: "http://localhost:8084/billing/sale/addSale",
 }
 
 export const MODAL_TYPES = {
@@ -42,6 +44,7 @@ export const ENTITIES = {
     PROVEEDOR: 'proveedor',
     VENDEDOR: 'vendedor',
     PRODUCTO: 'producto',
+    VENTA: 'movimiento (venta)',
 };
 
 export const BUTTONS_ACTIONS = {

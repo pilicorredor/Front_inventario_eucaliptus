@@ -68,10 +68,10 @@ const CustomTableSale = ({
     id_modify: "ID",
     idProduct: "ID",
     productName: "Nombre",
-    quantity: "Cantidad disponible",
-    quantitySelected: "Cantidad",
-    useProduct: "Uso",
-    unitPrice: "Precio",
+    quantityAvailable: "Cantidad disponible",
+    quantitySold: "Cantidad",
+    use: "Uso",
+    productSalePrice: "Precio",
     subTotal: "SubTotal",
   };
 
@@ -181,7 +181,7 @@ const CustomTableSale = ({
                             handleInputChange(
                               row.id_modify,
                               e.target.value,
-                              row.quantity
+                              row.quantityAvailable
                             )
                           }
                           style={{
@@ -213,9 +213,13 @@ const CustomTableSale = ({
                     >
                       {isNewSale ? (
                         <button
-                          onClick={() =>
-                            onAddToSummary(row, quantities[row.id_modify])
-                          }
+                          onClick={() => {
+                            onAddToSummary(row, quantities[row.id_modify]);
+                            setQuantities((prevQuantities) => ({
+                              ...prevQuantities,
+                              [row.id_modify]: 0,
+                            }));
+                          }}
                           style={{
                             backgroundColor: "#227e3c",
                             color: "white",

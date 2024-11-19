@@ -3,20 +3,98 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../Header/Header.jsx";
 import CustomTableSale from "../CustomTableSale/CustomTableSale.jsx";
 import "./RegisterSale.css";
+import CustomModal from "../../Modales/CustomModal";
+import CircularProgress from "@mui/material/CircularProgress";
+import { SERVICES, ENTITIES, BUTTONS_ACTIONS } from "../../Constants/Constants";
 
 const RegisterSale = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const initialSummaryData = location.state?.summaryData || [];
   const [summaryData, setSummaryData] = useState(initialSummaryData);
+  const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [entity, setEntity] = useState("venta");
+  const [action, setAction] = useState("registrar");
   const [consumerData, setConsumerData] = useState({
-    idPerson: "",
-    name: "",
+    idClient: "",
+    nameClient: "",
     email: "",
   });
 
+  const handleModalOpen = ({ selectedEntity, selectedAction }) => {
+    setEntity(selectedEntity);
+    setAction(selectedAction);
+    setOpenModal(true);
+  };
+
   const handleNextSale = () => {
-    navigate("/factura-venta", { state: { summaryData, consumerData } });
+    setLoading(true);
+    handleService();
+  };
+
+  const handleService = async () => {
+    const saleObject = generateSaleObject();
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(SERVICES.ADD_SALE_SERVICE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(saleObject),
+      });
+
+      if (response.ok) {
+        setLoading(false);
+        navigate("/factura-venta", {
+          state: { summaryData, consumerData, saleObject },
+        });
+      } else {
+        handleModalOpen({
+          selectedEntity: ENTITIES.VENTA,
+          selectedAction: BUTTONS_ACTIONS.REGISTRAR,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      handleModalOpen({
+        selectedEntity: ENTITIES.VENTA,
+        selectedAction: BUTTONS_ACTIONS.REGISTRAR,
+      });
+      setLoading(false);
+    }
+  };
+
+  const generateSaleObject = () => {
+    const defaultClientData = {
+      idClient: "0000000",
+      nameClient: "Cliente General",
+      email: "sincorreo@ejemplo.com",
+    };
+
+    const saleDetails = summaryData.map((product) => ({
+      idProduct: product.idProduct,
+      quantitySold: product.quantitySold,
+    }));
+
+    const colombianDate = new Date().toLocaleDateString("en-CA", {
+      timeZone: "America/Bogota",
+    });
+
+    const clientData = {
+      idClient: consumerData.idClient || defaultClientData.idClient,
+      nameClient: consumerData.nameClient || defaultClientData.nameClient,
+      email: consumerData.email || defaultClientData.email,
+    };
+
+    return {
+      clientDTO: clientData,
+      dateSale: colombianDate, // Directamente en formato YYYY-MM-DD
+      saleDetails,
+    };
   };
 
   const handleRemoveFromSummary = (id) => {
@@ -28,9 +106,9 @@ const RegisterSale = () => {
   const columnsProducts = [
     "idProduct",
     "productName",
-    "quantitySelected",
-    "useProduct",
-    "unitPrice",
+    "quantitySold",
+    "use",
+    "productSalePrice",
     "subTotal",
   ];
 
@@ -41,7 +119,7 @@ const RegisterSale = () => {
       return value.replace(/\D/g, "");
     };
 
-    if (name === "idPerson") {
+    if (name === "idClient") {
       const processedValue = validateNumericInput(value);
 
       setConsumerData((prevConsumer) => ({
@@ -81,6 +159,11 @@ const RegisterSale = () => {
     e.target.setCustomValidity("");
   };
 
+  const handleModalClose = () => {
+    setOpenModal(false);
+    navigate("/nueva-venta");
+  };
+
   return (
     <div className="products-sale">
       <Header pageTitle="Registrar Venta" />
@@ -91,15 +174,19 @@ const RegisterSale = () => {
             Datos del cliente
           </label>
         </div>
-
+        {loading && (
+          <div className="page-loading-container">
+            <CircularProgress className="page-loading-icon" />
+          </div>
+        )}
         <div className="customer-info-row">
           <div className="customer-info-field">
             <label>Número de Documento:</label>
             <input
               type="text"
               placeholder="Ingrese el documento"
-              name="idPerson"
-              value={consumerData.idPerson}
+              name="idClient"
+              value={consumerData.idClient}
               onChange={handleInputChange}
               minLength="7"
               maxLength="10"
@@ -113,8 +200,8 @@ const RegisterSale = () => {
             <input
               type="text"
               placeholder="Ingrese el nombre"
-              name="name"
-              value={consumerData.name}
+              name="nameClient"
+              value={consumerData.nameClient}
               onChange={handleInputChange}
               onInput={handleInput}
               className="customer-input"
@@ -154,6 +241,13 @@ const RegisterSale = () => {
             Generar Venta
           </button>
         </div>
+        <CustomModal
+          entity={entity}
+          action={action}
+          openModal={openModal}
+          onClose={handleModalClose}
+          successfull={false}
+        />
       </div>
     </div>
   );

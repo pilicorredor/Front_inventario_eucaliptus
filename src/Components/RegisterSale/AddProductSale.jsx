@@ -20,7 +20,7 @@ const AddProductSale = () => {
     const fetchProductsData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(SERVICES.GET_ALL_PRODUCTS, {
+        const response = await fetch(SERVICES.GET_STOCK_SERVICE, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -30,11 +30,14 @@ const AddProductSale = () => {
         if (response.ok) {
           const data = await response.json();
           const formattedProducts = data.map((product) => ({
-            id_modify: product.idProduct,
-            idProduct: product.idProduct,
-            productName: product.productName,
-            quantity: product.maximumProductAmount,
-            useProduct: product.use,
+            id_modify: product.productDTO.idProduct,
+            idProduct: product.productDTO.idProduct,
+            productName: product.productDTO.productName,
+            quantityAvailable: product.quantityAvailable,
+            productSalePrice: product.productSalePrice,
+            productSalePriceWithoutIVA: product.productSalePriceWithoutIVA,
+            use: product.productDTO.use,
+            iva: product.iva,
           }));
           setFilteredData(formattedProducts);
         } else {
@@ -49,8 +52,13 @@ const AddProductSale = () => {
     fetchProductsData();
   }, []);
 
-  const columnsProducts = ["idProduct", "productName", "quantity"];
-  const productItems = ["ID del producto", "Nombre", "Cantidad"];
+  const columnsProducts = [
+    "idProduct",
+    "productName",
+    "quantityAvailable",
+    "productSalePrice",
+  ];
+  const productItems = ["ID del producto", "Nombre", "Cantidad", "Precio"];
 
   const handleSearch = () => {
     //TODO: Agrega la lógica de búsqueda aquí
@@ -60,40 +68,74 @@ const AddProductSale = () => {
     setProductButtonText(selectedItem);
   };
 
-  const handleAddToSummary = (product, quantitySelected) => {
+  const handleAddToSummary = (product, quantitySold) => {
     setSummaryData((prevSummary) => {
       const existingProduct = prevSummary.find(
-        (item) => item.id === product.id_modify
+        (item) => item.id_modify === product.id_modify
       );
+
       if (existingProduct) {
-        // Actualiza la cantidad si ya existe
         return prevSummary.map((item) =>
-          item.id === product.id_modify
-            ? { ...item, quantitySelected: quantitySelected }
+          item.id_modify === product.id_modify
+            ? {
+                ...item,
+                quantitySold: item.quantitySold + quantitySold,
+                subTotal:
+                  item.productSalePrice * (item.quantitySold + quantitySold),
+              }
             : item
         );
       }
+
       return [
         ...prevSummary,
         {
           id_modify: product.id_modify,
-          idProduct: product.id_modify,
+          idProduct: product.idProduct,
           productName: product.productName,
-          categoryProduct: product.categoryProduct,
-          useProduct: product.useProduct,
-          unitPrice: 10000,
-          quantitySelected,
-          //subTotal: product.unitPrice * quantitySelected,
-          subTotal: 10000 * quantitySelected,
+          use: product.use,
+          productSalePrice: product.productSalePrice,
+          productSalePriceWithoutIVA: product.productSalePriceWithoutIVA,
+          quantitySold,
+          iva: product.iva,
+          subTotal: product.productSalePrice * quantitySold,
         },
       ];
     });
+
+    // Actualiza la cantidad disponible en filteredData
+    setFilteredData((prevFilteredData) =>
+      prevFilteredData.map((item) =>
+        item.id_modify === product.id_modify
+          ? {
+              ...item,
+              quantityAvailable: item.quantityAvailable - quantitySold,
+            }
+          : item
+      )
+    );
   };
 
   const handleRemoveFromSummary = (id) => {
-    setSummaryData((prevSummary) =>
-      prevSummary.filter((item) => item.id_modify !== id)
-    );
+    const removedItem = summaryData.find((item) => item.id_modify === id);
+
+    if (removedItem) {
+      setSummaryData((prevSummaryData) =>
+        prevSummaryData.filter((item) => item.id_modify !== id)
+      );
+
+      setFilteredData((prevFilteredData) =>
+        prevFilteredData.map((item) =>
+          item.id_modify === id
+            ? {
+                ...item,
+                quantityAvailable:
+                  item.quantityAvailable + removedItem.quantitySold,
+              }
+            : item
+        )
+      );
+    }
   };
 
   const handleNextSale = () => {

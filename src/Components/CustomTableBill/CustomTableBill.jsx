@@ -32,31 +32,24 @@ const CustomTableBill = ({ isSale }) => {
       .map(({ tax, subtotal }) => subtotal * (tax / 100))
       .reduce((sum, i) => sum + i, 0);
 
-  const createRow = (name, category, use, unitPrice, qty, tax) => {
+  const createRow = (name, use, unitPrice, qty, tax) => {
     const subtotal = priceRow(qty, unitPrice);
-    return { name, category, use, unitPrice, qty, subtotal, tax };
+    return { name, use, unitPrice, qty, subtotal, tax };
   };
 
   useEffect(() => {
     if (isSale) {
       const summaryData = location.state?.summaryData || [];
-      const consumerData = location.state?.consumerData || {};
-
+      const saleObject = location.state?.saleObject || {};
       const saleRows = summaryData.map((product) => {
-        const unitPriceWithoutTax = removeTax(
-          product.unitPrice,
-          product.tax || 0
-        );
         return createRow(
           product.productName,
-          product.categoryProduct,
-          product.useProduct,
-          unitPriceWithoutTax,
-          product.quantitySelected,
-          product.tax || 0
+          product.use,
+          product.productSalePriceWithoutIVA,
+          product.quantitySold,
+          product.iva || 0
         );
       });
-
       const subtotalSale = subtotal(saleRows);
       const taxesSale = taxTotal(saleRows);
 
@@ -65,7 +58,8 @@ const CustomTableBill = ({ isSale }) => {
       setInvoiceTaxes(taxesSale);
       setInvoiceTotal(subtotalSale + taxesSale);
 
-      console.log("Datos del cliente:", consumerData);
+      console.log("Datos del cliente:", saleObject.clientDTO);
+      console.log("Fecha de la venta:", saleObject.dateSale);
     } else {
       const purchaseRows = productsTable.map((product) => {
         const unitPriceWithoutTax = removeTax(
@@ -74,7 +68,6 @@ const CustomTableBill = ({ isSale }) => {
         );
         return createRow(
           product.productName,
-          product.category,
           product.use,
           unitPriceWithoutTax,
           product.quantityPurchased,
@@ -98,7 +91,6 @@ const CustomTableBill = ({ isSale }) => {
         <TableHead>
           <TableRow>
             <TableCell align="center">Nombre</TableCell>
-            <TableCell align="center">Categoría</TableCell>
             <TableCell align="center">Uso</TableCell>
             <TableCell align="center">Precio Unitario</TableCell>
             <TableCell align="center">Cantidad</TableCell>
@@ -109,7 +101,6 @@ const CustomTableBill = ({ isSale }) => {
           {rows.map((row, index) => (
             <TableRow key={index}>
               <TableCell align="center">{row.name}</TableCell>
-              <TableCell align="center">{row.category}</TableCell>
               <TableCell align="center">{row.use}</TableCell>
               <TableCell align="center">{row.unitPrice.toFixed(2)}</TableCell>
               <TableCell align="center">{row.qty}</TableCell>
@@ -118,19 +109,19 @@ const CustomTableBill = ({ isSale }) => {
           ))}
           <TableRow>
             <TableCell rowSpan={3} />
-            <TableCell colSpan={4} align="right">
+            <TableCell colSpan={3} align="right">
               Subtotal
             </TableCell>
             <TableCell align="right">{invoiceSubtotal.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={4} align="right">
+            <TableCell colSpan={3} align="right">
               IVA
             </TableCell>
             <TableCell align="right">{invoiceTaxes.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={4} align="right">
+            <TableCell colSpan={3} align="right">
               Total
             </TableCell>
             <TableCell align="right">{invoiceTotal.toFixed(2)}</TableCell>

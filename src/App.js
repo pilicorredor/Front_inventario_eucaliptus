@@ -85,6 +85,7 @@ const AppContent = () => {
                 <Route path="/compra/factura" element={<BillPurchase />} />
                 <Route path="/nueva-venta" element={<AddProductSale />} />
                 <Route path="/registrar-venta" element={<RegisterSale />} />
+                <Route path="/factura-venta" element={<BillSale />} />
                 <Route path="/reporte" element={<ReportPage />} />
             </Routes>
         </>
