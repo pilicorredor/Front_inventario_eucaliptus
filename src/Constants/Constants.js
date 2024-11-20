@@ -32,6 +32,8 @@ export const SERVICES = {
     VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/stock/validatePurchase",
     GET_STOCK_SERVICE: "http://localhost:8083/products/stock/all",
     ADD_SALE_SERVICE: "http://localhost:8084/billing/sale/addSale",
+    DAILY_REPORT_SERVICE: "http://localhost:8086/report/dailyReport",
+    RANGE_REPORT_SERVICE: "http://localhost:8086/report/rangeReport",
 }
 
 export const MODAL_TYPES = {

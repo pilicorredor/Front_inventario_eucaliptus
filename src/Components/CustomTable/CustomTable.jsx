@@ -88,6 +88,9 @@ const CustomTable = ({
     quantity: "Cantidad",
     priceUnit: "Precio Unitario",
     subTotal: "SubTotal",
+    totalPrice: "SubTotal",
+    category: "Categoría",
+    use: "Uso"
     //Poner despues las columnas de productos
   };
 

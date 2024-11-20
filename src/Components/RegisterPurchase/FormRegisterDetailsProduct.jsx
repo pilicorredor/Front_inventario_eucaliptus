@@ -344,6 +344,11 @@ const RegisterProduct = () => {
                   name="purchaseDueDate"
                   value={sendProduct.purchaseDueDate}
                   onChange={handleInputChange}
+                  min={
+                    new Date(new Date().setDate(new Date().getDate()))
+                      .toISOString()
+                      .split("T")[0]
+                  }
                   required
                 />
               </div>

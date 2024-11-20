@@ -88,22 +88,23 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 560px;
+  width: 65vw;
   gap: 5px;
   margin-bottom: 20px;
 }
 
-.calenar-input-container {
+.calendar-input-container {
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
 }
 
-.calenar-input-container input {
-  height: 35px;
-  width: 250px;
+.calendar-input-container input {
+  height: 36px;
+  width: 270px;
   border-radius: 8px;
   border: 1px solid #000000;
   padding: 0px 10px;
+  box-sizing: border-box;
 }

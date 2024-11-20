@@ -6,13 +6,15 @@ import { SERVICES, REPORT_PERIOD } from "../../Constants/Constants";
 import "./ReportPage.css";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
+import "./ReportPage.css";
 
 const ReportPage = () => {
   const [periodReport, setPeriodReport] = useState(REPORT_PERIOD.DAILY);
   const [productsData, setProductsData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDate, setSelectedDate] = useState(""); // Estado para la fecha seleccionada
+  const [selectedDate, setSelectedDate] = useState("");
+  const [range, setRange] = useState({ start: "", end: "" });
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
@@ -20,16 +22,11 @@ const ReportPage = () => {
   const columnsProducts = [
     "idProduct",
     "productName",
-    "categoryProduct",
-    "useProduct",
+    "category",
+    "use",
     "quantity",
-    "priceUnit",
-    "subTotal",
+    "totalPrice",
   ];
-
-  useEffect(() => {
-    // Llamar la función de reportes del día actual
-  }, []);
 
   const productItems = [
     "ID del producto",
@@ -37,7 +34,6 @@ const ReportPage = () => {
     "Categoría",
     "Uso",
     "Cantidad",
-    "Precio Unitario",
     "Sub Total",
   ];
 
@@ -45,31 +41,101 @@ const ReportPage = () => {
     handleUpdateData(periodReport, selectedUseFilter);
   }, [periodReport, selectedUseFilter, productsData]);
 
+  const formatDate = (date) => {
+    if (!date) return "";
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   const handleReportChange = (selectedPeriod) => {
     setPeriodReport(selectedPeriod);
+    setRange({ start: "", end: "" });
+    setSelectedDate("");
+  };
+
+  const handleDateChange = (event) => {
+    const selected = event.target.value;
+    setSelectedDate(selected);
+
+    if (periodReport === REPORT_PERIOD.WEEKLY) {
+      const start = new Date(selected);
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      setRange({
+        start: start.toISOString().split("T")[0],
+        end: end.toISOString().split("T")[0],
+      });
+    } else if (periodReport === REPORT_PERIOD.MONTHLY) {
+      const start = new Date(selected);
+      const end = new Date(start);
+      end.setDate(start.getDate() + 29);
+      setRange({
+        start: start.toISOString().split("T")[0],
+        end: end.toISOString().split("T")[0],
+      });
+    } else {
+      setRange({ start: selected, end: selected });
+    }
+  };
+
+  const handleSearchRange = async () => {
+    console.log("Buscar:", searchQuery, "Rango:", range);
+
+    const requestBody = {
+      startDate: range.start,
+      endDate: range.end,
+    };
+
+    const token = localStorage.getItem("token");
+
+    let url = "";
+    if (periodReport === REPORT_PERIOD.DAILY) {
+      url = `${SERVICES.DAILY_REPORT_SERVICE}`;
+    } else if (
+      periodReport === REPORT_PERIOD.WEEKLY ||
+      periodReport === REPORT_PERIOD.MONTHLY
+    ) {
+      url = `${SERVICES.RANGE_REPORT_SERVICE}`;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Datos obtenidos:", data);
+        const transformedData = data.map((item) => ({
+          ...item,
+          ...item.product, // Desestructurar los datos del producto
+        }));
+
+        setFilteredData(transformedData);
+      } else {
+        console.error("Error al obtener los reportes:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
   };
 
   const handleSearch = () => {
-    console.log("Buscar:", searchQuery, "Fecha seleccionada:", selectedDate);
-  };
-
-  const handleUpdateData = (periodReport) => {
-    let filteredProducts = productsData;
-    setFilteredData(filteredProducts);
+    console.log("Buscar:", searchQuery);
   };
 
   const handleUseFilterSelection = (selectedItem) => {
     setSelectedUseFilter(selectedItem);
   };
 
-  const handleSearchFilterSelection = (selectedItem) => {
-    setSelectedSearchFilter(selectedItem);
-    setProductButtonText(selectedItem);
-  };
-
-  const handleDateChange = (event) => {
-    const selected = event.target.value;
-    setSelectedDate(selected);
+  const handleUpdateData = (periodReport) => {
+    let filteredProducts = productsData;
+    setFilteredData(filteredProducts);
   };
 
   return (
@@ -97,6 +163,36 @@ const ReportPage = () => {
           </button>
         </div>
 
+        <div className="calendar-container">
+          <div className="calendar-input-container">
+            <label htmlFor="date-picker">Escoger Fecha Inicial:</label>
+            <input
+              type="date"
+              name="selectedDate"
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+          </div>
+          <div>
+            {periodReport === REPORT_PERIOD.DAILY && range.start && (
+              <p>Fecha seleccionada: {formatDate(range.start)}</p>
+            )}
+            {periodReport !== REPORT_PERIOD.DAILY &&
+              range.start &&
+              range.end && (
+                <p>
+                  Rango seleccionado: {formatDate(range.start)} -{" "}
+                  {formatDate(range.end)}
+                </p>
+              )}
+          </div>
+          {selectedDate && (
+            <button className="btn search-btn" onClick={handleSearchRange}>
+              Buscar
+            </button>
+          )}
+        </div>
+
         <div className="search-bar">
           <div className="search-container">
             <Dropdown
@@ -106,7 +202,7 @@ const ReportPage = () => {
                   {productItems.map((item) => (
                     <DropdownItem
                       key={item}
-                      onClick={() => handleSearchFilterSelection(item)}
+                      onClick={() => handleUseFilterSelection(item)}
                     >
                       {`${item}`}
                     </DropdownItem>
@@ -126,21 +222,6 @@ const ReportPage = () => {
               Buscar
             </button>
           </div>
-        </div>
-
-        <div className="calendar-container">
-          <div className="calenar-input-container">
-            <label htmlFor="date-picker">Escoger período:</label>
-            <input
-              type="date"
-              name="selectedDate"
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </div>
-          <button className="btn search-btn" onClick={handleSearch}>
-            Buscar
-          </button>
         </div>
 
         <div className="reports-content">
