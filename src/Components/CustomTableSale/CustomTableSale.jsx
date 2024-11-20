@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -29,8 +28,6 @@ const CustomTableSale = ({
     }, {})
   );
 
-  const navigate = useNavigate();
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -41,17 +38,19 @@ const CustomTableSale = ({
   };
 
   const handleIncrement = (id, maxQuantity) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [id]: Math.min(prevQuantities[id] + 1, maxQuantity),
-    }));
+    setQuantities((prevQuantities) => {
+      const currentQuantity = prevQuantities[id] ?? 0;
+      const newQuantity = Math.min(currentQuantity + 1, maxQuantity);
+      return { ...prevQuantities, [id]: newQuantity };
+    });
   };
 
   const handleDecrement = (id) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [id]: Math.max(prevQuantities[id] - 1, 0),
-    }));
+    setQuantities((prevQuantities) => {
+      const currentQuantity = prevQuantities[id] ?? 0;
+      const newQuantity = Math.max(currentQuantity - 1, 0);
+      return { ...prevQuantities, [id]: newQuantity };
+    });
   };
 
   const handleInputChange = (id, value, maxQuantity) => {
@@ -68,7 +67,7 @@ const CustomTableSale = ({
     id_modify: "ID",
     idProduct: "ID",
     productName: "Nombre",
-    quantityAvailable: "Cantidad disponible",
+    quantityAvailable: "Disponible",
     quantitySold: "Cantidad",
     use: "Uso",
     productSalePrice: "Precio",
@@ -164,44 +163,70 @@ const CustomTableSale = ({
                           alignItems: "center",
                         }}
                       >
-                        <button
-                          onClick={() => handleDecrement(row.id_modify)}
-                          style={{
-                            margin: "5px 5px",
-                            padding: "5px 10px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          value={quantities[row.id_modify] ?? 0}
-                          onChange={(e) =>
-                            handleInputChange(
-                              row.id_modify,
-                              e.target.value,
-                              row.quantityAvailable
-                            )
-                          }
-                          style={{
-                            width: "30px",
-                            height: "30px",
-                            textAlign: "center",
-                          }}
-                        />
-                        <button
-                          onClick={() =>
-                            handleIncrement(row.id_modify, row.quantity)
-                          }
-                          style={{
-                            margin: "5px 5px",
-                            padding: "5px 10px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          +
-                        </button>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <button
+                            onClick={() => handleDecrement(row.id_modify)}
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              border: "1px solid #ddd",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                              backgroundColor: "#ccffcc",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                            }}
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            value={quantities[row.id_modify] ?? 0}
+                            onChange={(e) =>
+                              handleInputChange(
+                                row.id_modify,
+                                e.target.value,
+                                row.quantityAvailable
+                              )
+                            }
+                            style={{
+                              width: "50px",
+                              height: "40px",
+                              textAlign: "center",
+                              border: "1px solid #ddd",
+                              appearance: "textfield",
+                              marginLeft: "5px",
+                              marginRight: "5px",
+                              borderRadius: "8px",
+                            }}
+                            min="0"
+                            max={row.quantityAvailable}
+                          />
+                          <button
+                            onClick={() =>
+                              handleIncrement(
+                                row.id_modify,
+                                row.quantityAvailable
+                              )
+                            }
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              border: "1px solid #ddd",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                              backgroundColor: "#ccffcc",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
                       </TableCell>
                     )}
                     <TableCell
@@ -214,11 +239,13 @@ const CustomTableSale = ({
                       {isNewSale ? (
                         <button
                           onClick={() => {
-                            onAddToSummary(row, quantities[row.id_modify]);
-                            setQuantities((prevQuantities) => ({
-                              ...prevQuantities,
-                              [row.id_modify]: 0,
-                            }));
+                            if (quantities[row.id_modify] > 0) {
+                              onAddToSummary(row, quantities[row.id_modify]);
+                              setQuantities((prevQuantities) => ({
+                                ...prevQuantities,
+                                [row.id_modify]: 0,
+                              }));
+                            }
                           }}
                           style={{
                             backgroundColor: "#227e3c",

@@ -34,6 +34,7 @@ export const SERVICES = {
     ADD_SALE_SERVICE: "http://localhost:8084/billing/sale/addSale",
     DAILY_REPORT_SERVICE: "http://localhost:8086/report/dailyReport",
     RANGE_REPORT_SERVICE: "http://localhost:8086/report/rangeReport",
+    GET_CLIENT_BY_ID: "http://localhost:8084/billing/client/getClientById",
 }
 
 export const MODAL_TYPES = {
