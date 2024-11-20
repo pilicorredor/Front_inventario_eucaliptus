@@ -2,6 +2,7 @@ import React from "react";
 import * as FaIcons from "react-icons/fa";
 import * as IoIcons from "react-icons/io";
 import * as Io5Icons from "react-icons/io5";
+import * as FaIcons6 from "react-icons/fa6";
 
 export const SidebarData = [
   {
@@ -35,9 +36,15 @@ export const SidebarData = [
     cName: "nav-text",
   },
   {
-    title: "Reporte ventas",
-    path: "/reporte",
+    title: "Productos vendidos",
+    path: "/productos-vendidos",
     icon: <FaIcons.FaInbox className="nav-menu-item-icon" />,
+    cName: "nav-text",
+  },
+  {
+    title: "Reporte de movimientos",
+    path: "/reportes",
+    icon: <FaIcons6.FaFileLines className="nav-menu-item-icon" />,
     cName: "nav-text",
   },
 ];

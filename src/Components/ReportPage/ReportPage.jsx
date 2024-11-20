@@ -113,7 +113,7 @@ const ReportPage = () => {
         console.log("Datos obtenidos:", data);
         const transformedData = data.map((item) => ({
           ...item,
-          ...item.product, // Desestructurar los datos del producto
+          ...item.product,
         }));
 
         setFilteredData(transformedData);
@@ -140,7 +140,7 @@ const ReportPage = () => {
 
   return (
     <div className="reports-page">
-      <Header pageTitle="Reportes" />
+      <Header pageTitle="Reporte Productos Vendidos" />
       <div>
         <div className="reports-header">
           <button
@@ -225,6 +225,11 @@ const ReportPage = () => {
         </div>
 
         <div className="reports-content">
+          {filteredData.length === 0 && (
+            <p className="no-data-message">
+              No hay registros en el tiempo seleccionado
+            </p>
+          )}
           <CustomTable
             data={filteredData}
             customColumns={columnsProducts}

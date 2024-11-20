@@ -86,7 +86,7 @@ const AppContent = () => {
                 <Route path="/nueva-venta" element={<AddProductSale />} />
                 <Route path="/registrar-venta" element={<RegisterSale />} />
                 <Route path="/factura-venta" element={<BillSale />} />
-                <Route path="/reporte" element={<ReportPage />} />
+                <Route path="/productos-vendidos" element={<ReportPage />} />
             </Routes>
         </>
     );
