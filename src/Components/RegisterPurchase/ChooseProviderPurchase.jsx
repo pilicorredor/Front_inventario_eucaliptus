@@ -18,6 +18,7 @@ const ChooseProviderPurchase = () => {
   const [providersData, setProvidersData] = useState([]);
   const [buttonText, setButtonText] = useState("Buscar por...");
   const [selectedFilter, setSelectedFilter] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     fetchProvidersData();
@@ -67,6 +68,7 @@ const ChooseProviderPurchase = () => {
 
   const providerItems = [
     "Todos",
+    "ID",
     "Nombre",
     "Dirección Empresarial",
     "Correo Electrónico",
@@ -75,13 +77,49 @@ const ChooseProviderPurchase = () => {
     "Cuenta Bancaria",
   ];
 
+  const columnMap = {
+    "ID": "id_modify",
+    "Nombre":"name",
+    "Dirección Empresarial":"addressCompany",
+    "Correo Electrónico":"email",
+    "Número de Teléfono":"phoneNumber",
+    "Nombre de la Empresa":"companyName",
+    "Cuenta Bancaria":"companyName",
+  };
+
   const handleSearch = () => {
-    console.log("Buscar:", searchQuery);
+    if (!searchQuery || selectedFilter === "Todos") {
+      
+      setFilteredData(providersData);
+      return;
+    }
+
+    const selectedColumn = columnMap[selectedFilter];
+
+    if (!selectedColumn) {
+      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      return;
+    }
+
+    const filteredResults = providersData.filter((provider) =>
+      provider[selectedColumn]
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredData(filteredResults);
   };
 
   const handleFilterSelection = (selectedItem) => {
     setSelectedFilter(selectedItem);
     setButtonText(selectedItem);
+
+    
+    if (selectedItem === "Todos") {
+      setSearchQuery("");
+      setFilteredData(providersData);
+    }
   };
 
   const handleNewButtonClick = () => {
@@ -144,7 +182,7 @@ const ChooseProviderPurchase = () => {
         <div className="products-content">
           {role === ENTITIES.PROVEEDOR && (
             <CustomTable
-              data={providersData}
+              data={filteredData}
               customColumns={columnsProviders}
               role={role}
               context={contextTable}
