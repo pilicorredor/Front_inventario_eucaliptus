@@ -5,8 +5,8 @@ import "./ConfigPanel.css";
 import { FaEdit } from "react-icons/fa";
 import { SERVICES } from "../../Constants/Constants.js";
 import CircularProgress from "@mui/material/CircularProgress";
-import SuccessModal from "./SuccessModal.jsx";
-import FailModal from "./FailModal.jsx";
+import SuccessModal from "../../Modales/SuccessModal.jsx";
+import FailModal from "../../Modales/FailModal.jsx"
 
 
 const Config = ({ userRol, username, handleLogout }) => {
@@ -128,10 +128,12 @@ const Config = ({ userRol, username, handleLogout }) => {
             } else {
                 setLoading(false);
                 setMessageFail("No fue posible guardar los cambios")
+                setIsModalOpen(true)
             }
         } catch (error) {
             setLoading(false);
-            setMessageFail("Error mandando los datos :(");
+            setMessageFail("Error mandando los datos");
+            setIsModalOpen(true)
         }
 
     };

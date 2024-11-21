@@ -6,6 +6,8 @@ import { useVerifCode } from "../../Context/VerificationCodeContext";
 import { SERVICES } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import SuccessModal from "../../Modales/SuccessModal.jsx";
+import FailModal from "../../Modales/FailModal.jsx"
 
 
 const RecoveryUpdatePassword = () => {
@@ -14,6 +16,11 @@ const RecoveryUpdatePassword = () => {
     const [newPassword, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [messageSuccess, setMessageSuccess] = useState("");
+    const [messageFail, setMessageFail] = useState("");
+    const [isSuccesful, setIsSuccesful] = useState(false);
+
     const { email } = useEmail();
     const { code } = useVerifCode();
     const navigate = useNavigate();
@@ -44,17 +51,21 @@ const RecoveryUpdatePassword = () => {
 
                 if (response.ok) {
                     setLoading(false);
-                    alert("Contraseña actualizada correctamente")
+                    setIsSuccesful(true)
+                    setMessageSuccess("Contraseña actualizada correctamente")
+                    setIsModalOpen(true)
                     navigate("/");
 
                 } else {
                     setLoading(false);
-                    console.log(response)
+                    setMessageFail("No fue posible actualizar la contraseña")
+                    setIsModalOpen(true)
                 }
 
             } catch (error) {
                 setLoading(false);
-                alert(error)
+                setMessageFail("No fue posible actualizar la contraseña")
+                setIsModalOpen(true)
             }
         }
     };
@@ -81,7 +92,6 @@ const RecoveryUpdatePassword = () => {
                         placeholder="Confirmar contraseña"
                         onChange={handleConfirmPasswordChange}
                     />
-
                 </div>
 
                 {errorMessage &&
@@ -100,6 +110,17 @@ const RecoveryUpdatePassword = () => {
                     <button onClick={handleSubmit}>Actualizar</button>
                 </div>
             </div>
+            {
+                isSuccesful ?
+                    <SuccessModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        message={messageSuccess} />
+                    : <FailModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        message={messageFail} />
+            }
         </div>
     );
 }

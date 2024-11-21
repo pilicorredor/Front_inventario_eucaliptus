@@ -5,11 +5,14 @@ import { useVerifCode } from "../../Context/VerificationCodeContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SERVICES } from "../../Constants/Constants";
 import { useNavigate } from "react-router-dom";
-
+import FailModal from "../../Modales/FailModal.jsx"
 
 
 const CheckPswdToken = () => {
     const [loading, setLoading] = useState(false);
+    const [messageFail, setMessageFail] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const { email } = useEmail();
     const navigate = useNavigate();
     const { code, setVerifCode } = useVerifCode();
@@ -31,18 +34,18 @@ const CheckPswdToken = () => {
 
             if (response.ok) {
                 setLoading(false);
-                console.log(response)
                 navigate("/config/recovery-update-password");
-
             } else {
                 setLoading(false);
-                alert('Porfavor verifique que el token ingresado sea el correcto')
-                console.log(response)
+                //alert('Porfavor verifique que el token ingresado sea el correcto')
+                setMessageFail('Porfavor verifique que el token ingresado sea el correcto')
+                setIsModalOpen(true)
             }
 
         } catch (error) {
             setLoading(false);
-            alert(error)
+            setMessageFail('Ocurrió un error interno del servidor')
+            setIsModalOpen(true)
         }
 
     };
@@ -73,6 +76,10 @@ const CheckPswdToken = () => {
                     <button onClick={handleSubmit}>Verificar</button>
                 </div>
             </div>
+            <FailModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                message={messageFail} />
         </div>
     );
 }
