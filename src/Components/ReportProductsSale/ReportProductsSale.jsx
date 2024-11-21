@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import CustomTable from "../CustomTable/CustomTable";
+import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import Header from "../Header/Header.jsx";
-import { SERVICES, REPORT_PERIOD } from "../../Constants/Constants";
-import "./ReportPage.css";
+import { SERVICES, REPORT_PERIOD } from "../../Constants/Constants.js";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
-import "./ReportPage.css";
+import "./ReportProductsSale.css";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ReportPage = () => {
   const [periodReport, setPeriodReport] = useState(REPORT_PERIOD.DAILY);
@@ -18,6 +18,7 @@ const ReportPage = () => {
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const columnsProducts = [
     "idProduct",
@@ -80,6 +81,7 @@ const ReportPage = () => {
 
   const handleSearchRange = async () => {
     console.log("Buscar:", searchQuery, "Rango:", range);
+    setLoading(true);
 
     const requestBody = {
       startDate: range.start,
@@ -113,15 +115,18 @@ const ReportPage = () => {
         console.log("Datos obtenidos:", data);
         const transformedData = data.map((item) => ({
           ...item,
-          ...item.product, // Desestructurar los datos del producto
+          ...item.product,
         }));
 
         setFilteredData(transformedData);
+        setLoading(false);
       } else {
         console.error("Error al obtener los reportes:", await response.json());
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
+      setLoading(false);
     }
   };
 
@@ -140,7 +145,7 @@ const ReportPage = () => {
 
   return (
     <div className="reports-page">
-      <Header pageTitle="Reportes" />
+      <Header pageTitle="Reporte Productos Vendidos" />
       <div>
         <div className="reports-header">
           <button
@@ -193,6 +198,12 @@ const ReportPage = () => {
           )}
         </div>
 
+        {loading && (
+          <div className="page-loading-container">
+            <CircularProgress className="page-loading-icon" />
+          </div>
+        )}
+
         <div className="search-bar">
           <div className="search-container">
             <Dropdown
@@ -225,6 +236,11 @@ const ReportPage = () => {
         </div>
 
         <div className="reports-content">
+          {filteredData.length === 0 && (
+            <p className="no-data-message">
+              No hay registros en el tiempo seleccionado
+            </p>
+          )}
           <CustomTable
             data={filteredData}
             customColumns={columnsProducts}

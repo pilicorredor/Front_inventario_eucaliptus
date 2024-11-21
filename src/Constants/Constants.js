@@ -36,6 +36,7 @@ export const SERVICES = {
     ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
     VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/details/validatePurchase",
     GET_EXPIRING_PRODUCTS: "http://localhost:8083/products/expiring",
+    GET_CLIENT_BY_ID: "http://localhost:8084/billing/client/getClientById",
 }
 
 export const MODAL_TYPES = {

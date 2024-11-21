@@ -16,6 +16,7 @@ const RegisterSale = () => {
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("venta");
   const [action, setAction] = useState("registrar");
+  const [clientFound, setClientFound] = useState(false);
   const [consumerData, setConsumerData] = useState({
     idClient: "",
     nameClient: "",
@@ -31,6 +32,39 @@ const RegisterSale = () => {
   const handleNextSale = () => {
     setLoading(true);
     handleService();
+  };
+
+  const handleClientSearch = async (idClient) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${SERVICES.GET_CLIENT_BY_ID}/${idClient}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const clientData = await response.json();
+        setConsumerData({
+          idClient: clientData.idClient,
+          nameClient: clientData.nameClient,
+          email: clientData.email,
+        });
+        setClientFound(true);
+      } else {
+        setClientFound(false);
+        setConsumerData((prev) => ({
+          ...prev,
+          nameClient: "",
+          email: "",
+        }));
+      }
+    } catch (error) {
+      console.error("Error al buscar el cliente:", error);
+      setClientFound(false);
+    }
   };
 
   const handleService = async () => {
@@ -70,7 +104,7 @@ const RegisterSale = () => {
 
   const generateSaleObject = () => {
     const defaultClientData = {
-      idClient: "0000000",
+      idClient: "0000000000",
       nameClient: "Cliente General",
       email: "sincorreo@ejemplo.com",
     };
@@ -92,7 +126,7 @@ const RegisterSale = () => {
 
     return {
       clientDTO: clientData,
-      dateSale: colombianDate, // Directamente en formato YYYY-MM-DD
+      dateSale: colombianDate,
       saleDetails,
     };
   };
@@ -125,7 +159,13 @@ const RegisterSale = () => {
       setConsumerData((prevConsumer) => ({
         ...prevConsumer,
         [name]: processedValue,
+        ...(processedValue === "" && { nameClient: "", email: "" }),
       }));
+      if (processedValue.length >= 7) {
+        handleClientSearch(processedValue);
+      } else {
+        setClientFound(false);
+      }
     } else {
       setConsumerData((prevConsumer) => ({
         ...prevConsumer,
@@ -204,6 +244,7 @@ const RegisterSale = () => {
               value={consumerData.nameClient}
               onChange={handleInputChange}
               onInput={handleInput}
+              disabled={clientFound}
               className="customer-input"
             />
           </div>
@@ -215,6 +256,7 @@ const RegisterSale = () => {
               name="email"
               value={consumerData.email}
               onChange={handleInputChange}
+              disabled={clientFound}
               className="customer-input"
             />
           </div>

@@ -108,3 +108,11 @@
   padding: 0px 10px;
   box-sizing: border-box;
 }
+
+.no-data-message {
+  text-align: center;
+  font-size: 30px;
+  color: #888;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
