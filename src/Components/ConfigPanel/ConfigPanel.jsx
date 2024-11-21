@@ -5,6 +5,8 @@ import "./ConfigPanel.css";
 import { FaEdit } from "react-icons/fa";
 import { SERVICES } from "../../Constants/Constants.js";
 import CircularProgress from "@mui/material/CircularProgress";
+import SuccessModal from "./SuccessModal.jsx";
+import FailModal from "./FailModal.jsx";
 
 
 const Config = ({ userRol, username, handleLogout }) => {
@@ -23,6 +25,11 @@ const Config = ({ userRol, username, handleLogout }) => {
         "config-input-email": ''
     });
     const [loading, setLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [messageSuccess, setMessageSuccess] = useState("");
+    const [messageFail, setMessageFail] = useState("");
+    const [isSuccesful, setIsSuccesful] = useState(false);
+
 
     let dataToSend = []
 
@@ -79,7 +86,9 @@ const Config = ({ userRol, username, handleLogout }) => {
                     username,
                 });
             } else {
-                alert("No fue posible recuperar los cambios")
+                //alert("No fue posible recuperar los datos")
+                setMessageFail("No fue posible recuperar los datos")
+                setIsModalOpen(true)
             }
         } catch (error) {
             setLoading(false);
@@ -102,7 +111,6 @@ const Config = ({ userRol, username, handleLogout }) => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            console.log(dataToSend)
             const response = await fetch(SERVICES.CONFIG_UPDATE_USER_INFO, {
                 method: "PUT",
                 headers: {
@@ -114,15 +122,16 @@ const Config = ({ userRol, username, handleLogout }) => {
             if (response.ok) {
                 setLoading(false);
                 fetchPersonInfo();
-                alert("Cambios guardados con éxito!")
-                console.log(response);
+                setIsSuccesful(true)
+                setMessageSuccess("Cambios guardados con éxito!")
+                setIsModalOpen(true)
             } else {
                 setLoading(false);
-                alert("No fue posible guardar los cambios")
+                setMessageFail("No fue posible guardar los cambios")
             }
         } catch (error) {
             setLoading(false);
-            alert("Error mandando los datos :(");
+            setMessageFail("Error mandando los datos :(");
         }
 
     };
@@ -229,6 +238,17 @@ const Config = ({ userRol, username, handleLogout }) => {
                             <a href="/config/login-to-change-password" onClick={handleLogout}>Actualizar contraseña</a>
                         </div>
                     </div>
+                    {
+                        isSuccesful ?
+                            <SuccessModal
+                                isOpen={isModalOpen}
+                                onClose={() => setIsModalOpen(false)}
+                                message={messageSuccess} />
+                            : <FailModal
+                                isOpen={isModalOpen}
+                                onClose={() => setIsModalOpen(false)}
+                                message={messageFail} />
+                    }
                 </form>
                 <div className="config-button-container">
                     <button className="confing-submit-btn" type="config-submit" onClick={handleSubmitBtn}>Guardar Cambios</button>
