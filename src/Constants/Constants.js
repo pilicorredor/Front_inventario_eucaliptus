@@ -35,6 +35,8 @@ export const SERVICES = {
     DAILY_REPORT_SERVICE: "http://localhost:8086/report/dailyReport",
     RANGE_REPORT_SERVICE: "http://localhost:8086/report/rangeReport",
     GET_CLIENT_BY_ID: "http://localhost:8084/billing/client/getClientById",
+    GET_HISTORY_SALE_SERVICE: "http://localhost:8084/billing/sale/getHistorySale",
+    GET_HISTORY_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/getHistoryPurchase",
 }
 
 export const MODAL_TYPES = {
@@ -103,4 +105,9 @@ export const REPORT_PERIOD = {
     DAILY: "Diario",
     WEEKLY: "Semanal",
     MONTHLY: "Mensual"
+}
+
+export const REPORT_TRANSACTION = {
+    SALE: "Venta",
+    PURCHASE: "Compra",
 }

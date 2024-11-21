@@ -39,13 +39,14 @@ const CustomTableBill = ({ isSale }) => {
 
   useEffect(() => {
     if (isSale) {
-      const summaryData = location.state?.summaryData || [];
-      const saleObject = location.state?.saleObject || {};
-      const saleRows = summaryData.map((product) => {
+      const saleDetails = location.state?.saleDetails || [];
+      const dataSale = location.state?.dataSale || {};
+      const clientData = location.state?.clientData || {};
+      const saleRows = saleDetails.map((product) => {
         return createRow(
-          product.productName,
-          product.use,
-          product.productSalePriceWithoutIVA,
+          product.productDTO.productName,
+          product.productDTO.use,
+          product.salePriceWithoutIva,
           product.quantitySold,
           product.iva || 0
         );
@@ -58,8 +59,15 @@ const CustomTableBill = ({ isSale }) => {
       setInvoiceTaxes(taxesSale);
       setInvoiceTotal(subtotalSale + taxesSale);
 
-      console.log("Datos del cliente:", saleObject.clientDTO);
-      console.log("Fecha de la venta:", saleObject.dateSale);
+      console.log("Datos del cliente:", clientData);
+      console.log("Fecha de la venta:", dataSale.dateSale);
+      console.log("Id Seller:", dataSale.idSeller);
+      console.log(
+        "Factura de venta:",
+        dataSale.idSale,
+        " fecha: ",
+        dataSale.dateSale
+      );
     } else {
       const purchaseRows = productsTable.map((product) => {
         const unitPriceWithoutTax = removeTax(

@@ -195,6 +195,8 @@ const ChooseProductsPurchase = () => {
       });
 
       if (response.ok) {
+        const dataPurchase = await response.json();
+        console.log("dataPruchasae; ", dataPurchase);
         setLoading(false);
         setIsCalendarOpen(false);
         setIsButtonActive(false);
@@ -235,6 +237,7 @@ const ChooseProductsPurchase = () => {
 
   const handleFinishPurchase = () => {
     setIsButtonActive(false);
+    handleSelectDate();
     handleServiceAddPurchase();
   };
 
