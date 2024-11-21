@@ -16,8 +16,7 @@ export const SERVICES = {
     MODIFY_SELLER_SERVICE: "http://localhost:8082/person/sellers/updateSeller",
     DELETE_SELLER_SERVICE: "http://localhost:8082/person/sellers/deleteSeller",
     DELETE_PROVIDER_SERVICE: "http://localhost:8082/person/providers/deleteProvider",
-    CONFIG_GET_ADMIN_DATA_SERVICE: "http://localhost:8082/person/getAdmin",
-    CONFIG_GET_SELLER_DATA_SERVICE: "http://localhost:8082/person/sellers/getSellerByUsername",
+    CONFIG_GET_SELLER_DATA_SERVICE: "http://localhost:8082/person/sellers/getSellerInfoByToken",
     CONFIG_UPDATE_USER_INFO: "http://localhost:8082/person/sellers/updateUserInfo",
     GET_PRODUCTS_ALL_SERVICE: "http://localhost:8083/products/all",
     GET_PRODUCTS_UNITS_SERVICE: "http://localhost:8083/products/units/getAllUnitNames",
@@ -36,7 +35,7 @@ export const SERVICES = {
     RANGE_REPORT_SERVICE: "http://localhost:8086/report/rangeReport",
     ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
     VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/details/validatePurchase",
-    GET_EXPIRING_PRODUCTS: "http://localhost:8083/products/expiring-soon",
+    GET_EXPIRING_PRODUCTS: "http://localhost:8083/products/expiring",
 }
 
 export const MODAL_TYPES = {

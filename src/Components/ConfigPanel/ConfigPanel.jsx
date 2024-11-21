@@ -3,7 +3,9 @@ import Header from "../Header/Header.jsx";
 import userImg from "../Assets/person-circle.png";
 import "./ConfigPanel.css";
 import { FaEdit } from "react-icons/fa";
-import { SERVICES, ROLES } from "../../Constants/Constants.js";
+import { SERVICES } from "../../Constants/Constants.js";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 const Config = ({ userRol, username, handleLogout }) => {
     const [isNameEditable, setIsNameEditable] = useState(false);
@@ -20,6 +22,7 @@ const Config = ({ userRol, username, handleLogout }) => {
         "config-input-username": '',
         "config-input-email": ''
     });
+    const [loading, setLoading] = useState(false);
 
     let dataToSend = []
 
@@ -56,50 +59,30 @@ const Config = ({ userRol, username, handleLogout }) => {
 
 
     const fetchPersonInfo = async () => {
+        setLoading(true);
         try {
-            if (userRol === ROLES.ADMIN) {
-                const response = await fetch(SERVICES.CONFIG_GET_ADMIN_DATA_SERVICE, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
+            const response = await fetch(SERVICES.CONFIG_GET_SELLER_DATA_SERVICE, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (response.ok) {
+                setLoading(false);
+                const data = await response.json();
+                setPersonData({
+                    idPerson: data.personDTO.idPerson,
+                    firstName: data.personDTO.firstName,
+                    lastName: data.personDTO.lastName,
+                    email: data.personDTO.email,
+                    username,
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    setPersonData({
-                        idPerson: data.idPerson,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        email: data.email,
-                        username,
-                    });
-                } else {
-                    console.error(response)
-                }
             } else {
-                const url = `${SERVICES.CONFIG_GET_SELLER_DATA_SERVICE}/${username}`;
-                const response = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setPersonData({
-                        idPerson: data.personDTO.idPerson,
-                        firstName: data.personDTO.firstName,
-                        lastName: data.personDTO.lastName,
-                        email: data.personDTO.email,
-                        username,
-                    });
-                } else {
-                    console.error(response)
-                }
+                alert("No fue posible recuperar los cambios")
             }
         } catch (error) {
+            setLoading(false);
             console.error("Error en la solicitud de datos de la persona:", error);
         }
     }
@@ -116,7 +99,7 @@ const Config = ({ userRol, username, handleLogout }) => {
             newUsername: personData["config-input-username"] || username,
             email: personData["config-input-email"] || personData.email
         }
-
+        setLoading(true);
         try {
             const token = localStorage.getItem("token");
             console.log(dataToSend)
@@ -129,13 +112,17 @@ const Config = ({ userRol, username, handleLogout }) => {
                 body: JSON.stringify(dataToSend)
             })
             if (response.ok) {
+                setLoading(false);
                 fetchPersonInfo();
+                alert("Cambios guardados con éxito!")
                 console.log(response);
             } else {
-                console.error(response);
+                setLoading(false);
+                alert("No fue posible guardar los cambios")
             }
         } catch (error) {
-            console.log("Error mandando los datos :(");
+            setLoading(false);
+            alert("Error mandando los datos :(");
         }
 
     };
@@ -153,6 +140,11 @@ const Config = ({ userRol, username, handleLogout }) => {
                     cuando estes satisfecho con tus cambios dale click al botón de “Guardar Cambios” y listo!
                 </p>
                 <form className="config-form">
+                    {loading && (
+                        <div className="loading-container">
+                            <CircularProgress className="loading-icon" />
+                        </div>
+                    )}
                     <div className="configForm-row">
                         <div className="configForm-item">
                             <label>

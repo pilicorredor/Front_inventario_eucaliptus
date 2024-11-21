@@ -46,12 +46,12 @@ const RecoveryUpdatePassword = ({ username }) => {
 
                 } else {
                     setLoading(false);
-                    console.log(response)
+                    alert("No fue posible actualizar la contraseña")
                 }
 
             } catch (error) {
                 setLoading(false);
-                alert(error)
+                alert("Error del servidor al actualizar la contraseña")
             }
         }
     };
