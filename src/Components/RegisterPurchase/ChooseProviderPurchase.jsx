@@ -47,6 +47,7 @@ const ChooseProviderPurchase = () => {
           bankAccount: provider.bankAccountNumber,
         }));
         setProvidersData(formattedProviders);
+        setFilteredData(formattedProviders);
       } else {
         const errorMessage = await response.text();
         console.error("Error al obtener los vendedores:", errorMessage);
