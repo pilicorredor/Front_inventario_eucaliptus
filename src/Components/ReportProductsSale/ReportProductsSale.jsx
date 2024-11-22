@@ -16,7 +16,6 @@ const ReportPage = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [range, setRange] = useState({ start: "", end: "" });
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
-  const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +29,7 @@ const ReportPage = () => {
   ];
 
   const productItems = [
+    "Todos",
     "ID del producto",
     "Nombre",
     "Categoría",
@@ -38,9 +38,18 @@ const ReportPage = () => {
     "Sub Total",
   ];
 
+  const columnMap = {
+    "ID del producto":"idProduct",
+    "Nombre":"productName",
+    "Categoría":"category",
+    "Uso":"use",
+    "Cantidad":"quantity",
+    "Sub Total":"totalPrice",
+  }
+
   useEffect(() => {
-    handleUpdateData(periodReport, selectedUseFilter);
-  }, [periodReport, selectedUseFilter, productsData]);
+    handleUpdateData(periodReport, selectedSearchFilter);
+  }, [periodReport, selectedSearchFilter, productsData]);
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -117,6 +126,7 @@ const ReportPage = () => {
           ...item.product,
         }));
 
+        setProductsData(transformedData);
         setFilteredData(transformedData);
         setLoading(false);
       } else {
@@ -130,11 +140,37 @@ const ReportPage = () => {
   };
 
   const handleSearch = () => {
-    console.log("Buscar:", searchQuery);
+    if (!searchQuery || selectedSearchFilter === "Todos") {
+      
+      setFilteredData(productsData);
+      return;
+    }
+
+    const selectedColumn = columnMap[selectedSearchFilter];
+
+    if (!selectedColumn) {
+      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      return;
+    }
+
+    const filteredResults = productsData.filter((product) =>
+      product[selectedColumn]
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredData(filteredResults);
   };
 
-  const handleUseFilterSelection = (selectedItem) => {
-    setSelectedUseFilter(selectedItem);
+  const handleSearchFilterSelection = (selectedItem) => {
+    setSelectedSearchFilter(selectedItem);
+    setProductButtonText(selectedItem);
+
+    if (selectedItem === "Todos") {
+      setSearchQuery("");
+      setFilteredData(productsData);
+    }
   };
 
   const handleUpdateData = (periodReport) => {
@@ -212,7 +248,7 @@ const ReportPage = () => {
                   {productItems.map((item) => (
                     <DropdownItem
                       key={item}
-                      onClick={() => handleUseFilterSelection(item)}
+                      onClick={() => handleSearchFilterSelection(item)}
                     >
                       {`${item}`}
                     </DropdownItem>

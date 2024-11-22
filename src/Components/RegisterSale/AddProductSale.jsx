@@ -15,6 +15,9 @@ const AddProductSale = () => {
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
   const [filteredData, setFilteredData] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
+  const [productsData, setProductsData] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("");
+
 
   useEffect(() => {
     const fetchProductsData = async () => {
@@ -39,6 +42,7 @@ const AddProductSale = () => {
             use: product.productDTO.use,
             iva: product.iva,
           }));
+          setProductsData(formattedProducts);
           setFilteredData(formattedProducts);
         } else {
           const errorMessage = await response.text();
@@ -58,14 +62,46 @@ const AddProductSale = () => {
     "quantityAvailable",
     "productSalePrice",
   ];
-  const productItems = ["ID del producto", "Nombre", "Cantidad", "Precio"];
+  const productItems = ["Todos","ID del producto", "Nombre", "Cantidad", "Precio"];
+
+  const columnMap = {
+    "ID del producto": "idProduct", 
+    "Nombre":"productName", 
+    "Cantidad":"quantityAvailable", 
+    "Precio":"productSalePrice"
+  }
 
   const handleSearch = () => {
-    //TODO: Agrega la lógica de búsqueda aquí
+    if (!searchQuery || selectedFilter === "Todos") {
+      setFilteredData(productsData);
+      return;
+    }
+
+    const selectedColumn = columnMap[selectedFilter];
+
+    if (!selectedColumn) {
+      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      return;
+    }
+
+    const filteredResults = productsData.filter((product) =>
+      product[selectedColumn]
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredData(filteredResults);
   };
 
   const handleSearchFilterSelection = (selectedItem) => {
+    setSelectedFilter(selectedItem);
     setProductButtonText(selectedItem);
+
+    if (selectedItem === "Todos") {
+      setSearchQuery("");
+      setFilteredData(productsData);
+    }
   };
 
   const handleAddToSummary = (product, quantitySold) => {

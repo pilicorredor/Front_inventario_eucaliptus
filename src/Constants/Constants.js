@@ -33,8 +33,6 @@ export const SERVICES = {
     ADD_SALE_SERVICE: "http://localhost:8084/billing/sale/addSale",
     DAILY_REPORT_SERVICE: "http://localhost:8086/report/dailyReport",
     RANGE_REPORT_SERVICE: "http://localhost:8086/report/rangeReport",
-    ADD_PURCHASE_SERVICE: "http://localhost:8083/products/details/addPurchase",
-    VALIDATE_PURCHASE_SERVICE: "http://localhost:8083/products/details/validatePurchase",
     GET_EXPIRING_PRODUCTS: "http://localhost:8083/products/expiring",
     GET_CLIENT_BY_ID: "http://localhost:8084/billing/client/getClientById",
     GET_HISTORY_SALE_SERVICE: "http://localhost:8084/billing/sale/getHistorySale",

@@ -14,6 +14,7 @@ const ReportTransactions = () => {
   );
   const [productsData, setProductsData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [filteredSaleData, setFilteredSaleData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [range, setRange] = useState({ start: "", end: "" });
@@ -21,12 +22,27 @@ const ReportTransactions = () => {
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [purchasesData, setPurchasesData] = useState([]);
+  const [salesData, setSalesData] = useState([]);
 
   const columnsSale = ["idSale", "idSeller", "nameClient", "total"];
   const columnsPurchase = ["purchaseId", "providerId", "totalPurchase"];
 
-  const saleItems = ["ID Factura", "ID Vendedor", "Cliente", "Total"];
-  const purchaseItems = ["ID Factura", "ID Proveedor", "Total"];
+  const saleItems = ["Todos", "ID Factura", "ID Vendedor", "Cliente", "Total"];
+  const purchaseItems = ["Todos", "ID Factura", "ID Proveedor", "Total"];
+
+  const columnSaleMap = {
+    "ID Factura":"idSale", 
+    "ID Vendedor":"idSeller", 
+    "Cliente":"nameClient", 
+    "Total":"total"
+  }
+
+  const columnPurchaseMap = {
+    "ID Factura":"purchaseId", 
+    "ID Proveedor":"providerId", 
+    "Total":"totalPurchase"
+  }
 
   useEffect(() => {
     handleUpdateData(typeTransaction, selectedUseFilter);
@@ -86,6 +102,12 @@ const ReportTransactions = () => {
             ...item,
           }));
         }
+
+        if (typeTransaction === REPORT_TRANSACTION.SALE) {
+          setSalesData(transformedData);
+        } else {
+          setPurchasesData(transformedData);
+        }
         setFilteredData(transformedData);
         setLoading(false);
       } else {
@@ -99,11 +121,63 @@ const ReportTransactions = () => {
   };
 
   const handleSearch = () => {
-    console.log("Buscar:", searchQuery);
+    if (typeTransaction === REPORT_TRANSACTION.SALE) {
+      if (!searchQuery || selectedSearchFilter === "Todos") {
+
+        setFilteredData(salesData);
+        return;
+      }
+      const selectedColumn = columnSaleMap[selectedSearchFilter];
+
+      if (!selectedColumn) {
+        console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+        return;
+      }
+
+      const filteredResults = salesData.filter((sale) =>
+        sale[selectedColumn]
+          .toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+
+      setFilteredData(filteredResults);
+    } else {
+      if (!searchQuery || selectedSearchFilter === "Todos") {
+      
+        setFilteredData(purchasesData);
+        return;
+      }
+      const selectedColumn = columnPurchaseMap[selectedSearchFilter];
+
+      if (!selectedColumn) {
+        console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+        return;
+      }
+  
+      const filteredResults = purchasesData.filter((purchase) =>
+        purchase[selectedColumn]
+          .toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+  
+      setFilteredData(filteredResults);
+    }
   };
 
-  const handleUseFilterSelection = (selectedItem) => {
-    setSelectedUseFilter(selectedItem);
+  const handleSearchFilterSelection = (selectedItem) => {
+    setSelectedSearchFilter(selectedItem);
+    setProductButtonText(selectedItem);
+
+    if (selectedItem === "Todos") {
+      setSearchQuery("");
+      if (typeTransaction === REPORT_TRANSACTION.SALE) {
+        setFilteredData(salesData);
+      } else {
+        setFilteredData(purchasesData);
+      }
+    }
   };
 
   const handleUpdateData = (typeTransaction) => {
@@ -169,7 +243,7 @@ const ReportTransactions = () => {
                   ).map((item) => (
                     <DropdownItem
                       key={item}
-                      onClick={() => handleUseFilterSelection(item)}
+                      onClick={() => handleSearchFilterSelection(item)}
                     >
                       {`${item}`}
                     </DropdownItem>
