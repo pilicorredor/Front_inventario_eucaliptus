@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./LoginForm.css";
-import { FaUser } from "react-icons/fa";
+import { FaEye, FaUser } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import logo from "../Assets/logo2.png";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,24 @@ const LoginForm = ({ handleLogin }) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("rememberedUsername");
+    if (savedUsername) {
+      setUsername(savedUsername);
+      setRememberMe(true);
+    }
+  }, []);
+  
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +52,13 @@ const LoginForm = ({ handleLogin }) => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
         localStorage.setItem("username", data.username);
+
+        if (rememberMe) {
+          localStorage.setItem("rememberedUsername", username);
+        } else {
+          localStorage.removeItem("rememberedUsername");
+        }
+
         setLoading(false);
         handleLogin({
           username: localStorage.getItem("username"),
@@ -80,13 +105,17 @@ const LoginForm = ({ handleLogin }) => {
           </div>
           <div className="input-box">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}
               onChange={handleInputChange(setPassword)}
               required
             />
-            <FaEyeSlash className="icon" />
+            {showPassword ? (
+              <FaEye className="icon" onClick={togglePasswordVisibility} />
+            ) : (
+              <FaEyeSlash className="icon" onClick={togglePasswordVisibility} />
+            )}
           </div>
           {error && (
             <div className="error-message">
@@ -95,7 +124,9 @@ const LoginForm = ({ handleLogin }) => {
           )}
           <div className="remember-forgot">
             <label>
-              <input type="checkbox" />
+              <input type="checkbox"       
+              checked={rememberMe}
+              onChange={handleRememberMeChange}/>
               Recuerdame
             </label>
             <a href="/config/send-email-password">¿Olvidaste tu contraseña?</a>

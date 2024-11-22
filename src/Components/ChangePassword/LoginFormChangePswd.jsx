@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./LoginFormChangePswd.css";
-import { FaUser } from "react-icons/fa";
+import { FaEye, FaUser } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import logo from "../Assets/logo2.png";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,11 @@ const LoginFormChangePswd = ({ handleLogin }) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,14 +84,18 @@ const LoginFormChangePswd = ({ handleLogin }) => {
             <FaUser className="icon" />
           </div>
           <div className="input-box">
-            <input
-              type="password"
+          <input
+              type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}
               onChange={handleInputChange(setPassword)}
               required
             />
-            <FaEyeSlash className="icon" />
+            {showPassword ? (
+              <FaEye className="icon" onClick={togglePasswordVisibility} />
+            ) : (
+              <FaEyeSlash className="icon" onClick={togglePasswordVisibility} />
+            )}
           </div>
           {error && (
             <div className="error-message">
