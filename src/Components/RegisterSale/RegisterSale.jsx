@@ -82,9 +82,12 @@ const RegisterSale = () => {
       });
 
       if (response.ok) {
+        const dataSale = await response.json();
+        const saleDetails = dataSale.saleDetails;
+        const clientData = dataSale.clientDTO;
         setLoading(false);
         navigate("/factura-venta", {
-          state: { summaryData, consumerData, saleObject },
+          state: { saleDetails, clientData, dataSale },
         });
       } else {
         handleModalOpen({

@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import Header from "../Header/Header.jsx";
-import { SERVICES, REPORT_PERIOD } from "../../Constants/Constants.js";
+import { SERVICES, REPORT_TRANSACTION } from "../../Constants/Constants.js";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
-import "./ReportProductsSale.css";
+import "./ReportTransactions.css";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ReportPage = () => {
-  const [periodReport, setPeriodReport] = useState(REPORT_PERIOD.DAILY);
+const ReportTransactions = () => {
+  const [typeTransaction, setTypeTransaction] = useState(
+    REPORT_TRANSACTION.SALE
+  );
   const [productsData, setProductsData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,27 +22,15 @@ const ReportPage = () => {
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const columnsProducts = [
-    "idProduct",
-    "productName",
-    "category",
-    "use",
-    "quantity",
-    "totalPrice",
-  ];
+  const columnsSale = ["idSale", "idSeller", "nameClient", "total"];
+  const columnsPurchase = ["purchaseId", "providerId", "totalPurchase"];
 
-  const productItems = [
-    "ID del producto",
-    "Nombre",
-    "Categoría",
-    "Uso",
-    "Cantidad",
-    "Sub Total",
-  ];
+  const saleItems = ["ID Factura", "ID Vendedor", "Cliente", "Total"];
+  const purchaseItems = ["ID Factura", "ID Proveedor", "Total"];
 
   useEffect(() => {
-    handleUpdateData(periodReport, selectedUseFilter);
-  }, [periodReport, selectedUseFilter, productsData]);
+    handleUpdateData(typeTransaction, selectedUseFilter);
+  }, [typeTransaction, selectedUseFilter, productsData]);
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -49,7 +39,7 @@ const ReportPage = () => {
   };
 
   const handleReportChange = (selectedPeriod) => {
-    setPeriodReport(selectedPeriod);
+    setTypeTransaction(selectedPeriod);
     setRange({ start: "", end: "" });
     setSelectedDate("");
   };
@@ -57,47 +47,18 @@ const ReportPage = () => {
   const handleDateChange = (event) => {
     const selected = event.target.value;
     setSelectedDate(selected);
-
-    if (periodReport === REPORT_PERIOD.WEEKLY) {
-      const start = new Date(selected);
-      const end = new Date(start);
-      end.setDate(start.getDate() + 6);
-      setRange({
-        start: start.toISOString().split("T")[0],
-        end: end.toISOString().split("T")[0],
-      });
-    } else if (periodReport === REPORT_PERIOD.MONTHLY) {
-      const start = new Date(selected);
-      const end = new Date(start);
-      end.setDate(start.getDate() + 29);
-      setRange({
-        start: start.toISOString().split("T")[0],
-        end: end.toISOString().split("T")[0],
-      });
-    } else {
-      setRange({ start: selected, end: selected });
-    }
+    setRange({ startDate: selected });
   };
 
   const handleSearchRange = async () => {
-    console.log("Buscar:", searchQuery, "Rango:", range);
     setLoading(true);
-
-    const requestBody = {
-      startDate: range.start,
-      endDate: range.end,
-    };
-
     const token = localStorage.getItem("token");
 
     let url = "";
-    if (periodReport === REPORT_PERIOD.DAILY) {
-      url = `${SERVICES.DAILY_REPORT_SERVICE}`;
-    } else if (
-      periodReport === REPORT_PERIOD.WEEKLY ||
-      periodReport === REPORT_PERIOD.MONTHLY
-    ) {
-      url = `${SERVICES.RANGE_REPORT_SERVICE}`;
+    if (typeTransaction === REPORT_TRANSACTION.SALE) {
+      url = `${SERVICES.GET_HISTORY_SALE_SERVICE}`;
+    } else if (typeTransaction === REPORT_TRANSACTION.PURCHASE) {
+      url = `${SERVICES.GET_HISTORY_PURCHASE_SERVICE}`;
     }
 
     try {
@@ -107,16 +68,24 @@ const ReportPage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(range),
       });
 
       if (response.ok) {
         const data = await response.json();
-        const transformedData = data.map((item) => ({
-          ...item,
-          ...item.product,
-        }));
-
+        let transformedData = null;
+        if (typeTransaction === REPORT_TRANSACTION.SALE) {
+          transformedData = data.map((item) => ({
+            id_modify: item.idSale,
+            ...item,
+            ...item.clientDTO,
+          }));
+        } else {
+          transformedData = data.map((item) => ({
+            id_modify: item.purchaseId,
+            ...item,
+          }));
+        }
         setFilteredData(transformedData);
         setLoading(false);
       } else {
@@ -137,58 +106,43 @@ const ReportPage = () => {
     setSelectedUseFilter(selectedItem);
   };
 
-  const handleUpdateData = (periodReport) => {
+  const handleUpdateData = (typeTransaction) => {
     let filteredProducts = productsData;
     setFilteredData(filteredProducts);
   };
 
   return (
-    <div className="reports-page">
-      <Header pageTitle="Reporte Productos Vendidos" />
+    <div className="reports-transaction">
+      <Header pageTitle="Reporte de Movimientos" />
       <div>
         <div className="reports-header">
           <button
-            onClick={() => handleReportChange(REPORT_PERIOD.DAILY)}
-            className={periodReport === REPORT_PERIOD.DAILY ? "selected" : ""}
+            onClick={() => handleReportChange(REPORT_TRANSACTION.SALE)}
+            className={
+              typeTransaction === REPORT_TRANSACTION.SALE ? "selected" : ""
+            }
           >
-            Diario
+            Ventas
           </button>
           <button
-            onClick={() => handleReportChange(REPORT_PERIOD.WEEKLY)}
-            className={periodReport === REPORT_PERIOD.WEEKLY ? "selected" : ""}
+            onClick={() => handleReportChange(REPORT_TRANSACTION.PURCHASE)}
+            className={
+              typeTransaction === REPORT_TRANSACTION.PURCHASE ? "selected" : ""
+            }
           >
-            Semanal
-          </button>
-          <button
-            onClick={() => handleReportChange(REPORT_PERIOD.MONTHLY)}
-            className={periodReport === REPORT_PERIOD.MONTHLY ? "selected" : ""}
-          >
-            Mensual
+            Compras
           </button>
         </div>
 
-        <div className="calendar-container">
-          <div className="calendar-input-container">
-            <label htmlFor="date-picker">Escoger Fecha Inicial:</label>
+        <div className="calendar-container-t">
+          <div className="calendar-input-container-t">
+            <label htmlFor="date-picker-t">Escoger Fecha Inicial:</label>
             <input
               type="date"
               name="selectedDate"
               value={selectedDate}
               onChange={handleDateChange}
             />
-          </div>
-          <div>
-            {periodReport === REPORT_PERIOD.DAILY && range.start && (
-              <p>Fecha seleccionada: {formatDate(range.start)}</p>
-            )}
-            {periodReport !== REPORT_PERIOD.DAILY &&
-              range.start &&
-              range.end && (
-                <p>
-                  Rango seleccionado: {formatDate(range.start)} -{" "}
-                  {formatDate(range.end)}
-                </p>
-              )}
           </div>
           {selectedDate && (
             <button className="btn search-btn" onClick={handleSearchRange}>
@@ -209,7 +163,10 @@ const ReportPage = () => {
               buttonText={productButtonText}
               content={
                 <>
-                  {productItems.map((item) => (
+                  {(typeTransaction === REPORT_TRANSACTION.SALE
+                    ? saleItems
+                    : purchaseItems
+                  ).map((item) => (
                     <DropdownItem
                       key={item}
                       onClick={() => handleUseFilterSelection(item)}
@@ -242,9 +199,13 @@ const ReportPage = () => {
           )}
           <CustomTable
             data={filteredData}
-            customColumns={columnsProducts}
+            customColumns={
+              typeTransaction === REPORT_TRANSACTION.SALE
+                ? columnsSale
+                : columnsPurchase
+            }
             handleUpdateData={handleUpdateData}
-            context={"report"}
+            context={typeTransaction}
           />
         </div>
       </div>
@@ -252,4 +213,4 @@ const ReportPage = () => {
   );
 };
 
-export default ReportPage;
+export default ReportTransactions;

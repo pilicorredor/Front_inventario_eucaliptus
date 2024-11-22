@@ -261,18 +261,20 @@ const CustomTableSale = ({
                         </button>
                       ) : (
                         <>
-                          <IconButton
-                            aria-label="edit"
-                            onClick={() => handleEdit(row.id_modify)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            aria-label="delete"
+                          <button
                             onClick={() => handleRemove(row.id_modify)}
+                            style={{
+                              backgroundColor: "#ff0303",
+                              color: "white",
+                              padding: "8px 16px",
+                              borderRadius: "8px",
+                              border: "none",
+                              cursor: "pointer",
+                              fontSize: "16px",
+                            }}
                           >
-                            <DeleteIcon />
-                          </IconButton>
+                            Eliminar
+                          </button>
                         </>
                       )}
                     </TableCell>

@@ -12,7 +12,12 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomModal from "../../Modales/CustomModal";
-import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";
+import CustomModalBill from "../../Modales/CustomModalBill";
+import {
+  BUTTONS_ACTIONS,
+  REPORT_TRANSACTION,
+  SERVICES,
+} from "../../Constants/Constants";
 
 const CustomTable = ({
   data,
@@ -29,6 +34,8 @@ const CustomTable = ({
   const [entity, setEntity] = useState("proveedor");
   const [action, setAction] = useState("registrar");
   const [selectedId, setSelectedId] = useState(null);
+  const [selectedBillId, setSelectedBillId] = useState(null);
+  const [isBillModalOpen, setIsBillModalOpen] = useState(false);
 
   const handleModalOpen = ({ selectedEntity, selectedAction, id }) => {
     setEntity(selectedEntity);
@@ -59,7 +66,13 @@ const CustomTable = ({
   };
 
   const handleSelect = (id) => {
-    if (context === "registerProd") {
+    if (context === REPORT_TRANSACTION.SALE) {
+      setSelectedBillId(id);
+      setIsBillModalOpen(true);
+    } else if (context === REPORT_TRANSACTION.PURCHASE) {
+      setSelectedBillId(id);
+      setIsBillModalOpen(true);
+    } else if (context === "registerProd") {
       navigate(`/productos/registrar/${id}`);
     } else if (context === "registerPurchase") {
       navigate(`/compra/productos/${id}`);
@@ -68,14 +81,18 @@ const CustomTable = ({
     }
   };
 
+  const handleModalBillClose = () => {
+    setIsBillModalOpen(false);
+  };
+
   const columnNamesLabels = {
     id_modify: "ID",
     name: "Nombre",
-    addressCompany: "Dirección Empresarial",
+    addressCompany: "Dirección Empresa",
     address: "Dirección de domicilio",
     email: "Correo Electrónico",
-    phoneNumber: "Número de Teléfono",
-    companyName: "Nombre de la Empresa",
+    phoneNumber: "Teléfono",
+    companyName: "Empresa",
     bankAccount: "Cuenta Bancaria",
     productName: "Nombre",
     brand: "Marca",
@@ -90,8 +107,14 @@ const CustomTable = ({
     subTotal: "SubTotal",
     totalPrice: "SubTotal",
     category: "Categoría",
-    use: "Uso"
-    //Poner despues las columnas de productos
+    use: "Uso",
+    idSale: "ID Factura",
+    idSeller: "ID Vendedor",
+    nameClient: "Cliente",
+    total: "Total",
+    purchaseId: "ID Factura",
+    providerId: "ID Proveedor",
+    totalPurchase: "Total Compra",
   };
 
   return (
@@ -166,45 +189,77 @@ const CustomTable = ({
                           padding: "10px",
                         }}
                       >
-                        {context === "registerProd" ||
-                        context === "registerPurchase" ||
-                        context === "registerPurchaseAddProd" ? (
-                          <button
-                            onClick={() => handleSelect(row.id_modify)}
-                            style={{
-                              backgroundColor: "#227e3c",
-                              color: "white",
-                              padding: "8px 16px",
-                              borderRadius: "8px",
-                              border: "none",
-                              cursor: "pointer",
-                              fontSize: "16px",
-                            }}
-                          >
-                            Seleccionar
-                          </button>
-                        ) : (
-                          <>
-                            <IconButton
-                              aria-label="edit"
-                              onClick={() => handleEdit(row.id_modify)}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() =>
-                                handleModalOpen({
-                                  selectedEntity: role,
-                                  selectedAction: BUTTONS_ACTIONS.ELIMINAR,
-                                  id: row.id_modify,
-                                })
-                              }
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
-                        )}
+                        {(() => {
+                          if (
+                            context === REPORT_TRANSACTION.SALE ||
+                            context === REPORT_TRANSACTION.PURCHASE
+                          ) {
+                            return (
+                              <button
+                                onClick={() => handleSelect(row.id_modify)}
+                                style={{
+                                  backgroundColor: "#227e3c",
+                                  color: "white",
+                                  padding: "8px 16px",
+                                  borderRadius: "8px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  fontSize: "16px",
+                                }}
+                              >
+                                Ver Factura
+                              </button>
+                            );
+                          }
+
+                          if (
+                            [
+                              "registerProd",
+                              "registerPurchase",
+                              "registerPurchaseAddProd",
+                            ].includes(context)
+                          ) {
+                            return (
+                              <button
+                                onClick={() => handleSelect(row.id_modify)}
+                                style={{
+                                  backgroundColor: "#227e3c",
+                                  color: "white",
+                                  padding: "8px 16px",
+                                  borderRadius: "8px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  fontSize: "16px",
+                                }}
+                              >
+                                Seleccionar
+                              </button>
+                            );
+                          }
+
+                          return (
+                            <>
+                              <IconButton
+                                aria-label="edit"
+                                onClick={() => handleEdit(row.id_modify)}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() =>
+                                  handleModalOpen({
+                                    selectedEntity: role,
+                                    selectedAction: BUTTONS_ACTIONS.ELIMINAR,
+                                    id: row.id_modify,
+                                  })
+                                }
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </>
+                          );
+                        })()}
                       </TableCell>
                     )}
                   </TableRow>
@@ -227,6 +282,12 @@ const CustomTable = ({
           openModal={openModal}
           onClose={handleModalClose}
           id={selectedId}
+        />
+        <CustomModalBill
+          isOpen={isBillModalOpen}
+          billId={selectedBillId}
+          onClose={handleModalBillClose}
+          typeBill={context}
         />
       </div>
     </Paper>

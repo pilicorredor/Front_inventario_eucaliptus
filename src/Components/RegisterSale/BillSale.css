@@ -1,13 +1,16 @@
 .sale {
   width: 90vw;
-  margin-left: 60px;
+  margin-left: 70px;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 }
 
 .table-bill {
-  width: 90%;
+  margin-top: 20px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
 }
 
 .modal-buttons-box {

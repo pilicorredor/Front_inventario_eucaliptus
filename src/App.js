@@ -30,6 +30,7 @@ import AddProductSale from './Components/RegisterSale/AddProductSale';
 import RegisterSale from './Components/RegisterSale/RegisterSale';
 import BillSale from './Components/RegisterSale/BillSale';
 import ReportPage from './Components/ReportProductsSale/ReportProductsSale';
+import ReportTransactions from './Components/ReportTransactions/ReportTransactions';
 
 
 const AppContent = () => {
@@ -87,6 +88,7 @@ const AppContent = () => {
                 <Route path="/registrar-venta" element={<RegisterSale />} />
                 <Route path="/factura-venta" element={<BillSale />} />
                 <Route path="/productos-vendidos" element={<ReportPage />} />
+                <Route path="/reportes" element={<ReportTransactions />} />
             </Routes>
         </>
     );

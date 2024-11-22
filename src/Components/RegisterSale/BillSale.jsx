@@ -17,7 +17,7 @@ const BillSale = () => {
 
   return (
     <div className="sale">
-      <Header pageTitle="Factura de Venta" />
+      <Header pageTitle="Comprobante de Venta" />
       <div className="table-bill">
         <CustomTableBill isSale={true} />
       </div>

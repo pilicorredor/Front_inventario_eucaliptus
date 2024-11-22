@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,19 +6,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useLocation } from "react-router-dom";
 import logo from "../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
 
-const CustomTableBill = ({ isSale }) => {
-  const location = useLocation();
-  const saleDetails = location.state?.saleDetails || [];
-  const dataSale = location.state?.dataSale || {};
-  const clientData = location.state?.clientData || {};
-  const purchaseID = location.state?.purchaseID || [];
-  const pruchaseDate = location.state?.pruchaseDate || {};
-  const purchaseDetails = location.state?.purchaseDetails || {};
-  const providerID = location.state?.providerID || {};
+const CustomTableBillModal = ({
+  isSale,
+  saleDetails,
+  dataSale,
+  clientData,
+  purchaseID,
+  pruchaseDate,
+  purchaseDetails,
+  providerID,
+}) => {
+  const [loading, setLoading] = useState(true);
   const [dateBill, setDateBill] = useState("");
   const [idBill, setIdBill] = useState("");
   const [rows, setRows] = useState([]);
@@ -51,48 +52,65 @@ const CustomTableBill = ({ isSale }) => {
 
   useEffect(() => {
     if (isSale) {
-      const saleRows = saleDetails.map((product) => {
-        return createRow(
-          product.productDTO.productName,
-          product.productDTO.use,
-          product.salePriceWithoutIva,
-          product.quantitySold,
-          product.iva || 0
-        );
-      });
-      const subtotalSale = subtotal(saleRows);
-      const taxesSale = taxTotal(saleRows);
+      if (saleDetails && saleDetails.length > 0) {
+        const saleRows = saleDetails.map((product) => {
+          return createRow(
+            product.productDTO.productName,
+            product.productDTO.use,
+            product.salePriceWithoutIva,
+            product.quantitySold,
+            product.iva || 0
+          );
+        });
+        const subtotalSale = subtotal(saleRows);
+        const taxesSale = taxTotal(saleRows);
 
-      setRows(saleRows);
-      setInvoiceSubtotal(subtotalSale);
-      setInvoiceTaxes(taxesSale);
-      setInvoiceTotal(subtotalSale + taxesSale);
-      setIdBill(dataSale.idSale);
-      const formattedDate = formatDate(dataSale.dateSale);
-      setDateBill(formattedDate);
+        setRows(saleRows);
+        setInvoiceSubtotal(subtotalSale);
+        setInvoiceTaxes(taxesSale);
+        setInvoiceTotal(subtotalSale + taxesSale);
+        setIdBill(dataSale.idSale);
+        const formattedDate = formatDate(dataSale.dateSale);
+        setDateBill(formattedDate);
+        setLoading(false); // Marca como listo
+      }
     } else {
-      const purchaseRows = purchaseDetails.map((product) => {
-        return createRow(
-          product.productDTO.productName,
-          product.productDTO.use,
-          product.purchasePriceWithoutIva,
-          product.quantityPurchased,
-          product.iva
-        );
-      });
-      const formattedDate = formatDate(pruchaseDate);
-      setDateBill(formattedDate);
-      setIdBill(purchaseID);
+      if (purchaseDetails && purchaseDetails.length > 0 && pruchaseDate) {
+        const purchaseRows = purchaseDetails.map((product) => {
+          return createRow(
+            product.productDTO.productName,
+            product.productDTO.use,
+            product.purchasePriceWithoutIva,
+            product.quantityPurchased,
+            product.iva
+          );
+        });
+        const formattedDate = formatDate(pruchaseDate);
+        setDateBill(formattedDate);
+        setIdBill(purchaseID);
 
-      const subtotalPurchase = subtotal(purchaseRows);
-      const taxesPurchase = taxTotal(purchaseRows);
+        const subtotalPurchase = subtotal(purchaseRows);
+        const taxesPurchase = taxTotal(purchaseRows);
 
-      setRows(purchaseRows);
-      setInvoiceSubtotal(subtotalPurchase);
-      setInvoiceTaxes(taxesPurchase);
-      setInvoiceTotal(subtotalPurchase + taxesPurchase);
+        setRows(purchaseRows);
+        setInvoiceSubtotal(subtotalPurchase);
+        setInvoiceTaxes(taxesPurchase);
+        setInvoiceTotal(subtotalPurchase + taxesPurchase);
+        setLoading(false); // Marca como listo
+      }
     }
-  }, [isSale, location.state]);
+  }, [
+    isSale,
+    saleDetails,
+    dataSale,
+    purchaseDetails,
+    pruchaseDate,
+    purchaseID,
+  ]);
+
+  if (loading) {
+    return <p>Cargando...</p>; // Indicador de carga
+  }
 
   return (
     <div class="paper-bill">
@@ -190,4 +208,4 @@ const CustomTableBill = ({ isSale }) => {
   );
 };
 
-export default CustomTableBill;
+export default CustomTableBillModal;

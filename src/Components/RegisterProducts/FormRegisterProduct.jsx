@@ -291,9 +291,6 @@ const RegisterProduct = () => {
       if (!response.ok) {
         throw new Error("Error al guardar la unidad en la base de datos");
       }
-
-      const result = await response.json();
-      console.log("Unidad guardada correctamente:", result);
     } catch (error) {
       console.error("Hubo un error:", error);
       alert("No se pudo guardar la unidad. Inténtalo de nuevo.");
