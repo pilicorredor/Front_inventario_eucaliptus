@@ -199,7 +199,13 @@ const RegisterProduct = () => {
         setLoading(false);
         setIsCalendarOpen(false);
         setIsButtonActive(false);
-        navigate("/compra/factura");
+        const purchaseID = dataPurchase.purchaseId;
+        const pruchaseDate = dataPurchase.purchaseDate;
+        const purchaseDetails = dataPurchase.purchaseDetails;
+        const providerID = dataPurchase.providerId;
+        navigate("/compra/factura", {
+          state: { purchaseID, pruchaseDate, purchaseDetails, providerID },
+        });
       } else {
         const errorData = await response.json();
         console.error("Error al registrar la compra:", errorData);

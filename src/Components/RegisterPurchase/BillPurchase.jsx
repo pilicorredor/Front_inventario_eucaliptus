@@ -23,7 +23,7 @@ const BillPurchase = () => {
     <div className="purchas">
       <Header pageTitle="Factura de Compra" />
       <div className="table-bill">
-        <CustomTableBill />
+        <CustomTableBill isSale={false} />
       </div>
       <div className="modal-buttons-box">
         <button

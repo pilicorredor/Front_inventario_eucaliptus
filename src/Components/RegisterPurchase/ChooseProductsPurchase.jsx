@@ -183,8 +183,6 @@ const ChooseProductsPurchase = () => {
         purchaseDetails: sendProducts,
       };
 
-      console.log(purchaseData);
-
       const response = await fetch(SERVICES.ADD_PURCHASE_SERVICE, {
         method: "POST",
         headers: {
@@ -196,11 +194,16 @@ const ChooseProductsPurchase = () => {
 
       if (response.ok) {
         const dataPurchase = await response.json();
-        console.log("dataPruchasae; ", dataPurchase);
         setLoading(false);
         setIsCalendarOpen(false);
         setIsButtonActive(false);
-        navigate("/compra/factura");
+        const purchaseID = dataPurchase.purchaseId;
+        const pruchaseDate = dataPurchase.purchaseDate;
+        const purchaseDetails = dataPurchase.purchaseDetails;
+        const providerID = dataPurchase.providerId;
+        navigate("/compra/factura", {
+          state: { purchaseID, pruchaseDate, purchaseDetails, providerID },
+        });
       } else {
         const errorData = await response.json();
         console.error("Error al registrar la compra:", errorData);
