@@ -39,7 +39,6 @@ const ChooseProvider = () => {
           companyName: provider.companyDTO?.companyName || "N/A",
           bankAccount: provider.bankAccountNumber,
         }));
-        console.log(formattedProviders);
         setProvidersData(formattedProviders);
       } else {
         const errorMessage = await response.text();

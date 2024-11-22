@@ -112,7 +112,6 @@ const ReportPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Datos obtenidos:", data);
         const transformedData = data.map((item) => ({
           ...item,
           ...item.product,

@@ -134,20 +134,15 @@ const ReportTransactions = () => {
           </button>
         </div>
 
-        <div className="calendar-container">
-          <div className="calendar-input-container">
-            <label htmlFor="date-picker">Escoger Fecha Inicial:</label>
+        <div className="calendar-container-t">
+          <div className="calendar-input-container-t">
+            <label htmlFor="date-picker-t">Escoger Fecha Inicial:</label>
             <input
               type="date"
               name="selectedDate"
               value={selectedDate}
               onChange={handleDateChange}
             />
-          </div>
-          <div>
-            {range.start && (
-              <p>Fecha seleccionada: {formatDate(range.start)}</p>
-            )}
           </div>
           {selectedDate && (
             <button className="btn search-btn" onClick={handleSearchRange}>
@@ -210,7 +205,7 @@ const ReportTransactions = () => {
                 : columnsPurchase
             }
             handleUpdateData={handleUpdateData}
-            context={"transaction"}
+            context={typeTransaction}
           />
         </div>
       </div>

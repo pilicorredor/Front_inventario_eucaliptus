@@ -37,6 +37,8 @@ export const SERVICES = {
     GET_CLIENT_BY_ID: "http://localhost:8084/billing/client/getClientById",
     GET_HISTORY_SALE_SERVICE: "http://localhost:8084/billing/sale/getHistorySale",
     GET_HISTORY_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/getHistoryPurchase",
+    GET_PURCHASE_DETAIL_SERVICE: "http://localhost:8084/billing/purchase/getPurchaseDetails",
+    GET_SALE_DETAIL_SERVICE: "http://localhost:8084/billing/sale/getSaleDetails",
 }
 
 export const MODAL_TYPES = {

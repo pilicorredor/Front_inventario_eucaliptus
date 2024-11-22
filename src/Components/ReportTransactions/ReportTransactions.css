@@ -83,24 +83,24 @@
   background-color: #125e28;
 }
 
-.calendar-container {
+.calendar-container-t {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 65vw;
-  gap: 5px;
+  width: 40vw;
+  gap: 2px;
   margin-bottom: 20px;
 }
 
-.calendar-input-container {
+.calendar-input-container-t {
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
 }
 
-.calendar-input-container input {
+.calendar-input-container-t input {
   height: 36px;
   width: 270px;
   border-radius: 8px;

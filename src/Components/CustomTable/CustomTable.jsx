@@ -13,7 +13,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomModal from "../../Modales/CustomModal";
 import CustomModalBill from "../../Modales/CustomModalBill";
-import { BUTTONS_ACTIONS, ENTITIES } from "../../Constants/Constants";
+import {
+  BUTTONS_ACTIONS,
+  REPORT_TRANSACTION,
+  SERVICES,
+} from "../../Constants/Constants";
 
 const CustomTable = ({
   data,
@@ -62,7 +66,10 @@ const CustomTable = ({
   };
 
   const handleSelect = (id) => {
-    if (context === "transaction") {
+    if (context === REPORT_TRANSACTION.SALE) {
+      setSelectedBillId(id);
+      setIsBillModalOpen(true);
+    } else if (context === REPORT_TRANSACTION.PURCHASE) {
       setSelectedBillId(id);
       setIsBillModalOpen(true);
     } else if (context === "registerProd") {
@@ -108,7 +115,6 @@ const CustomTable = ({
     purchaseId: "ID Factura",
     providerId: "ID Proveedor",
     totalPurchase: "Total Compra",
-    //Poner despues las columnas de productos
   };
 
   return (
@@ -184,7 +190,10 @@ const CustomTable = ({
                         }}
                       >
                         {(() => {
-                          if (context === "transaction") {
+                          if (
+                            context === REPORT_TRANSACTION.SALE ||
+                            context === REPORT_TRANSACTION.PURCHASE
+                          ) {
                             return (
                               <button
                                 onClick={() => handleSelect(row.id_modify)}
@@ -278,6 +287,7 @@ const CustomTable = ({
           isOpen={isBillModalOpen}
           billId={selectedBillId}
           onClose={handleModalBillClose}
+          typeBill={context}
         />
       </div>
     </Paper>

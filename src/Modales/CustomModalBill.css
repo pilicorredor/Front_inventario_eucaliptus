@@ -1,10 +1,9 @@
-.modal-box {
+.modal-box-bill {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 200px;
-  width: 45vw;
+  width: 1200px;
   background-color: #fff5eb;
   box-shadow: 24px 24px 48px rgba(69, 63, 63, 0.1);
   padding: 16px 32px 24px 32px;
