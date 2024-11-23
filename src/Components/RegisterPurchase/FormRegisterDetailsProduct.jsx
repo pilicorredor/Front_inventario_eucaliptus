@@ -25,7 +25,7 @@ const RegisterProduct = () => {
   const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
   const [loading, setLoading] = useState(false);
   const [messageModal, setMessageModal] = useState("");
-  const { sendProducts, addProduct, productsTable, addProductTable } =
+  const { sendProducts, addProduct, addProductTable } =
     useContext(ProductContext);
   // Estado del producto
   const [product, setProduct] = useState({
@@ -167,7 +167,7 @@ const RegisterProduct = () => {
         setIsModalOpen(true);
       } else {
         setIsDuplicateModalOpen(true);
-        setMessageModal(result.message);
+        setMessageModal(`El lote del producto ${id} ya existe`);
       }
     } catch (error) {
       console.error("Error en la solicitud de verificación:", error);

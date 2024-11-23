@@ -44,24 +44,96 @@
 }
 
 /* Datos del Proveedor */
-.provider-info {
+.provider-info-bill {
   margin-bottom: 10px;
   margin-left: 20px;
 }
 
-.provider-columns {
+.provider-columns-bill {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.provider-columns div {
+.provider-columns-bill div {
   width: 48%;
 }
 
 .table-container {
   max-height: 250px;
   overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
+/* Tabla */
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
 
+.product-table thead {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.product-table th,
+.product-table td {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.product-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.product-table tbody tr:hover {
+  background-color: #eaeaea;
+}
+
+.product-table .align-right {
+  text-align: right;
+}
+
+/* Subtotal, IVA y Total */
+.product-table tbody tr:last-child td {
+  font-weight: bold;
+  background-color: #e5e5e5;
+}
+
+/* Scroll */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background-color: #aaaaaa;
+}
+
+/* Responsividad */
+@media screen and (max-width: 768px) {
+  .paper-bill {
+    width: 95vw;
+    height: auto;
+  }
+
+  .header-bill {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .provider-columns {
+    flex-direction: column;
+  }
+
+  .provider-columns div {
+    width: 100%;
+  }
+}
