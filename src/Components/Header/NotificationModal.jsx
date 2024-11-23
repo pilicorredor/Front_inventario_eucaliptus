@@ -2,8 +2,6 @@ import React from 'react';
 import './NotificationModal.css';
 import logo from "../Assets/logo.jpg";
 import { IoMdCloseCircle } from "react-icons/io";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 const NotificationModal = ({ isOpen, onClose, notifications, deleteNotification }) => {
   if (!isOpen) return null;
@@ -35,14 +33,6 @@ const NotificationModal = ({ isOpen, onClose, notifications, deleteNotification 
               className={`notification-item alert ${isAlertMessage(notification) ? 
               'alerta' : ''}`}>
                 <p>{notification.message}</p>
-
-                <IconButton
-                  aria-label="delete"
-                  className="delete-button"
-                  onClick={() => deleteNotification(notification.idNotification)}
-                >
-                  <DeleteIcon />
-                </IconButton>
                 
               </div>
             ))}
