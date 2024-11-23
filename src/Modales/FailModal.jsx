@@ -1,7 +1,7 @@
 import React from "react";
 import "./FailModal.css";
 import Box from "@mui/material/Box";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 
 const FailModal = ({ isOpen, onClose, message}) => {
@@ -15,7 +15,7 @@ const FailModal = ({ isOpen, onClose, message}) => {
         {" "}
         {/* Evita cerrar al hacer clic dentro del modal */}
         <h2>{message}</h2>
-        <CheckCircleOutlineIcon className="modal-icon icon-green" />
+        <ErrorOutlineIcon className="modal-icon" />
         <button className="modal-button check-button" onClick={onClose}>
           Aceptar
         </button>

@@ -92,7 +92,8 @@ const Config = ({ userRol, username, handleLogout }) => {
             }
         } catch (error) {
             setLoading(false);
-            console.error("Error en la solicitud de datos de la persona:", error);
+            setMessageFail("Error interno del servidor durante la recuperacion de datos")
+            setIsModalOpen(true)
         }
     }
 
@@ -132,7 +133,7 @@ const Config = ({ userRol, username, handleLogout }) => {
             }
         } catch (error) {
             setLoading(false);
-            setMessageFail("Error mandando los datos");
+            setMessageFail("Error durante el envio de los cambios");
             setIsModalOpen(true)
         }
 

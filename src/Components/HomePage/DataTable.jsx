@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './DataTable.css';
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const DataTable = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,11 +24,10 @@ const DataTable = ({ data }) => {
 
   const getRowStyle = (fechaVencimiento) => {
     const hoy = new Date();
-
-    const [dia, mes, año] = fechaVencimiento.split('/').map(Number);
+  
+    const [año, mes, dia] = fechaVencimiento.split('-').map(Number);
     const vencimiento = new Date(año, mes - 1, dia);
   
-    // Calcular la diferencia en días
     const diferenciaDias = Math.floor((vencimiento - hoy) / (1000 * 60 * 60 * 24));
   
     if (diferenciaDias <= 7 && diferenciaDias >= 0) {
@@ -37,6 +38,7 @@ const DataTable = ({ data }) => {
     return {};
   };
   
+
 
   return (
     <div className="table-container">
@@ -52,12 +54,18 @@ const DataTable = ({ data }) => {
         </thead>
         <tbody>
           {currentData.map((item, index) => (
-            <tr key={index} style={getRowStyle(item.fechaVencimiento)}>
-              <td>{item.idProducto}</td>
-              <td>{item.nombre}</td>
-              <td>{item.cantidadVencer}</td>
-              <td>{item.fechaVencimiento}</td>
-              <td>{item.operacion}</td>
+            <tr key={index} style={getRowStyle(item.dueDate)}>
+              <td>{item.idProduct}</td>
+              <td>{item.productName}</td>
+              <td>{item.quantity}</td>
+              <td>{item.dueDate}</td>
+              <td> <>
+                <IconButton
+                  aria-label="delete"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </></td>
             </tr>
           ))}
         </tbody>
