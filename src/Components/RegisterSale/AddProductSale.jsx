@@ -9,6 +9,8 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import "./AddProductSale.css";
 import CircularProgress from "@mui/material/CircularProgress";
+import FailModal from "../../Modales/FailModal.jsx"
+
 
 
 const AddProductSale = () => {
@@ -20,7 +22,8 @@ const AddProductSale = () => {
   const [productsData, setProductsData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
 
   useEffect(() => {
     const fetchProductsData = async () => {
@@ -53,10 +56,15 @@ const AddProductSale = () => {
           setLoading(false);
           const errorMessage = await response.text();
           console.error("Error al obtener los productos:", errorMessage);
+          setMessageFail("No fue posible obtener los productos");
+          setIsModalOpen(true);
+
         }
       } catch (error) {
         setLoading(false);
         console.error("Error en la solicitud de productos:", error);
+        setMessageFail("Error en la solicitud de productos");
+        setIsModalOpen(true);
       }
     };
 
@@ -69,13 +77,13 @@ const AddProductSale = () => {
     "quantityAvailable",
     "productSalePrice",
   ];
-  const productItems = ["Todos","ID del producto", "Nombre", "Cantidad", "Precio"];
+  const productItems = ["Todos", "ID del producto", "Nombre", "Cantidad", "Precio"];
 
   const columnMap = {
-    "ID del producto": "idProduct", 
-    "Nombre":"productName", 
-    "Cantidad":"quantityAvailable", 
-    "Precio":"productSalePrice"
+    "ID del producto": "idProduct",
+    "Nombre": "productName",
+    "Cantidad": "quantityAvailable",
+    "Precio": "productSalePrice"
   }
 
   const handleSearch = () => {
@@ -121,11 +129,11 @@ const AddProductSale = () => {
         return prevSummary.map((item) =>
           item.id_modify === product.id_modify
             ? {
-                ...item,
-                quantitySold: item.quantitySold + quantitySold,
-                subTotal:
-                  item.productSalePrice * (item.quantitySold + quantitySold),
-              }
+              ...item,
+              quantitySold: item.quantitySold + quantitySold,
+              subTotal:
+                item.productSalePrice * (item.quantitySold + quantitySold),
+            }
             : item
         );
       }
@@ -151,9 +159,9 @@ const AddProductSale = () => {
       prevFilteredData.map((item) =>
         item.id_modify === product.id_modify
           ? {
-              ...item,
-              quantityAvailable: item.quantityAvailable - quantitySold,
-            }
+            ...item,
+            quantityAvailable: item.quantityAvailable - quantitySold,
+          }
           : item
       )
     );
@@ -171,10 +179,10 @@ const AddProductSale = () => {
         prevFilteredData.map((item) =>
           item.id_modify === id
             ? {
-                ...item,
-                quantityAvailable:
-                  item.quantityAvailable + removedItem.quantitySold,
-              }
+              ...item,
+              quantityAvailable:
+                item.quantityAvailable + removedItem.quantitySold,
+            }
             : item
         )
       );
@@ -225,7 +233,11 @@ const AddProductSale = () => {
         </div>
 
         <div className="products-sale-content">
-        {loading && (
+          <FailModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            message={messageFail} />
+          {loading && (
             <div className="loading-container">
               <CircularProgress className="loading-icon" />
             </div>

@@ -7,6 +7,8 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import "./ReportProductsSale.css";
 import CircularProgress from "@mui/material/CircularProgress";
+import FailModal from "../../Modales/FailModal.jsx"
+
 
 const ReportPage = () => {
   const [periodReport, setPeriodReport] = useState(REPORT_PERIOD.DAILY);
@@ -18,6 +20,8 @@ const ReportPage = () => {
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
 
   const columnsProducts = [
     "idProduct",
@@ -39,12 +43,12 @@ const ReportPage = () => {
   ];
 
   const columnMap = {
-    "ID del producto":"idProduct",
-    "Nombre":"productName",
-    "Categoría":"category",
-    "Uso":"use",
-    "Cantidad":"quantity",
-    "Sub Total":"totalPrice",
+    "ID del producto": "idProduct",
+    "Nombre": "productName",
+    "Categoría": "category",
+    "Uso": "use",
+    "Cantidad": "quantity",
+    "Sub Total": "totalPrice",
   }
 
   useEffect(() => {
@@ -132,16 +136,20 @@ const ReportPage = () => {
       } else {
         console.error("Error al obtener los reportes:", await response.json());
         setLoading(false);
+        setMessageFail("No fue posible obtener los reportes");
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       setLoading(false);
+      setMessageFail("Error en la solicitud");
+      setIsModalOpen(true);
     }
   };
 
   const handleSearch = () => {
     if (!searchQuery || selectedSearchFilter === "Todos") {
-      
+
       setFilteredData(productsData);
       return;
     }
@@ -271,6 +279,10 @@ const ReportPage = () => {
         </div>
 
         <div className="reports-content">
+          <FailModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            message={messageFail} />
           {filteredData.length === 0 && (
             <p className="no-data-message">
               No hay registros en el tiempo seleccionado

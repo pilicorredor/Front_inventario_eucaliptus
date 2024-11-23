@@ -7,6 +7,7 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import "./ReportTransactions.css";
 import CircularProgress from "@mui/material/CircularProgress";
+import FailModal from "../../Modales/FailModal.jsx"
 
 const ReportTransactions = () => {
   const [typeTransaction, setTypeTransaction] = useState(
@@ -24,6 +25,8 @@ const ReportTransactions = () => {
   const [loading, setLoading] = useState(false);
   const [purchasesData, setPurchasesData] = useState([]);
   const [salesData, setSalesData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
 
   const columnsSale = ["idSale", "idSeller", "nameClient", "total"];
   const columnsPurchase = ["purchaseId", "providerId", "totalPurchase"];
@@ -32,16 +35,16 @@ const ReportTransactions = () => {
   const purchaseItems = ["Todos", "ID Factura", "ID Proveedor", "Total"];
 
   const columnSaleMap = {
-    "ID Factura":"idSale", 
-    "ID Vendedor":"idSeller", 
-    "Cliente":"nameClient", 
-    "Total":"total"
+    "ID Factura": "idSale",
+    "ID Vendedor": "idSeller",
+    "Cliente": "nameClient",
+    "Total": "total"
   }
 
   const columnPurchaseMap = {
-    "ID Factura":"purchaseId", 
-    "ID Proveedor":"providerId", 
-    "Total":"totalPurchase"
+    "ID Factura": "purchaseId",
+    "ID Proveedor": "providerId",
+    "Total": "totalPurchase"
   }
 
   useEffect(() => {
@@ -113,10 +116,14 @@ const ReportTransactions = () => {
       } else {
         console.error("Error al obtener los reportes:", await response.json());
         setLoading(false);
+        setMessageFail("No fue posible obtener los reportes");
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       setLoading(false);
+      setMessageFail("Error en la solicitud");
+      setIsModalOpen(true);
     }
   };
 
@@ -144,7 +151,7 @@ const ReportTransactions = () => {
       setFilteredData(filteredResults);
     } else {
       if (!searchQuery || selectedSearchFilter === "Todos") {
-      
+
         setFilteredData(purchasesData);
         return;
       }
@@ -154,14 +161,14 @@ const ReportTransactions = () => {
         console.warn("No se ha seleccionado una columna válida para la búsqueda.");
         return;
       }
-  
+
       const filteredResults = purchasesData.filter((purchase) =>
         purchase[selectedColumn]
           .toString()
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       );
-  
+
       setFilteredData(filteredResults);
     }
   };
@@ -266,6 +273,10 @@ const ReportTransactions = () => {
         </div>
 
         <div className="reports-content">
+          <FailModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            message={messageFail} />
           {filteredData.length === 0 && (
             <p className="no-data-message">
               No hay registros en el tiempo seleccionado

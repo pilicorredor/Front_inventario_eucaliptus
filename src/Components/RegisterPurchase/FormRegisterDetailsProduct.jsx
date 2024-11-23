@@ -13,6 +13,8 @@ import CalendarModal from "../../Modales/CalendarModal";
 import VerifyPurchaseModal from "../../Modales/VerifyPurchaseModal";
 import { ButtonContext } from "../../Context/ButtonContext";
 import { ProductContext } from "../../Context/ProductContext";
+import FailModal from "../../Modales/FailModal";
+
 
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -25,6 +27,7 @@ const RegisterProduct = () => {
   const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
   const [loading, setLoading] = useState(false);
   const [messageModal, setMessageModal] = useState("");
+  const [messageFail, setMessageFail] = useState("");
   const { sendProducts, addProduct, addProductTable } =
     useContext(ProductContext);
   // Estado del producto
@@ -70,9 +73,13 @@ const RegisterProduct = () => {
           setIdProvider(data.idProvider);
         } else {
           console.error("Error al traer el producto:", await response.json());
+          setMessageFail("Error al traer el producto");
+          setIsModalOpen(true);
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
+        setMessageFail("Error en la solicitud");
+        setIsModalOpen(true);
       }
     };
     fetchProductById();
@@ -98,9 +105,13 @@ const RegisterProduct = () => {
           setProvider(providerName);
         } else {
           console.error("Error al traer el proveedor:", await response.json());
+          setMessageFail("No fue posible obtener el proveedor");
+          setIsModalOpen(true);
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
+        setMessageFail("Error en la solicitud");
+        setIsModalOpen(true);
       }
     };
     if (idProvider) {
@@ -171,6 +182,8 @@ const RegisterProduct = () => {
       }
     } catch (error) {
       console.error("Error en la solicitud de verificación:", error);
+      setMessageFail("Error en la solicitud de verificación");
+      setIsModalOpen(true);
     }
   };
 
@@ -208,9 +221,14 @@ const RegisterProduct = () => {
       } else {
         const errorData = await response.json();
         console.error("Error al registrar la compra:", errorData);
+        setMessageFail("Error al registrar la compra");
+        setIsModalOpen(true);
+        
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
+      setMessageFail("Error en la solicitud");
+      setIsModalOpen(true);
     }
   };
 
@@ -380,6 +398,10 @@ const RegisterProduct = () => {
             BUTTONS_ACTIONS.ANADIR.slice(1)}
         </button>
         <img src={logo} alt="logo" className="product-logo" />
+        <FailModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            message={messageFail} />
         {/* Componente del modal */}
         <PurchaseModal
           isOpen={isModalOpen}
