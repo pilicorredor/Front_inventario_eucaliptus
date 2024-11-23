@@ -1,11 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import logo from "../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
@@ -42,10 +35,7 @@ const CustomTableBill = ({ isSale }) => {
   };
 
   const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
+    const [year, month, day] = isoDate.split("T")[0].split("-");
     return `${day}/${month}/${year}`;
   };
 
@@ -95,30 +85,30 @@ const CustomTableBill = ({ isSale }) => {
   }, [isSale, location.state]);
 
   return (
-    <div class="paper-bill">
-      <div class="container-bill">
-        <div class="header-bill">
-          <div class="company-info">
-            <img src={logo} alt="Logo Empresa" class="company-logo" />
+    <div className="paper-bill">
+      <div className="container-bill">
+        <div className="header-bill">
+          <div className="company-info">
+            <img src={logo} alt="Logo Empresa" className="company-logo" />
             <div>
               <h3>Nombre de la Empresa</h3>
               <p>NIT: 123456789</p>
-              <p>Dirección: Calle 123 #45-67</p>
-              <p>Celular: 3001234567</p>
+              <p>Dirección: Calle 123 4-12</p>
+              <p>Celular: 3128888829</p>
             </div>
           </div>
-          <div class="invoice-info">
+          <div className="invoice-info">
             <h3>Información de la Factura</h3>
             <p>Número de Factura: {idBill}</p>
             <p>Fecha de Emisión: {dateBill}</p>
           </div>
         </div>
 
-        <div class="provider-info">
+        <div className="provider-info">
           {isSale ? (
             <>
               <h3>Datos del Cliente</h3>
-              <div class="provider-columns">
+              <div className="provider-columns">
                 <div>
                   <p>Documento: {clientData?.idClient || "N/A"}</p>
                   <p>Nombre: {clientData?.nameClient || "N/A"}</p>
@@ -133,7 +123,7 @@ const CustomTableBill = ({ isSale }) => {
           ) : (
             <>
               <h3>Datos del Proveedor</h3>
-              <div class="provider-columns">
+              <div className="provider-columns">
                 <div>
                   <p>Documento: {providerID || "N/A"}</p>
                 </div>
@@ -141,51 +131,75 @@ const CustomTableBill = ({ isSale }) => {
             </>
           )}
         </div>
-      </div>
 
-      <TableContainer component={Paper} className="table-container">
-        <Table sx={{ minWidth: 800 }} aria-label="product table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Nombre</TableCell>
-              <TableCell align="center">Uso</TableCell>
-              <TableCell align="center">Precio Unitario</TableCell>
-              <TableCell align="center">Cantidad</TableCell>
-              <TableCell align="center">Subtotal</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.use}</TableCell>
-                <TableCell align="center">{row.unitPrice.toFixed(2)}</TableCell>
-                <TableCell align="center">{row.qty}</TableCell>
-                <TableCell align="right">{row.subtotal.toFixed(2)}</TableCell>
-              </TableRow>
-            ))}
-            <TableRow>
-              <TableCell rowSpan={3} />
-              <TableCell colSpan={3} align="right">
-                Subtotal
-              </TableCell>
-              <TableCell align="right">{invoiceSubtotal.toFixed(2)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={3} align="right">
-                IVA
-              </TableCell>
-              <TableCell align="right">{invoiceTaxes.toFixed(2)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={3} align="right">
-                Total
-              </TableCell>
-              <TableCell align="right">{invoiceTotal.toFixed(2)}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <div className="table-container">
+          <table className="product-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Uso</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.name}</td>
+                  <td>{row.use}</td>
+                  <td>
+                    {row.unitPrice.toLocaleString("es-CO", {
+                      style: "currency",
+                      currency: "COP",
+                    })}
+                  </td>
+                  <td>{row.qty}</td>
+                  <td>
+                    {row.subtotal.toLocaleString("es-CO", {
+                      style: "currency",
+                      currency: "COP",
+                    })}
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td colSpan="3" className="align-right">
+                  Subtotal
+                </td>
+                <td colSpan="2" align="right">
+                  {invoiceSubtotal.toLocaleString("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                  })}
+                </td>
+              </tr>
+              <tr>
+                <td colSpan="3" className="align-right">
+                  IVA
+                </td>
+                <td colSpan="2" align="right">
+                  {invoiceTaxes.toLocaleString("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                  })}
+                </td>
+              </tr>
+              <tr>
+                <td colSpan="3" className="align-right">
+                  Total
+                </td>
+                <td colSpan="2" align="right">
+                  {invoiceTotal.toLocaleString("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                  })}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
