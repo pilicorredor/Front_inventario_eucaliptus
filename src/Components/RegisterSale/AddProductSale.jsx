@@ -8,6 +8,8 @@ import { SERVICES } from "../../Constants/Constants.js";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import "./AddProductSale.css";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 const AddProductSale = () => {
   const navigate = useNavigate();
@@ -17,10 +19,12 @@ const AddProductSale = () => {
   const [summaryData, setSummaryData] = useState([]);
   const [productsData, setProductsData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("");
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
     const fetchProductsData = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(SERVICES.GET_STOCK_SERVICE, {
@@ -31,6 +35,7 @@ const AddProductSale = () => {
           },
         });
         if (response.ok) {
+          setLoading(false);
           const data = await response.json();
           const formattedProducts = data.map((product) => ({
             id_modify: product.productDTO.idProduct,
@@ -45,10 +50,12 @@ const AddProductSale = () => {
           setProductsData(formattedProducts);
           setFilteredData(formattedProducts);
         } else {
+          setLoading(false);
           const errorMessage = await response.text();
           console.error("Error al obtener los productos:", errorMessage);
         }
       } catch (error) {
+        setLoading(false);
         console.error("Error en la solicitud de productos:", error);
       }
     };
@@ -218,6 +225,11 @@ const AddProductSale = () => {
         </div>
 
         <div className="products-sale-content">
+        {loading && (
+            <div className="loading-container">
+              <CircularProgress className="loading-icon" />
+            </div>
+          )}
           <CustomTableSale
             widthTable={"70%"}
             dataProducts={filteredData}

@@ -12,6 +12,8 @@ import {
 
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 const Products = () => {
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ const Products = () => {
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const columnsProducts = [
     "idProduct",
@@ -41,6 +45,7 @@ const Products = () => {
   }, []);
 
   const fetchProductsData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.GET_PRODUCTS_ALL_SERVICE, {
@@ -52,6 +57,7 @@ const Products = () => {
       });
 
       if (response.ok) {
+        setLoading(false);
         const data = await response.json();
         const formattedProducts = data.map((product) => ({
           id_modify: product.idProduct,
@@ -69,10 +75,14 @@ const Products = () => {
         setProductsData(formattedProducts);
         setFilteredData(formattedProducts);
       } else {
+        setLoading(false);
+
         const errorMessage = await response.text();
         console.error("Error al obtener los productos:", errorMessage);
       }
     } catch (error) {
+      setLoading(false);
+
       console.error("Error en la solicitud de productos:", error);
     }
   };
@@ -119,7 +129,7 @@ const Products = () => {
 
   const handleSearch = () => {
     if (!searchQuery || selectedSearchFilter === "Todos") {
-      
+
       setFilteredData(productsData);
       return;
     }
@@ -271,6 +281,11 @@ const Products = () => {
         </div>
 
         <div className="products-content">
+          {loading && (
+            <div className="loading-container">
+              <CircularProgress className="loading-icon" />
+            </div>
+          )}
           <CustomTable
             data={filteredData}
             customColumns={columnsProducts}

@@ -10,11 +10,8 @@ const NotificationModal = ({ isOpen, onClose, notifications, deleteNotification 
 
   function isAlertMessage(notification) {
     const { message } = notification;
-    return message.toLowerCase().includes('alerta');
+    return message && message.toLowerCase().includes('alerta');
   }
-
-  
-const alertNotifications = notifications.filter(notification => isAlertMessage(notification));
 
   return (
     <div className="notif-overlay">

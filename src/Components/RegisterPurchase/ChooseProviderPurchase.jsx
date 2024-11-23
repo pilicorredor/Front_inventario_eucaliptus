@@ -8,6 +8,7 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import { SERVICES, ENTITIES } from "../../Constants/Constants.js";
 import RegisterProviderModal from "../../Modales/RegisterProviderModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ChooseProviderPurchase = () => {
   const navigate = useNavigate();
@@ -19,12 +20,15 @@ const ChooseProviderPurchase = () => {
   const [buttonText, setButtonText] = useState("Buscar por...");
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     fetchProvidersData();
   }, []);
 
   const fetchProvidersData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.GET_PROVIDERS_ALL_SERVICE, {
@@ -36,6 +40,7 @@ const ChooseProviderPurchase = () => {
       });
 
       if (response.ok) {
+        setLoading(false);
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
           id_modify: provider.personDTO.idPerson,
@@ -49,10 +54,12 @@ const ChooseProviderPurchase = () => {
         setProvidersData(formattedProviders);
         setFilteredData(formattedProviders);
       } else {
+        setLoading(false);
         const errorMessage = await response.text();
         console.error("Error al obtener los vendedores:", errorMessage);
       }
     } catch (error) {
+      setLoading(false);
       console.error("Error en la solicitud de vendedores:", error);
     }
   };
@@ -80,17 +87,17 @@ const ChooseProviderPurchase = () => {
 
   const columnMap = {
     "ID": "id_modify",
-    "Nombre":"name",
-    "Dirección Empresarial":"addressCompany",
-    "Correo Electrónico":"email",
-    "Número de Teléfono":"phoneNumber",
-    "Nombre de la Empresa":"companyName",
-    "Cuenta Bancaria":"companyName",
+    "Nombre": "name",
+    "Dirección Empresarial": "addressCompany",
+    "Correo Electrónico": "email",
+    "Número de Teléfono": "phoneNumber",
+    "Nombre de la Empresa": "companyName",
+    "Cuenta Bancaria": "companyName",
   };
 
   const handleSearch = () => {
     if (!searchQuery || selectedFilter === "Todos") {
-      
+
       setFilteredData(providersData);
       return;
     }
@@ -116,7 +123,7 @@ const ChooseProviderPurchase = () => {
     setSelectedFilter(selectedItem);
     setButtonText(selectedItem);
 
-    
+
     if (selectedItem === "Todos") {
       setSearchQuery("");
       setFilteredData(providersData);
@@ -181,6 +188,11 @@ const ChooseProviderPurchase = () => {
         </div>
 
         <div className="products-content">
+          {loading && (
+            <div className="loading-container">
+              <CircularProgress className="loading-icon" />
+            </div>
+          )}
           {role === ENTITIES.PROVEEDOR && (
             <CustomTable
               data={filteredData}

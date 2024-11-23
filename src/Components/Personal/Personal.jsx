@@ -7,6 +7,8 @@ import Header from "../Header/Header.jsx";
 import { SERVICES, ENTITIES } from "../../Constants/Constants";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 const Personal = () => {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ const Personal = () => {
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [filteredProviderData, setFilteredProviderData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
 
   const columnsProviders = [
@@ -83,6 +87,7 @@ const Personal = () => {
   }, [role]);
 
   const fetchSellersData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.GET_SELLERS_ALL_SERVICE, {
@@ -94,6 +99,7 @@ const Personal = () => {
       });
 
       if (response.ok) {
+        setLoading(false);
         const data = await response.json();
         const formattedSellers = data.map((seller) => ({
           id_modify: seller.personDTO.idPerson,
@@ -104,15 +110,18 @@ const Personal = () => {
         }));
         setSellersData(formattedSellers);
       } else {
+        setLoading(false);
         const errorMessage = await response.text();
         console.error("Error al obtener los vendedores:", errorMessage);
       }
     } catch (error) {
+      setLoading(false);
       console.error("Error en la solicitud de vendedores:", error);
     }
   };
 
   const fetchProvidersData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.GET_PROVIDERS_ALL_SERVICE, {
@@ -124,6 +133,7 @@ const Personal = () => {
       });
 
       if (response.ok) {
+        setLoading(false);
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
           id_modify: provider.personDTO.idPerson,
@@ -136,10 +146,12 @@ const Personal = () => {
         }));
         setProvidersData(formattedProviders);
       } else {
+        setLoading(false);
         const errorMessage = await response.text();
         console.error("Error al obtener los proveedores:", errorMessage);
       }
     } catch (error) {
+      setLoading(false);
       console.error("Error en la solicitud de proveedores:", error);
     }
   };
@@ -160,9 +172,9 @@ const Personal = () => {
   };
 
   const handleSearch = () => {
-    if (role === "proveedor") {  
+    if (role === "proveedor") {
       if (!searchQuery || selectedFilter === "Todos") {
-      
+
         setFilteredProviderData(providersData);
         return;
       }
@@ -172,18 +184,18 @@ const Personal = () => {
         console.warn("No se ha seleccionado una columna válida para la búsqueda.");
         return;
       }
-  
+
       const filteredResults = providersData.filter((provider) =>
         provider[selectedColumn]
           .toString()
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       );
-  
+
       setFilteredProviderData(filteredResults);
     } else {
       if (!searchQuery || selectedFilter === "Todos") {
-      
+
         setFilteredData(sellersData);
         return;
       }
@@ -193,14 +205,14 @@ const Personal = () => {
         console.warn("No se ha seleccionado una columna válida para la búsqueda.");
         return;
       }
-  
+
       const filteredResults = sellersData.filter((seller) =>
         seller[selectedColumn]
           .toString()
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       );
-  
+
       setFilteredData(filteredResults);
     }
   };
@@ -209,7 +221,7 @@ const Personal = () => {
     navigate(`/registrar-${role}`);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => { };
 
   const handleFilterSelection = (selectedItem) => {
     setSelectedFilter(selectedItem);
@@ -293,9 +305,14 @@ const Personal = () => {
         </div>
 
         <div className="personal-content">
+          {loading && (
+            <div className="loading-container">
+              <CircularProgress className="loading-icon" />
+            </div>
+          )}
           {role === ENTITIES.PROVEEDOR && (
             <CustomTable
-              data={searchQuery? filteredProviderData : providersData}
+              data={searchQuery ? filteredProviderData : providersData}
               customColumns={columnsProviders}
               role={ENTITIES.PROVEEDOR}
               onDelete={handleDelete}
@@ -304,7 +321,7 @@ const Personal = () => {
           )}
           {role === ENTITIES.VENDEDOR && (
             <CustomTable
-              data={searchQuery? filteredData : sellersData}
+              data={searchQuery ? filteredData : sellersData}
               customColumns={columnsSellers}
               role={ENTITIES.VENDEDOR}
               onDelete={handleDelete}

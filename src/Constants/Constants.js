@@ -35,8 +35,7 @@ export const SERVICES = {
     RANGE_REPORT_SERVICE: "http://localhost:8086/report/rangeReport",
     GET_EXPIRING_PRODUCTS: "http://localhost:8083/api/products/expiring",
     GET_HOMEPAGE_SUMMARY: "http://localhost:8084/billing/sale/summary",
-
-
+    GET_SOTCK_NOTIFICATIONS: "http://localhost:8083/notification/getStockNotifications",
     GET_CLIENT_BY_ID: "http://localhost:8084/billing/client/getClientById",
     GET_HISTORY_SALE_SERVICE: "http://localhost:8084/billing/sale/getHistorySale",
     GET_HISTORY_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/getHistoryPurchase",

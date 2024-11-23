@@ -15,6 +15,7 @@ import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import { ProductContext } from "../../Context/ProductContext";
 import RegisterProductModal from "../../Modales/RegisterProductModal.jsx";
 import CalendarModal from "../../Modales/CalendarModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ChooseProductsPurchase = () => {
   const { id } = useParams();
@@ -36,6 +37,8 @@ const ChooseProductsPurchase = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [provider, setProvider] = useState("");
   const { sendProducts, clearProducts } = useContext(ProductContext);
+
+  
   const columnsProducts = [
     "idProduct",
     "productName",
@@ -52,6 +55,7 @@ const ChooseProductsPurchase = () => {
 
   useEffect(() => {
     const fetchProviderById = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("token");
         const url = `${SERVICES.GET_PROVIDER_BY_ID}/${id}`;
@@ -65,13 +69,18 @@ const ChooseProductsPurchase = () => {
         });
 
         if (response.ok) {
+          setLoading(false);
           const data = await response.json();
           const providerName = `${data.personDTO.firstName} ${data.personDTO.lastName}`;
           setProvider(providerName);
         } else {
+          setLoading(false);
+
           console.error("Error al traer el vendedor:", await response.json());
         }
       } catch (error) {
+        setLoading(false);
+
         console.error("Error en la solicitud:", error);
       }
     };
@@ -80,6 +89,7 @@ const ChooseProductsPurchase = () => {
   }, [id]);
 
   const fetchProductsData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -94,6 +104,7 @@ const ChooseProductsPurchase = () => {
       );
 
       if (response.ok) {
+        setLoading(false);
         const data = await response.json();
         const formattedProducts = data.map((product) => ({
           id_modify: product.idProduct,
@@ -111,10 +122,14 @@ const ChooseProductsPurchase = () => {
         setProductsData(formattedProducts);
         setFilteredData(formattedProducts);
       } else {
+        setLoading(false);
+
         const errorMessage = await response.text();
         console.error("Error al obtener los productos:", errorMessage);
       }
     } catch (error) {
+      setLoading(false);
+
       console.error("Error en la solicitud de productos:", error);
     }
   };
@@ -409,6 +424,11 @@ const ChooseProductsPurchase = () => {
         </div>
 
         <div className="products-content">
+        {loading && (
+            <div className="loading-container">
+              <CircularProgress className="loading-icon" />
+            </div>
+          )}
           <CustomTable
             data={filteredData}
             customColumns={columnsProducts}
