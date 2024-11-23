@@ -246,9 +246,10 @@ const ChooseProductsPurchase = () => {
         const purchaseID = dataPurchase.purchaseId;
         const pruchaseDate = dataPurchase.purchaseDate;
         const purchaseDetails = dataPurchase.purchaseDetails;
-        const providerID = dataPurchase.providerId;
+        const providerDTO = dataPurchase.providerDTO;
+        console.log("dataPurchase.providerDTO: ", dataPurchase.providerDTO);
         navigate("/compra/factura", {
-          state: { purchaseID, pruchaseDate, purchaseDetails, providerID },
+          state: { purchaseID, pruchaseDate, purchaseDetails, providerDTO },
         });
       } else {
         const errorData = await response.json();

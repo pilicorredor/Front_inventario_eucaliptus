@@ -25,14 +25,17 @@ const BillPurchase = () => {
       <div className="table-bill">
         <CustomTableBill isSale={false} />
       </div>
-      <div className="modal-buttons-box">
+      <div className="billpurchase-buttons-box">
         <button
-          className="modal-button check-button"
+          className="billpurchase-button check-button"
           onClick={handleClearProducts}
         >
           Aceptar
         </button>
-        <button className="modal-button check-button" onClick={handlePrint}>
+        <button
+          className="billpurchase-button check-button"
+          onClick={handlePrint}
+        >
           Imprimir
         </button>
       </div>

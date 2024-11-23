@@ -17,6 +17,8 @@ const Navbar = ({ username, role, handleLogout }) => {
     }
   }, [role]);
 
+  const sellFields = ["Inicio", "Productos", "Registrar venta"];
+
   return (
     <div className="sidebar">
       <img src={userImg} alt="Profile" className="profile-image" />
@@ -26,16 +28,16 @@ const Navbar = ({ username, role, handleLogout }) => {
       </div>
       <hr className="divider" />
       <ul className="nav-menu-items">
-        {SidebarData.map((item, index) => {
-          return (
-            <li key={index}>
-              <Link to={item.path} className="item">
-                {item.icon}
-                <span className="menu-text">{item.title}</span>
-              </Link>
-            </li>
-          );
-        })}
+      {SidebarData.filter((item) => {
+          return role === ROLES.ADMIN || sellFields.includes(item.title);
+        }).map((item, index) => (
+          <li key={index}>
+            <Link to={item.path} className="item">
+              {item.icon}
+              <span className="menu-text">{item.title}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
       <div className="nav-item-bottom">
         <Link to="/" onClick={handleLogout}>

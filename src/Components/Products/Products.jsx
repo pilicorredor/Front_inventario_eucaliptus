@@ -8,6 +8,7 @@ import {
   SERVICES,
   CATEGORY_PRODUCT,
   ENTITIES,
+  ROLES,
 } from "../../Constants/Constants";
 
 import Dropdown from "../Dropdown/Dropdown.jsx";
@@ -16,7 +17,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FailModal from "../../Modales/FailModal.jsx"
 
 
-const Products = () => {
+const Products = ({ role }) => {
+  console.log(role);
   const navigate = useNavigate();
   const [categoryProd, setCategoryProd] = useState(
     CATEGORY_PRODUCT.ALL_PRODUCTS
@@ -258,9 +260,11 @@ const Products = () => {
               Buscar
             </button>
           </div>
-          <button className="btn new-btn" onClick={handleNew}>
-            Nuevo
-          </button>
+          {role !== ROLES.SELLER && (
+            <button className="btn new-btn" onClick={handleNew}>
+              Nuevo
+            </button>
+          )}
         </div>
 
         {/* Nuevo filtro por uso */}
@@ -296,6 +300,7 @@ const Products = () => {
             handleUpdateData={handleUpdateData}
             role={ENTITIES.PRODUCTO}
             fetchProductsData={fetchProductsData}
+            personRole={role}
           />
         </div>
       </div>

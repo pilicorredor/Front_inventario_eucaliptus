@@ -16,6 +16,7 @@ import CustomModalBill from "../../Modales/CustomModalBill";
 import {
   BUTTONS_ACTIONS,
   REPORT_TRANSACTION,
+  ROLES,
   SERVICES,
 } from "../../Constants/Constants";
 
@@ -26,6 +27,7 @@ const CustomTable = ({
   handleUpdateData,
   fetchProductsData,
   context,
+  personRole,
 }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -148,7 +150,7 @@ const CustomTable = ({
                     {columnNamesLabels[column]}
                   </TableCell>
                 ))}
-                {context !== "report" && (
+                {context !== "report" && personRole !== ROLES.SELLER && (
                   <TableCell
                     sx={{
                       backgroundColor: "#F8DEC4",
@@ -181,7 +183,7 @@ const CustomTable = ({
                         {row[item]}
                       </TableCell>
                     ))}
-                    {context !== "report" && (
+                    {context !== "report" && personRole !== ROLES.SELLER && (
                       <TableCell
                         sx={{
                           textAlign: "center",

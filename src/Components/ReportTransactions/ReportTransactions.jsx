@@ -51,12 +51,6 @@ const ReportTransactions = () => {
     handleUpdateData(typeTransaction, selectedUseFilter);
   }, [typeTransaction, selectedUseFilter, productsData]);
 
-  const formatDate = (date) => {
-    if (!date) return "";
-    const [year, month, day] = date.split("-");
-    return `${day}/${month}/${year}`;
-  };
-
   const handleReportChange = (selectedPeriod) => {
     setTypeTransaction(selectedPeriod);
     setRange({ start: "", end: "" });

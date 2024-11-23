@@ -10,7 +10,7 @@ const CustomTableBillModal = ({
   purchaseID,
   pruchaseDate,
   purchaseDetails,
-  providerID,
+  providerData,
 }) => {
   const [loading, setLoading] = useState(true);
   const [dateBill, setDateBill] = useState("");
@@ -143,7 +143,35 @@ const CustomTableBillModal = ({
               <div className="provider-columns-bill">
                 <div>
                   <h3>Datos del Proveedor</h3>
-                  <p>Documento: {providerID || "N/A"}</p>
+                  <p>
+                    Nombre:{" "}
+                    {`${providerData?.personDTO.firstName || "N/A"} ${
+                      providerData?.personDTO.lastName || "N/A"
+                    }`}
+                  </p>
+                  <p>
+                    Documento:{" "}
+                    {providerData?.companyDTO?.nit ||
+                      providerData?.personDTO.idPerson ||
+                      "N/A"}
+                  </p>
+                  <p>
+                    Correo electrónico:{" "}
+                    {providerData?.companyDTO?.companyEmail ||
+                      providerData?.personDTO.email ||
+                      "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    Télefono:{" "}
+                    {providerData?.companyDTO?.companyPhoneNumber ||
+                      providerData?.personDTO.phoneNumber ||
+                      "N/A"}
+                  </p>
+                  <p>
+                    Empresa: {providerData?.companyDTO?.companyName || "N/A"}
+                  </p>
                 </div>
               </div>
             </>

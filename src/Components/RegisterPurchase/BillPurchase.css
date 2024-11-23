@@ -10,17 +10,18 @@
   flex-direction: column;
 }
 
-.modal-buttons-box {
-  margin-top: 20px;
+.billpurchase-buttons-box {
+  max-width: 500px;
+  width: 50vw;
   display: flex;
   flex-direction: row;
-  width: 90%;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+  gap: 30px;
+  margin: 20px auto;
 }
 
-.modal-button {
+.billpurchase-button {
   width: 180px;
   min-width: 100px;
   height: 35px;

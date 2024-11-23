@@ -23,7 +23,7 @@ const ErrorSpecificModal = ({
           <>
             <div className="modal-buttons-box">
               <button className="modal-button check-button" onClick={onRecover}>
-                Recuperar datos
+                Nuevo Representante
               </button>
               <button
                 className="modal-button check-button"
