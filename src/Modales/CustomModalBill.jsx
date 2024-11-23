@@ -11,7 +11,7 @@ const CustomModalBill = ({ isOpen, billId, typeBill, onClose }) => {
   const [purchaseID, setPurchaseID] = useState();
   const [pruchaseDate, setPruchaseDate] = useState();
   const [purchaseDetails, setPurchaseDetails] = useState();
-  const [providerID, setProviderID] = useState();
+  const [providerData, setProviderData] = useState();
   const [dataSale, setDataSale] = useState();
   const [saleDetails, setSaleDetails] = useState();
   const [clientData, setClientData] = useState();
@@ -61,7 +61,7 @@ const CustomModalBill = ({ isOpen, billId, typeBill, onClose }) => {
         setPurchaseID(data.purchaseId);
         setPruchaseDate(data.purchaseDate);
         setPurchaseDetails(data.purchaseDetails);
-        setProviderID(data.providerId);
+        setProviderData(data.providerDTO);
         setLoading(false);
       } else {
         console.error("Error al traer la compra:", await response.json());
@@ -107,7 +107,7 @@ const CustomModalBill = ({ isOpen, billId, typeBill, onClose }) => {
             purchaseID={purchaseID}
             pruchaseDate={pruchaseDate}
             purchaseDetails={purchaseDetails}
-            providerID={providerID}
+            providerData={providerData}
           />
         </div>
         <div>

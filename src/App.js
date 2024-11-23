@@ -76,7 +76,7 @@ const AppContent = () => {
                 <Route path="/registrar-proveedor" element={<RegisterProvider />} />
                 <Route path="/modificar/proveedor/:id" element={<ModifyProvider />} />
                 <Route path="/modificar/vendedor/:id" element={<ModifySeller />} />
-                <Route path='/productos*' element={<Products />} />
+                <Route path='/productos*' element={<Products role={role}/>} />
                 <Route path='/productos/escoger-proveedor' element={<ChooseProvider />} />
                 <Route path="/productos/registrar/:id" element={<RegisterProduct />} />
                 <Route path="/modificar/producto/:id" element={<ModidyProducts />} />

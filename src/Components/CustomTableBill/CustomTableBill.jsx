@@ -11,7 +11,7 @@ const CustomTableBill = ({ isSale }) => {
   const purchaseID = location.state?.purchaseID || [];
   const pruchaseDate = location.state?.pruchaseDate || {};
   const purchaseDetails = location.state?.purchaseDetails || {};
-  const providerID = location.state?.providerID || {};
+  const providerDTO = location.state?.providerDTO || {};
   const [dateBill, setDateBill] = useState("");
   const [idBill, setIdBill] = useState("");
   const [rows, setRows] = useState([]);
@@ -73,6 +73,7 @@ const CustomTableBill = ({ isSale }) => {
       const formattedDate = formatDate(pruchaseDate);
       setDateBill(formattedDate);
       setIdBill(purchaseID);
+      console.log(providerDTO);
 
       const subtotalPurchase = subtotal(purchaseRows);
       const taxesPurchase = taxTotal(purchaseRows);
@@ -104,28 +105,54 @@ const CustomTableBill = ({ isSale }) => {
           </div>
         </div>
 
-        <div className="provider-info">
+        <div className="bill-info">
           {isSale ? (
             <>
-              <h3>Datos del Cliente</h3>
-              <div className="provider-columns">
-                <div>
-                  <p>Documento: {clientData?.idClient || "N/A"}</p>
-                  <p>Nombre: {clientData?.nameClient || "N/A"}</p>
-                  <p>Correo: {clientData?.email || "N/A"}</p>
-                </div>
-                <div>
-                  <h3>Datos del Vendedor</h3>
-                  <p>ID Vendedor: {dataSale?.idSeller || "N/A"}</p>
-                </div>
+              <div>
+                <h3>Datos del Cliente</h3>
+                <p>Documento: {clientData?.idClient || "N/A"}</p>
+                <p>Nombre: {clientData?.nameClient || "N/A"}</p>
+                <p>Correo: {clientData?.email || "N/A"}</p>
+              </div>
+              <div>
+                <h3>Datos del Vendedor</h3>
+                <p>ID Vendedor: {dataSale?.idSeller || "N/A"}</p>
               </div>
             </>
           ) : (
             <>
-              <h3>Datos del Proveedor</h3>
-              <div className="provider-columns">
+              <div className="provider-columns-bill">
                 <div>
-                  <p>Documento: {providerID || "N/A"}</p>
+                  <h3>Datos del Proveedor</h3>
+                  <p>
+                    Nombre:{" "}
+                    {`${providerDTO?.personDTO.firstName || "N/A"} ${
+                      providerDTO?.personDTO.lastName || "N/A"
+                    }`}
+                  </p>
+                  <p>
+                    Documento:{" "}
+                    {providerDTO?.companyDTO?.nit ||
+                      providerDTO?.personDTO.idPerson ||
+                      "N/A"}
+                  </p>
+                  <p>
+                    Correo electrónico:{" "}
+                    {providerDTO?.companyDTO?.companyEmail ||
+                      providerDTO?.personDTO.email ||
+                      "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    Télefono:{" "}
+                    {providerDTO?.companyDTO?.companyPhoneNumber ||
+                      providerDTO?.personDTO.phoneNumber ||
+                      "N/A"}
+                  </p>
+                  <p>
+                    Empresa: {providerDTO?.companyDTO?.companyName || "N/A"}
+                  </p>
                 </div>
               </div>
             </>

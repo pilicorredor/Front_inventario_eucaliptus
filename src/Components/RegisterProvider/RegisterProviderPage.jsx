@@ -177,7 +177,7 @@ const RegisterProvider = ({ providerData }) => {
           handleModalValidationOpen({
             errorValidate: response.status,
             messageErrorValidate:
-              "La empresa ya se había registrado anteriormente. ¿Desea recuperar los datos o sobreescribirlos?",
+              "La empresa ya se había registrado anteriormente. ¿Desea asignar un nuevo representante legal o sobreescribir los datos?",
           });
         } else {
           handleModalValidationOpen({

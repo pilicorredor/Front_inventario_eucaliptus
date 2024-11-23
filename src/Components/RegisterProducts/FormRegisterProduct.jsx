@@ -275,6 +275,7 @@ const RegisterProduct = () => {
 
   const handleSaveUnitData = async (unitData) => {
     try {
+      console.log('productos que llegan acá: ', unitData)
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.ADD_UNIT_SERVICE, {
         method: "POST",

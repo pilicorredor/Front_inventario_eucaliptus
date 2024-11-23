@@ -41,10 +41,11 @@
   padding: 0px 10px;
 }
 
-.modal-buttons-box {
+.unitModal-buttons-box {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 20px;
   width: 100%;
 }
 
@@ -65,4 +66,12 @@
 
 .check-button {
   background-color: #227e3c;
+}
+
+.unitmodal-incomplete-message {
+  width: 100%;
+  font-size: 0.7rem;
+  color: red;
+  text-align: center;
+  margin: 10px 0px;
 }

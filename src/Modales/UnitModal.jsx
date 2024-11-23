@@ -7,6 +7,8 @@ const UnitModal = ({ isOpen, onClose, onSave, mode, unitName }) => {
     description: "",
   });
 
+  const [isDataCompleted, setIsDataCompleted] = useState(false);
+
   useEffect(() => {
     if (unitName) {
       setUnitData({ unitName: unitName, description: "" });
@@ -15,12 +17,18 @@ const UnitModal = ({ isOpen, onClose, onSave, mode, unitName }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setIsDataCompleted(false);
     setUnitData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    onSave(unitData);
-    setUnitData({ unitName: "", description: "" });
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Previene el comportamiento predeterminado del formulario
+    if (unitData.unitName.trim() && unitData.description.trim()) {
+      onSave(unitData);
+      setUnitData({ unitName: "", description: "" });
+    } else {
+      setIsDataCompleted(true);
+    }
   };
 
   if (!isOpen) return null;
@@ -31,52 +39,67 @@ const UnitModal = ({ isOpen, onClose, onSave, mode, unitName }) => {
         <h3>
           {mode === "addUnit" ? "Agregar Nueva Unidad" : "Agregar Descripción"}
         </h3>
-        {mode === "addUnit" && (
+        <form onSubmit={handleSubmit}>
+          {mode === "addUnit" && (
+            <div className="modal-field">
+              <label>Nombre de la Unidad:</label>
+              <input
+                type="text"
+                name="unitName"
+                value={unitData.unitName}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          )}
+
+          {mode === "addDescription" && (
+            <div className="modal-field">
+              <label>Nombre de la Unidad:</label>
+              <input
+                type="text"
+                name="unitName"
+                value={unitData.unitName}
+                disabled
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          )}
+
           <div className="modal-field">
-            <label>Nombre de la Unidad:</label>
+            <label>Descripción de la Unidad:</label>
             <input
               type="text"
-              name="unitName"
-              value={unitData.unitName}
+              name="description"
+              value={unitData.description}
               onChange={handleInputChange}
               required
             />
           </div>
-        )}
+          {isDataCompleted && (
+            <div className="unitmodal-incomplete-message">
+              Completa todos los campos
+            </div>
+          )}
 
-        {mode === "addDescription" && (
-          <div className="modal-field">
-            <label>Nombre de la Unidad:</label>
-            <input
-              type="text"
-              name="unitName"
-              value={unitData.unitName}
-              disabled
-              onChange={handleInputChange}
-              required
-            />
+          <div className="unitModal-buttons-box">
+            <button
+              type="button"
+              className="modal-button cancel-button"
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="modal-button check-button"
+            >
+              Guardar
+            </button>
           </div>
-        )}
-
-        <div className="modal-field">
-          <label>Descripción de la Unidad:</label>
-          <input
-            type="text"
-            name="description"
-            value={unitData.description}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <div className="modal-buttons-box">
-          <button className="modal-button check-button" onClick={handleSave}>
-            Guardar
-          </button>
-          <button className="modal-button cancel-button" onClick={onClose}>
-            Cancelar
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   );

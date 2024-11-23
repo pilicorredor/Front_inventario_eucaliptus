@@ -49,14 +49,27 @@
   margin-left: 20px;
 }
 
-.provider-columns-bill {
+.bill-info {
   display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+  width: 95%;
+  margin: 10px auto;
+}
+
+.provider-columns-bill {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
 .provider-columns-bill div {
-  width: 48%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 .table-container {
