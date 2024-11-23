@@ -7,6 +7,7 @@ import { SERVICES } from "../../Constants/Constants.js";
 import CircularProgress from "@mui/material/CircularProgress";
 import SuccessModal from "../../Modales/SuccessModal.jsx";
 import FailModal from "../../Modales/FailModal.jsx"
+import { useNavigate } from "react-router-dom";
 
 
 const Config = ({ userRol, username, handleLogout }) => {
@@ -29,6 +30,7 @@ const Config = ({ userRol, username, handleLogout }) => {
     const [messageSuccess, setMessageSuccess] = useState("");
     const [messageFail, setMessageFail] = useState("");
     const [isSuccesful, setIsSuccesful] = useState(false);
+    const navigate = useNavigate();
 
 
     let dataToSend = []
@@ -126,6 +128,13 @@ const Config = ({ userRol, username, handleLogout }) => {
                 setIsSuccesful(true)
                 setMessageSuccess("Cambios guardados con éxito!")
                 setIsModalOpen(true)
+                // Si el username ha cambiado, forzar logout
+                if (dataToSend.newUsername !== username) {
+                    setTimeout(() => {
+                        handleLogout();
+                        navigate("/");
+                    }, 2000); // Agrega un retraso para mostrar el modal antes de cerrar sesión
+                }
             } else {
                 setLoading(false);
                 setMessageFail("No fue posible guardar los cambios")

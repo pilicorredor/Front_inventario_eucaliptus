@@ -14,6 +14,8 @@ import {
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
+import FailModal from "../../Modales/FailModal.jsx"
+
 
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -29,6 +31,8 @@ const RegisterProduct = () => {
   const [openModalUnit, setOpenModalUnit] = useState(false);
   const [modalUnitMode, setModalUnitMode] = useState("addUnit");
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
   const [product, setProduct] = useState({
     idProduct: "",
     productName: "",
@@ -78,10 +82,12 @@ const RegisterProduct = () => {
           const providerName = `${data.personDTO.firstName} ${data.personDTO.lastName}`;
           setProvider(providerName);
         } else {
-          console.error("Error al traer el vendedor:", await response.json());
+          setMessageFail("No fue posible obtener el vendedores");
+          setIsModalOpen(true);
         }
       } catch (error) {
-        console.error("Error en la solicitud:", error);
+        setMessageFail("Ocurrió un error en la solicitud");
+        setIsModalOpen(true);
       }
     };
 
@@ -106,10 +112,12 @@ const RegisterProduct = () => {
         const units = await response.json();
         setUnit(units);
       } else {
-        console.error("Error al traer las unidades:", await response.json());
+        setMessageFail("No fue posible obtener las unidades");
+        setIsModalOpen(true);
       }
     } catch (error) {
-      console.error("Error en la solicitud:", error);
+      setMessageFail("Ocurrió un error en la solicitud");
+      setIsModalOpen(true);
     }
   };
 
@@ -130,13 +138,12 @@ const RegisterProduct = () => {
         const data = await response.json();
         setDescriptions(data);
       } else {
-        console.error(
-          "Error al obtener las descripciones:",
-          await response.json()
-        );
+        setMessageFail("No fue posible obtener las descripciones");
+        setIsModalOpen(true);
       }
     } catch (error) {
-      console.error("Error en la solicitud:", error);
+      setMessageFail("Ocurrió un error en la solicitud");
+      setIsModalOpen(true);
     }
   };
 
@@ -220,8 +227,8 @@ const RegisterProduct = () => {
         setLoading(false);
         setSend(false);
       } else {
-        const errorData = await response.json();
-        console.error("Error al registrar el producto:", errorData);
+        setMessageFail("Ocurrió un error al registrar el producto");
+        setIsModalOpen(true);
         setLoading(false);
         setSend(false);
       }
@@ -289,11 +296,13 @@ const RegisterProduct = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Error al guardar la unidad en la base de datos");
+        //throw new Error("Error al guardar la unidad en la base de datos");
+        setMessageFail("Error al guardar la unidad en la base de datos");
+        setIsModalOpen(true);
       }
     } catch (error) {
-      console.error("Hubo un error:", error);
-      alert("No se pudo guardar la unidad. Inténtalo de nuevo.");
+      setMessageFail("No se pudo guardar la unidad. Inténtalo de nuevo.");
+      setIsModalOpen(true);
     }
     fetchUnit();
     fetchDescriptionByUnit(unitData.unitName);

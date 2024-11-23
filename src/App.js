@@ -48,6 +48,7 @@ const AppContent = () => {
 
     const handleLogout = () => {
         localStorage.setItem('login', false);
+        localStorage.removeItem("token");
         setLogin(false);
     };
 

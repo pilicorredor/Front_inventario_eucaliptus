@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import './SendEmailPassword.css';
 import { IoMdMail } from "react-icons/io";
-import { SERVICES, ROLES } from "../../Constants/Constants";
+import { SERVICES } from "../../Constants/Constants";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEmail } from '../../Context/EmailContext';
+import FailModal from "../../Modales/FailModal.jsx"
+
 
 
 const SendEmailPassword = () => {
     const { email, setEmail } = useEmail();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [messageFail, setMessageFail] = useState("");
 
 
     const handleInputChange = (setter) => (e) => {
@@ -34,22 +38,19 @@ const SendEmailPassword = () => {
 
             if (response.ok) {
                 setLoading(false);
-                console.log(response)
                 navigate("/config/check-token-password");
-
             } else {
                 setLoading(false);
-                alert('El correo ingresado no coincide con el registrado, porfavor verifica tu correo e intentalo de nuevo')
-                console.log(response)
+                setMessageFail("El correo ingresado no coincide con el registrado, porfavor verifica tu correo e intentalo de nuevo");
+                setIsModalOpen(true);
             }
 
         } catch (error) {
             setLoading(false);
-            alert(error)
+            setMessageFail("Ocurrión un error interno del servidor al intentar enviar el correo");
+            setIsModalOpen(true);
         }
     };
-
-    //lilianah111001@gmail.com
 
     return (
         <div className="emailPassword-section">
@@ -74,6 +75,10 @@ const SendEmailPassword = () => {
                     <button onClick={handleSubmit}>Enviar Correo</button>
                 </div>
             </div>
+            <FailModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                message={messageFail} />
         </div>
     );
 }

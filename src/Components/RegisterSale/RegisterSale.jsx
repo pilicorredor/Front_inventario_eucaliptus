@@ -6,6 +6,7 @@ import "./RegisterSale.css";
 import CustomModal from "../../Modales/CustomModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SERVICES, ENTITIES, BUTTONS_ACTIONS } from "../../Constants/Constants";
+import FailModal from "../../Modales/FailModal.jsx"
 
 const RegisterSale = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const RegisterSale = () => {
   const [entity, setEntity] = useState("venta");
   const [action, setAction] = useState("registrar");
   const [clientFound, setClientFound] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
   const [consumerData, setConsumerData] = useState({
     idClient: "",
     nameClient: "",
@@ -62,7 +65,8 @@ const RegisterSale = () => {
         }));
       }
     } catch (error) {
-      console.error("Error al buscar el cliente:", error);
+      setMessageFail("Error al buscar el cliente");
+      setIsModalOpen(true);
       setClientFound(false);
     }
   };
@@ -293,6 +297,10 @@ const RegisterSale = () => {
           onClose={handleModalClose}
           successfull={false}
         />
+        <FailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          message={messageFail} />
       </div>
     </div>
   );

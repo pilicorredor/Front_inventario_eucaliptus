@@ -13,6 +13,7 @@ import {
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
+import FailModal from "../../Modales/FailModal.jsx"
 
 
 const Products = () => {
@@ -28,6 +29,9 @@ const Products = () => {
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
+
 
 
   const columnsProducts = [
@@ -76,14 +80,14 @@ const Products = () => {
         setFilteredData(formattedProducts);
       } else {
         setLoading(false);
-
-        const errorMessage = await response.text();
-        console.error("Error al obtener los productos:", errorMessage);
+        setMessageFail("No fue posible obtener los productos");
+        setIsModalOpen(true);
       }
     } catch (error) {
       setLoading(false);
-
-      console.error("Error en la solicitud de productos:", error);
+      setMessageFail("Error en la solicitud de productos");
+      setIsModalOpen(true);
+      
     }
   };
 
@@ -295,6 +299,10 @@ const Products = () => {
           />
         </div>
       </div>
+      <FailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={messageFail} />
     </div>
   );
 };

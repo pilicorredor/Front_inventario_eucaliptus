@@ -83,11 +83,10 @@ const RecoveryUpdatePassword = ({ username }) => {
                         onChange={handlePasswordChange}
                     />
                     {showPassword ? (
-                        <FaEye className="icon" onClick={togglePasswordVisibility} />
+                        <FaEye className="update-icon" onClick={togglePasswordVisibility} />
                     ) : (
-                        <FaEyeSlash className="icon" onClick={togglePasswordVisibility} />
+                        <FaEyeSlash className="update-icon" onClick={togglePasswordVisibility} />
                     )}
-
                 </div>
                 <div className="input-update-box">
                     <input

@@ -5,6 +5,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import "./ChooseProvider.css";
 import Header from "../Header/Header.jsx";
 import { SERVICES, ENTITIES } from "../../Constants/Constants";
+import FailModal from "../../Modales/FailModal.jsx"
+import CircularProgress from "@mui/material/CircularProgress";
+
+
 
 const ChooseProvider = () => {
   const navigate = useNavigate();
@@ -12,12 +16,17 @@ const ChooseProvider = () => {
   const [contextTable, setContextTable] = useState("registerProd");
   const [searchQuery, setSearchQuery] = useState("");
   const [providersData, setProvidersData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     fetchProvidersData();
   }, []);
 
   const fetchProvidersData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.GET_PROVIDERS_ALL_SERVICE, {
@@ -29,6 +38,7 @@ const ChooseProvider = () => {
       });
 
       if (response.ok) {
+        setLoading(false);
         const data = await response.json();
         const formattedProviders = data.map((provider) => ({
           id_modify: provider.personDTO.idPerson,
@@ -41,11 +51,14 @@ const ChooseProvider = () => {
         }));
         setProvidersData(formattedProviders);
       } else {
-        const errorMessage = await response.text();
-        console.error("Error al obtener los vendedores:", errorMessage);
+        setLoading(false);
+        setMessageFail("No fue posible obtener los vendedores");
+        setIsModalOpen(true);
       }
     } catch (error) {
-      console.error("Error en la solicitud de vendedores:", error);
+      setLoading(false);
+      setMessageFail("Error en la solicitud de vendedores");
+      setIsModalOpen(true);
     }
   };
 
@@ -91,6 +104,11 @@ const ChooseProvider = () => {
         </div>
 
         <div className="products-content">
+          {loading && (
+            <div className="loading-container">
+              <CircularProgress className="loading-icon" />
+            </div>
+          )}
           {role === ENTITIES.PROVEEDOR && (
             <CustomTable
               data={providersData}
@@ -100,6 +118,10 @@ const ChooseProvider = () => {
             />
           )}
         </div>
+        <FailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={messageFail} />
       </div>
     </div>
   );
