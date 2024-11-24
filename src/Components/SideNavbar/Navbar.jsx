@@ -3,7 +3,7 @@ import * as Io5Icons from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "./Navbar.css";
-import userImg from "../Assets/person-circle.png";
+import userImg from "../../Assets/person-circle.png";
 import { ROLES } from "../../Constants/Constants";
 
 const Navbar = ({ username, role, handleLogout }) => {
@@ -28,7 +28,7 @@ const Navbar = ({ username, role, handleLogout }) => {
       </div>
       <hr className="divider" />
       <ul className="nav-menu-items">
-      {SidebarData.filter((item) => {
+        {SidebarData.filter((item) => {
           return role === ROLES.ADMIN || sellFields.includes(item.title);
         }).map((item, index) => (
           <li key={index}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ModifySeller.css";
-import logo from "../Assets/logo2.png";
+import logo from "../../Assets/logo2.png";
 import CustomModal from "../../Modales/CustomModal";
 import Header from "../Header/Header";
 import {

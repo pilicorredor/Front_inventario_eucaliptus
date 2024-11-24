@@ -1,6 +1,6 @@
 import React from "react";
 import "./NotificationModal.css";
-import logo from "../Assets/logo.jpg";
+import logo from "../../Assets/logo.jpg";
 import { IoMdCloseCircle } from "react-icons/io";
 
 const NotificationModal = ({

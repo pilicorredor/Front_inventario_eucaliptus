@@ -1,9 +1,9 @@
 import React from "react";
 import "./HomePageSeller.css";
 import Header from "../Header/Header.jsx";
-import missionImg from "../Assets/misionImg.png";
-import visionImg from "../Assets/visionImg.png";
-import valuesImg from "../Assets/valuesImg.png";
+import missionImg from "../../Assets/misionImg.png";
+import visionImg from "../../Assets/visionImg.png";
+import valuesImg from "../../Assets/valuesImg.png";
 
 const HomePageSeller = () => {
   return (

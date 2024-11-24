@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./HomePage.css";
 import Header from "../Header/Header.jsx";
-import coutionLogo from "../Assets/danger.png";
+import coutionLogo from "../../Assets/danger.png";
 import DataTable from "./DataTable.jsx";
 import { SERVICES } from "../../Constants/Constants.js";
 import CircularProgress from "@mui/material/CircularProgress";

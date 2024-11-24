@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import "./Header.css";
-import logo from "../Assets/logoInterfaces.png";
+import logo from "../../Assets/logoInterfaces.png";
 import NotificationModal from "./NotificationModal";
 import { useNavigate } from "react-router-dom";
 import { SERVICES } from "../../Constants/Constants.js";

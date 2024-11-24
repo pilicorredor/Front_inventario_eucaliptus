@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegisterProvider.css";
-import logo from "../Assets/logo2.png";
+import logo from "../../Assets/logo2.png";
 import CustomModal from "../../Modales/CustomModal";
 import ErrorSpecificModal from "../../Modales/ErrorSpecificModal";
 import Header from "../Header/Header";

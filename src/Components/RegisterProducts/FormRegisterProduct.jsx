@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import logo from "../Assets/logo2.png";
+import logo from "../../Assets/logo2.png";
 import Header from "../Header/Header";
 import CustomModal from "../../Modales/CustomModal";
 import UnitModal from "../../Modales/UnitModal";
@@ -14,8 +14,7 @@ import {
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
-import FailModal from "../../Modales/FailModal.jsx"
-
+import FailModal from "../../Modales/FailModal.jsx";
 
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -282,7 +281,7 @@ const RegisterProduct = () => {
 
   const handleSaveUnitData = async (unitData) => {
     try {
-      console.log('productos que llegan acá: ', unitData)
+      console.log("productos que llegan acá: ", unitData);
       const token = localStorage.getItem("token");
       const response = await fetch(SERVICES.ADD_UNIT_SERVICE, {
         method: "POST",

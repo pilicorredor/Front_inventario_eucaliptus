@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./LoginFormChangePswd.css";
 import { FaEye, FaUser } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import logo from "../Assets/logo2.png";
+import logo from "../../Assets/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { SERVICES } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -84,7 +84,7 @@ const LoginFormChangePswd = ({ handleLogin }) => {
             <FaUser className="icon" />
           </div>
           <div className="input-box">
-          <input
+            <input
               type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}

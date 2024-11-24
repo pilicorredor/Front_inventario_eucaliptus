@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../Assets/logoInterfaces.png";
+import logo from "../../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
 import { DATA_COMPANY } from "../../Constants/Constants";
 

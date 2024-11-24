@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import logo from "../Assets/logo2.png";
+import logo from "../../Assets/logo2.png";
 import Header from "../Header/Header";
 import "./FormRegisterDetailsProduct.css";
 import {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Header/Header.jsx";
-import userImg from "../Assets/person-circle.png";
+import userImg from "../../Assets/person-circle.png";
 import "./ConfigPanel.css";
 import { FaEdit } from "react-icons/fa";
 import { SERVICES } from "../../Constants/Constants.js";
