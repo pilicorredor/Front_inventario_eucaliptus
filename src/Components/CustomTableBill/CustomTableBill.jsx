@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import logo from "../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
+import { DATA_COMPANY } from "../../Constants/Constants";
 
 const CustomTableBill = ({ isSale }) => {
   const location = useLocation();
@@ -92,10 +93,10 @@ const CustomTableBill = ({ isSale }) => {
           <div className="company-info">
             <img src={logo} alt="Logo Empresa" className="company-logo" />
             <div>
-              <h3>Nombre de la Empresa</h3>
-              <p>NIT: 123456789</p>
-              <p>Dirección: Calle 123 4-12</p>
-              <p>Celular: 3128888829</p>
+              <h3>{DATA_COMPANY.NAME}</h3>
+              <p>NIT: {DATA_COMPANY.NIT}</p>
+              <p>Dirección: {DATA_COMPANY.ADDRESS}</p>
+              <p>Celular: {DATA_COMPANY.PHONE}</p>
             </div>
           </div>
           <div className="invoice-info">
@@ -126,20 +127,20 @@ const CustomTableBill = ({ isSale }) => {
                   <h3>Datos del Proveedor</h3>
                   <p>
                     Nombre:{" "}
-                    {`${providerDTO?.personDTO.firstName || "N/A"} ${
-                      providerDTO?.personDTO.lastName || "N/A"
+                    {`${providerDTO?.personDTO?.firstName || "N/A"} ${
+                      providerDTO?.personDTO?.lastName || "N/A"
                     }`}
                   </p>
                   <p>
                     Documento:{" "}
                     {providerDTO?.companyDTO?.nit ||
-                      providerDTO?.personDTO.idPerson ||
+                      providerDTO?.personDTO?.idPerson ||
                       "N/A"}
                   </p>
                   <p>
                     Correo electrónico:{" "}
                     {providerDTO?.companyDTO?.companyEmail ||
-                      providerDTO?.personDTO.email ||
+                      providerDTO?.personDTO?.email ||
                       "N/A"}
                   </p>
                 </div>
@@ -147,7 +148,7 @@ const CustomTableBill = ({ isSale }) => {
                   <p>
                     Télefono:{" "}
                     {providerDTO?.companyDTO?.companyPhoneNumber ||
-                      providerDTO?.personDTO.phoneNumber ||
+                      providerDTO?.personDTO?.phoneNumber ||
                       "N/A"}
                   </p>
                   <p>

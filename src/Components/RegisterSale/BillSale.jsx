@@ -29,7 +29,7 @@ const BillSale = () => {
           Aceptar
         </button>
         <button className="billSale-button check-button" onClick={handlePrint}>
-          Imprimir
+          Enviar Factura
         </button>
       </div>
     </div>

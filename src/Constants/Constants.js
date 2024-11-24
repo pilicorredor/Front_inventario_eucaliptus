@@ -115,3 +115,10 @@ export const REPORT_TRANSACTION = {
     SALE: "Venta",
     PURCHASE: "Compra",
 }
+
+export const DATA_COMPANY = {
+    NAME: "Naturista Eucaliptus",
+    NIT: "7180744",
+    ADDRESS: "Cra. 15 #21 67, Tunja, Boyacá",
+    PHONE: "3176502842",
+}

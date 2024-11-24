@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
+import { DATA_COMPANY } from "../../Constants/Constants";
 
 const CustomTableBillModal = ({
   isSale,
@@ -99,7 +100,7 @@ const CustomTableBillModal = ({
   ]);
 
   if (loading) {
-    return <p>Cargando...</p>; // Indicador de carga
+    return <p>Cargando...</p>;
   }
 
   return (
@@ -109,10 +110,10 @@ const CustomTableBillModal = ({
           <div className="company-info">
             <img src={logo} alt="Logo Empresa" className="company-logo" />
             <div>
-              <h3>Nombre de la Empresa</h3>
-              <p>NIT: 123456789</p>
-              <p>Dirección: Calle 123 4-12</p>
-              <p>Celular: 3128888829</p>
+              <h3>{DATA_COMPANY.NAME}</h3>
+              <p>NIT: {DATA_COMPANY.NIT}</p>
+              <p>Dirección: {DATA_COMPANY.ADDRESS}</p>
+              <p>Celular: {DATA_COMPANY.PHONE}</p>
             </div>
           </div>
           <div className="invoice-info">
@@ -145,20 +146,20 @@ const CustomTableBillModal = ({
                   <h3>Datos del Proveedor</h3>
                   <p>
                     Nombre:{" "}
-                    {`${providerData?.personDTO.firstName || "N/A"} ${
-                      providerData?.personDTO.lastName || "N/A"
+                    {`${providerData?.personDTO?.firstName || "N/A"} ${
+                      providerData?.personDTO?.lastName || "N/A"
                     }`}
                   </p>
                   <p>
                     Documento:{" "}
                     {providerData?.companyDTO?.nit ||
-                      providerData?.personDTO.idPerson ||
+                      providerData?.personDTO?.idPerson ||
                       "N/A"}
                   </p>
                   <p>
                     Correo electrónico:{" "}
                     {providerData?.companyDTO?.companyEmail ||
-                      providerData?.personDTO.email ||
+                      providerData?.personDTO?.email ||
                       "N/A"}
                   </p>
                 </div>
@@ -166,7 +167,7 @@ const CustomTableBillModal = ({
                   <p>
                     Télefono:{" "}
                     {providerData?.companyDTO?.companyPhoneNumber ||
-                      providerData?.personDTO.phoneNumber ||
+                      providerData?.personDTO?.phoneNumber ||
                       "N/A"}
                   </p>
                   <p>

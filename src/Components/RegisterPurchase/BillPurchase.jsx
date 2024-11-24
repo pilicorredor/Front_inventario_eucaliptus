@@ -36,7 +36,7 @@ const BillPurchase = () => {
           className="billpurchase-button check-button"
           onClick={handlePrint}
         >
-          Imprimir
+          Enviar Factura
         </button>
       </div>
     </div>
