@@ -82,7 +82,7 @@ const AppContent = () => {
                     }
                 />
                 <Route path='/config' element={<Config userRol={role} username={username} handleLogout={handleLogout} />} />
-                <Route path='/config/login-to-change-password' element={<LoginFormChangePswd />} />
+                <Route path='/config/login-to-change-password' element={<LoginFormChangePswd handleLogin={handleLogin} />} />
                 <Route path='/config/send-email-password' element={<SendEmailPassword />} />
                 <Route path='/config/check-token-password' element={<CheckPswdToken />} />
                 <Route path='/config/recovery-update-password' element={<RecoveryUpdatePassword />} />

@@ -1,5 +1,6 @@
 {
   "name": "front",
+  "homepage": "https://pilicorredor.github.io/Front_inventario_eucaliptus/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,6 +14,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
+    "gh-pages": "^6.2.0",
     "react": "^18.3.1",
     "react-calendar": "^5.1.0",
     "react-date-range": "^2.0.1",
@@ -27,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
