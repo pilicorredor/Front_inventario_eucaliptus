@@ -37,7 +37,6 @@ const CheckPswdToken = () => {
                 navigate("/config/recovery-update-password");
             } else {
                 setLoading(false);
-                //alert('Porfavor verifique que el token ingresado sea el correcto')
                 setMessageFail('Porfavor verifique que el token ingresado sea el correcto')
                 setIsModalOpen(true)
             }
@@ -51,7 +50,10 @@ const CheckPswdToken = () => {
     };
 
     const handleInputChange = (e) => {
-        setVerifCode(e.target.value);
+        const value = e.target.value;
+        if (value.length <= 6) {
+            setVerifCode(value);
+        }
     };
 
     return (
@@ -65,6 +67,11 @@ const CheckPswdToken = () => {
                         name="input-token"
                         placeholder="123456"
                         onChange={handleInputChange}
+                        onInput={(e) => {
+                            if (e.target.value.length > 6) {
+                                e.target.value = e.target.value.slice(0, 6); // Limita a 6 dígitos
+                            }
+                        }}
                     />
                 </div>
                 {loading && (
