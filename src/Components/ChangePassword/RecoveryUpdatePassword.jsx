@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './RecoveryUpdatePassword.css';
+import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { useEmail } from "../../Context/EmailContext";
 import { useVerifCode } from "../../Context/VerificationCodeContext";
@@ -20,11 +21,16 @@ const RecoveryUpdatePassword = () => {
     const [messageSuccess, setMessageSuccess] = useState("");
     const [messageFail, setMessageFail] = useState("");
     const [isSuccesful, setIsSuccesful] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
 
     const { email } = useEmail();
     const { code } = useVerifCode();
     const navigate = useNavigate();
 
+    const togglePasswordVisibility = () => {
+        setShowPassword((prevShowPassword) => !prevShowPassword);
+    };
 
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
@@ -77,12 +83,16 @@ const RecoveryUpdatePassword = () => {
                 <p>Digita una nueva contraseña en el campo a continuación para cambiar tu contraseña</p>
                 <div className="input-update-box">
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="input-update"
                         placeholder="Nueva contraseña"
                         onChange={handlePasswordChange}
                     />
-                    <FaEyeSlash className="update-icon" />
+                    {showPassword ? (
+                        <FaEye className="update-icon" onClick={togglePasswordVisibility} />
+                    ) : (
+                        <FaEyeSlash className="update-icon" onClick={togglePasswordVisibility} />
+                    )}
 
                 </div>
                 <div className="input-update-box">
