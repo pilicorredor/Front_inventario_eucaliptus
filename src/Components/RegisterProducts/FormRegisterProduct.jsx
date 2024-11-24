@@ -14,7 +14,6 @@ import {
 } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
-import FailModal from "../../Modales/FailModal.jsx";
 
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -30,8 +29,8 @@ const RegisterProduct = () => {
   const [openModalUnit, setOpenModalUnit] = useState(false);
   const [modalUnitMode, setModalUnitMode] = useState("addUnit");
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [messageFail, setMessageFail] = useState("");
+  const [setIsModalOpen] = useState(false);
+  const [setMessageFail] = useState("");
   const [product, setProduct] = useState({
     idProduct: "",
     productName: "",

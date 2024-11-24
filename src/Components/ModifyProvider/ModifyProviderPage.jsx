@@ -106,7 +106,6 @@ const ModifyProvider = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.PROVEEDOR,
           selectedAction: BUTTONS_ACTIONS.MODIFICAR,

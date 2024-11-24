@@ -131,7 +131,6 @@ const ModidyProducts = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.PRODUCTO,
           selectedAction: BUTTONS_ACTIONS.MODIFICAR,

@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import CustomTableBill from "../CustomTableBill/CustomTableBill";
 import Header from "../Header/Header.jsx";
 import "./BillSale.css";

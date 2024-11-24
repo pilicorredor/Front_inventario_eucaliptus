@@ -13,8 +13,6 @@ import CalendarModal from "../../Modales/CalendarModal";
 import VerifyPurchaseModal from "../../Modales/VerifyPurchaseModal";
 import { ButtonContext } from "../../Context/ButtonContext";
 import { ProductContext } from "../../Context/ProductContext";
-import FailModal from "../../Modales/FailModal";
-
 
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -24,10 +22,9 @@ const RegisterProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false);
-  const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
+  const { setIsButtonActive } = useContext(ButtonContext);
   const [loading, setLoading] = useState(false);
   const [messageModal, setMessageModal] = useState("");
-  const [messageFail, setMessageFail] = useState("");
   const { sendProducts, addProduct, addProductTable } =
     useContext(ProductContext);
   // Estado del producto
@@ -73,11 +70,9 @@ const RegisterProduct = () => {
           setIdProvider(data.idProvider);
         } else {
           console.error("Error al traer el producto:", await response.json());
-
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
-
       }
     };
     fetchProductById();
@@ -103,11 +98,9 @@ const RegisterProduct = () => {
           setProvider(providerName);
         } else {
           console.error("Error al traer el proveedor:", await response.json());
-
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
-
       }
     };
     if (idProvider) {
@@ -178,7 +171,6 @@ const RegisterProduct = () => {
       }
     } catch (error) {
       console.error("Error en la solicitud de verificación:", error);
-
     }
   };
 
@@ -216,7 +208,6 @@ const RegisterProduct = () => {
       } else {
         const errorData = await response.json();
         console.error("Error al registrar la compra:", errorData);
-        
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);

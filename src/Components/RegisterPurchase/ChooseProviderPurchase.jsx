@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import "./ChooseProviderPurchase.css";
@@ -11,17 +10,15 @@ import RegisterProviderModal from "../../Modales/RegisterProviderModal";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const ChooseProviderPurchase = () => {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [role, setRole] = useState("proveedor");
-  const [contextTable, setContextTable] = useState("registerPurchase");
+  const [role] = useState("proveedor");
+  const [contextTable] = useState("registerPurchase");
   const [searchQuery, setSearchQuery] = useState("");
   const [providersData, setProvidersData] = useState([]);
   const [buttonText, setButtonText] = useState("Buscar por...");
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     fetchProvidersData();
@@ -86,8 +83,8 @@ const ChooseProviderPurchase = () => {
   ];
 
   const columnMap = {
-    "ID": "id_modify",
-    "Nombre": "name",
+    ID: "id_modify",
+    Nombre: "name",
     "Dirección Empresarial": "addressCompany",
     "Correo Electrónico": "email",
     "Número de Teléfono": "phoneNumber",
@@ -97,7 +94,6 @@ const ChooseProviderPurchase = () => {
 
   const handleSearch = () => {
     if (!searchQuery || selectedFilter === "Todos") {
-
       setFilteredData(providersData);
       return;
     }
@@ -105,7 +101,9 @@ const ChooseProviderPurchase = () => {
     const selectedColumn = columnMap[selectedFilter];
 
     if (!selectedColumn) {
-      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      console.warn(
+        "No se ha seleccionado una columna válida para la búsqueda."
+      );
       return;
     }
 
@@ -122,7 +120,6 @@ const ChooseProviderPurchase = () => {
   const handleFilterSelection = (selectedItem) => {
     setSelectedFilter(selectedItem);
     setButtonText(selectedItem);
-
 
     if (selectedItem === "Todos") {
       setSearchQuery("");

@@ -13,14 +13,13 @@ const ReportTransactions = () => {
   const [typeTransaction, setTypeTransaction] = useState(
     REPORT_TRANSACTION.SALE
   );
-  const [productsData, setProductsData] = useState([]);
+  const [productsData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [filteredSaleData, setFilteredSaleData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [range, setRange] = useState({ start: "", end: "" });
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
-  const [selectedUseFilter, setSelectedUseFilter] = useState("");
+  const [selectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const [purchasesData, setPurchasesData] = useState([]);

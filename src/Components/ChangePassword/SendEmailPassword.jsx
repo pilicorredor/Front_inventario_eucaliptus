@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./SendEmailPassword.css";
 import { IoMdMail } from "react-icons/io";
 import { SERVICES } from "../../Constants/Constants";

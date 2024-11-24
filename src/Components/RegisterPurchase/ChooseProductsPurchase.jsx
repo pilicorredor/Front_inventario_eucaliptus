@@ -31,14 +31,13 @@ const ChooseProductsPurchase = () => {
   const [productButtonText, setProductButtonText] = useState("Buscar por...");
   const [selectedUseFilter, setSelectedUseFilter] = useState("");
   const [selectedSearchFilter, setSelectedSearchFilter] = useState("");
-  const [contextTable, setContextTable] = useState("registerPurchaseAddProd");
+  const [contextTable] = useState("registerPurchaseAddProd");
   const { isButtonActive, setIsButtonActive } = useContext(ButtonContext);
   const [loading, setLoading] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [provider, setProvider] = useState("");
   const { sendProducts, clearProducts } = useContext(ProductContext);
 
-  
   const columnsProducts = [
     "idProduct",
     "productName",
@@ -158,11 +157,11 @@ const ChooseProductsPurchase = () => {
 
   const columnMap = {
     "ID del producto": "idProduct",
-    "Nombre": "productName",
-    "Marca": "brand",
-    "Categoría": "categoryProduct",
-    "Uso": "useProduct",
-    "Unidad": "unitName",
+    Nombre: "productName",
+    Marca: "brand",
+    Categoría: "categoryProduct",
+    Uso: "useProduct",
+    Unidad: "unitName",
     "Descripción unidad": "unitDescription",
   };
 
@@ -176,7 +175,6 @@ const ChooseProductsPurchase = () => {
 
   const handleSearch = () => {
     if (!searchQuery || selectedSearchFilter === "Todos") {
-      
       setFilteredData(productsData);
       return;
     }
@@ -184,7 +182,9 @@ const ChooseProductsPurchase = () => {
     const selectedColumn = columnMap[selectedSearchFilter];
 
     if (!selectedColumn) {
-      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      console.warn(
+        "No se ha seleccionado una columna válida para la búsqueda."
+      );
       return;
     }
 
@@ -425,7 +425,7 @@ const ChooseProductsPurchase = () => {
         </div>
 
         <div className="products-content">
-        {loading && (
+          {loading && (
             <div className="loading-container">
               <CircularProgress className="loading-icon" />
             </div>

@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
 import "./ChooseProvider.css";
 import Header from "../Header/Header.jsx";
 import { SERVICES, ENTITIES } from "../../Constants/Constants";
-import FailModal from "../../Modales/FailModal.jsx"
+import FailModal from "../../Modales/FailModal.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 
-
-
 const ChooseProvider = () => {
-  const navigate = useNavigate();
-  const [role, setRole] = useState("proveedor");
-  const [contextTable, setContextTable] = useState("registerProd");
+  const [role] = useState("proveedor");
+  const [contextTable] = useState("registerProd");
   const [searchQuery, setSearchQuery] = useState("");
   const [providersData, setProvidersData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageFail, setMessageFail] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     fetchProvidersData();
@@ -119,9 +114,10 @@ const ChooseProvider = () => {
           )}
         </div>
         <FailModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        message={messageFail} />
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          message={messageFail}
+        />
       </div>
     </div>
   );

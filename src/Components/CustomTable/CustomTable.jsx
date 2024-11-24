@@ -17,7 +17,6 @@ import {
   BUTTONS_ACTIONS,
   REPORT_TRANSACTION,
   ROLES,
-  SERVICES,
 } from "../../Constants/Constants";
 
 const CustomTable = ({

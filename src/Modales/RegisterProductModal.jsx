@@ -268,11 +268,7 @@ const RegisterProductModal = ({ id, isOpen, onClose, handleSubmit }) => {
     fetchDescriptionByUnit(unitData.unitName);
     setOpenModalUnit(false);
   };
-
-  const handleInputReset = (e) => {
-    e.target.setCustomValidity("");
-  };
-
+  
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("modal-overlay")) {
       onClose();

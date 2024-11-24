@@ -7,7 +7,6 @@ import Header from "../Header/Header";
 import {
   BUTTONS_ACTIONS,
   ENTITIES,
-  ROLES,
   DOCUMENT_TYPE,
   SERVICES,
 } from "../../Constants/Constants";
@@ -17,7 +16,7 @@ const ModifySeller = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [send, setSend] = useState(false);
-  const [update, setUpdate] = useState(false);
+  const [update] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [entity, setEntity] = useState("vendedor");
   const [action, setAction] = useState("modificar");
@@ -102,7 +101,6 @@ const ModifySeller = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         handleModalOpen({
           selectedEntity: ENTITIES.VENDEDOR,
           selectedAction: BUTTONS_ACTIONS.MODIFICAR,
