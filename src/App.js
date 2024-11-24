@@ -53,7 +53,11 @@ const AppContent = () => {
     };
 
     useEffect(() => {
-        if (location.pathname === '/') {
+        if (location.pathname === '/' ||
+            location.pathname === '/config/login-to-change-password' ||
+            location.pathname === '/config/send-email-password' ||
+            location.pathname === '/config/check-token-password' ||
+            location.pathname === '/config/recovery-update-password') {
             setLogin(false);
         } else {
             setLogin(true);
@@ -67,7 +71,7 @@ const AppContent = () => {
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
                 <Route path='/inicio' element={<HomePage username={username} />} />
                 <Route path='/config' element={<Config userRol={role} username={username} handleLogout={handleLogout} />} />
-                <Route path='/config/login-to-change-password' element={<LoginFormChangePswd login={login} handleLogin={handleLogin} />} />
+                <Route path='/config/login-to-change-password' element={<LoginFormChangePswd />} />
                 <Route path='/config/send-email-password' element={<SendEmailPassword />} />
                 <Route path='/config/check-token-password' element={<CheckPswdToken />} />
                 <Route path='/config/recovery-update-password' element={<RecoveryUpdatePassword />} />
@@ -77,7 +81,7 @@ const AppContent = () => {
                 <Route path="/registrar-proveedor" element={<RegisterProvider />} />
                 <Route path="/modificar/proveedor/:id" element={<ModifyProvider />} />
                 <Route path="/modificar/vendedor/:id" element={<ModifySeller />} />
-                <Route path='/productos*' element={<Products role={role}/>} />
+                <Route path='/productos*' element={<Products role={role} />} />
                 <Route path='/productos/escoger-proveedor' element={<ChooseProvider />} />
                 <Route path="/productos/registrar/:id" element={<RegisterProduct />} />
                 <Route path="/modificar/producto/:id" element={<ModidyProducts />} />
