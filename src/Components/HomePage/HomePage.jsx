@@ -5,10 +5,9 @@ import coutionLogo from "../Assets/danger.png";
 import DataTable from "./DataTable.jsx";
 import { SERVICES } from "../../Constants/Constants.js";
 import CircularProgress from "@mui/material/CircularProgress";
-import FailModal from "../../Modales/FailModal.jsx"
+import FailModal from "../../Modales/FailModal.jsx";
 
 const HomePage = ({ username }) => {
-
   const [productsData, setProductsData] = useState([]);
   const [totalSalesIncome, setTotalSalesIncome] = useState("");
   const [totalPurchaseInvestment, setTotalPurchaseInvestment] = useState("");
@@ -17,9 +16,6 @@ const HomePage = ({ username }) => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageFail, setMessageFail] = useState("");
-
-
-
 
   useEffect(() => {
     fetchExpiringProductsData();
@@ -46,20 +42,22 @@ const HomePage = ({ username }) => {
           idProduct: product.idProduct,
           productName: product.productName,
           quantity: product.quantity,
-          dueDate: product.dueDate
+          dueDate: product.dueDate,
         }));
-        setProductsData(formattedProducts)
+        setProductsData(formattedProducts);
       } else {
         setLoading(false);
-        setMessageFail("No fue posible recuperar los datos")
-        setIsModalOpen(true)
+        setMessageFail("No fue posible recuperar los datos");
+        setIsModalOpen(true);
       }
     } catch (error) {
       setLoading(false);
-      setMessageFail("Error interno del servidor durante la recuperacion de datos")
-      setIsModalOpen(true)
+      setMessageFail(
+        "Error interno del servidor durante la recuperacion de datos"
+      );
+      setIsModalOpen(true);
     }
-  }
+  };
 
   const fetchSummaryData = async () => {
     setLoading(true);
@@ -83,43 +81,48 @@ const HomePage = ({ username }) => {
         setTotalPurchasesCount(data.totalPurchasesCount);
       } else {
         setLoading(false);
-        setMessageFail("No fue posible recuperar los datos")
-        setIsModalOpen(true)
+        setMessageFail("No fue posible recuperar los datos");
+        setIsModalOpen(true);
       }
     } catch (error) {
       setLoading(false);
-      setMessageFail("Error interno del servidor durante la recuperacion de datos")
-      setIsModalOpen(true)
+      setMessageFail(
+        "Error interno del servidor durante la recuperacion de datos"
+      );
+      setIsModalOpen(true);
     }
-  }
+  };
 
   return (
-    <div className="homepage">
+    <div className="homepage-admin">
       <Header pageTitle="Inicio" />
-      <div className="homepage-content">
+      <div className="homepage-admin-content">
         {loading && (
           <div className="loading-container">
             <CircularProgress className="loading-icon" />
           </div>
         )}
-        <div className="homepage-welcoming-message">
-          <h2>Hola {username}, estos son algunos datos de la operación durante este mes: </h2>
+        <div className="homepage-admin-welcoming-message">
+          <h2>
+            Hola {username}, estos son algunos datos de la operación durante
+            este mes:{" "}
+          </h2>
         </div>
 
-        <div className="home-card data">
-          <div className="home-data income">
+        <div className="home-card-data">
+          <div className="home-data">
             <p>Ingreso ventas</p>
             <h2>${totalSalesIncome.toLocaleString("es-ES")}</h2>
           </div>
-          <div className="home-data expenses">
+          <div className="home-data">
             <p>Inversión compra productos</p>
             <h2>${totalPurchaseInvestment.toLocaleString("es-ES")}</h2>
           </div>
-          <div className="home-data sales">
+          <div className="home-data">
             <p>Total ventas realizadas</p>
             <h2> {totalSalesCount} </h2>
           </div>
-          <div className="home-data purchases">
+          <div className="home-data">
             <p>Total compras realizadas</p>
             <h2> {totalPurchasesCount} </h2>
           </div>
@@ -137,7 +140,8 @@ const HomePage = ({ username }) => {
       <FailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        message={messageFail} />
+        message={messageFail}
+      />
     </div>
   );
 };

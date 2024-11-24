@@ -6,6 +6,7 @@ import { ButtonContext, ButtonProvider } from './Context/ButtonContext';
 import { ProductContext, ProductProvider } from './Context/ProductContext';
 import LoginForm from './Components/LoginForm/LoginForm';
 import HomePage from './Components/HomePage/HomePage';
+import HomePageSeller from './Components/HomePageSeller/HomePageSeller';
 import Personal from './Components/Personal/Personal';
 import Navbar from './Components/SideNavbar/Navbar';
 import RegisterSeller from './Components/RegisterSeller/RegisterSellerPage';
@@ -31,6 +32,7 @@ import RegisterSale from './Components/RegisterSale/RegisterSale';
 import BillSale from './Components/RegisterSale/BillSale';
 import ReportPage from './Components/ReportProductsSale/ReportProductsSale';
 import ReportTransactions from './Components/ReportTransactions/ReportTransactions';
+import { ROLES } from './Constants/Constants';
 
 
 const AppContent = () => {
@@ -69,7 +71,16 @@ const AppContent = () => {
             {login && <Navbar login={login} handleLogin={handleLogin} username={username} role={role} handleLogout={handleLogout} />}
             <Routes>
                 <Route path='/' element={<LoginForm login={login} handleLogin={handleLogin} />} />
-                <Route path='/inicio' element={<HomePage username={username} />} />
+                <Route
+                    path="/inicio"
+                    element={
+                        role === ROLES.ADMIN ? (
+                            <HomePage username={username} />
+                        ) : role === ROLES.SELLER && (
+                            <HomePageSeller username={username} />
+                        )
+                    }
+                />
                 <Route path='/config' element={<Config userRol={role} username={username} handleLogout={handleLogout} />} />
                 <Route path='/config/login-to-change-password' element={<LoginFormChangePswd />} />
                 <Route path='/config/send-email-password' element={<SendEmailPassword />} />
