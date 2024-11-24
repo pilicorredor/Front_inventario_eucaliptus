@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/Front_inventario_eucaliptus/static/css/main.534494df.css",
+    "main.js": "/Front_inventario_eucaliptus/static/js/main.ea8cd4fe.js",
+    "static/js/453.c2b2afdb.chunk.js": "/Front_inventario_eucaliptus/static/js/453.c2b2afdb.chunk.js",
+    "static/media/FondoLogin.png": "/Front_inventario_eucaliptus/static/media/FondoLogin.c566a8e8a2d195819924.png",
+    "static/media/logo2.png": "/Front_inventario_eucaliptus/static/media/logo2.e96f63fa0a6de49c9c78.png",
+    "static/media/visionImg.png": "/Front_inventario_eucaliptus/static/media/visionImg.66fa0a7badaf4d1867d3.png",
+    "static/media/logo.jpg": "/Front_inventario_eucaliptus/static/media/logo.38d13d9953fdc9f4c634.jpg",
+    "static/media/logoInterfaces.png": "/Front_inventario_eucaliptus/static/media/logoInterfaces.339bbb2bdbf5b543bf63.png",
+    "static/media/valuesImg.png": "/Front_inventario_eucaliptus/static/media/valuesImg.3aa0581e17536724d2c3.png",
+    "index.html": "/Front_inventario_eucaliptus/index.html",
+    "main.534494df.css.map": "/Front_inventario_eucaliptus/static/css/main.534494df.css.map",
+    "main.ea8cd4fe.js.map": "/Front_inventario_eucaliptus/static/js/main.ea8cd4fe.js.map",
+    "453.c2b2afdb.chunk.js.map": "/Front_inventario_eucaliptus/static/js/453.c2b2afdb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.534494df.css",
+    "static/js/main.ea8cd4fe.js"
+  ]
+}
