@@ -139,6 +139,7 @@ const RegisterProductModal = ({ id, isOpen, onClose, handleSubmit }) => {
     if (send) {
       handleService();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [send]);
 
   const handleModalOpen = ({ selectedEntity, selectedAction }) => {
@@ -268,7 +269,7 @@ const RegisterProductModal = ({ id, isOpen, onClose, handleSubmit }) => {
     fetchDescriptionByUnit(unitData.unitName);
     setOpenModalUnit(false);
   };
-  
+
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("modal-overlay")) {
       onClose();

@@ -48,6 +48,7 @@ const ReportTransactions = () => {
 
   useEffect(() => {
     handleUpdateData(typeTransaction, selectedUseFilter);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeTransaction, selectedUseFilter, productsData]);
 
   const handleReportChange = (selectedPeriod) => {

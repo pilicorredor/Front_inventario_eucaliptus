@@ -50,6 +50,7 @@ const ChooseProductsPurchase = () => {
 
   useEffect(() => {
     fetchProductsData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -167,6 +168,7 @@ const ChooseProductsPurchase = () => {
 
   useEffect(() => {
     handleUpdateData(categoryProd, selectedUseFilter);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryProd, selectedUseFilter, productsData]);
 
   const handleCategoryChange = (selectedCategory) => {

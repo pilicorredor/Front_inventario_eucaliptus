@@ -109,6 +109,7 @@ const Config = ({ userRol, username, handleLogout }) => {
 
   useEffect(() => {
     fetchPersonInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmitBtn = async () => {

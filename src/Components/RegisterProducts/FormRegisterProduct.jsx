@@ -91,6 +91,7 @@ const RegisterProduct = () => {
 
     fetchProviderById();
     fetchUnit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchUnit = async () => {
@@ -149,7 +150,7 @@ const RegisterProduct = () => {
     e.preventDefault();
 
     if (tooltipOpen) {
-      return; // Evita el envío del formulario si el tooltip de cantidades está abierto
+      return;
     }
 
     setSendProduct({
@@ -175,6 +176,7 @@ const RegisterProduct = () => {
     if (send) {
       handleService();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [send]);
 
   const handleModalOpen = ({ selectedEntity, selectedAction }) => {

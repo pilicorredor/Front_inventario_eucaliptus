@@ -41,6 +41,8 @@ export const SERVICES = {
     GET_HISTORY_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/getHistoryPurchase",
     GET_PURCHASE_DETAIL_SERVICE: "http://localhost:8084/billing/purchase/getPurchaseDetails",
     GET_SALE_DETAIL_SERVICE: "http://localhost:8084/billing/sale/getSaleDetails",
+    SEND_BILL_PURCHASE_SERVICE: "http://localhost:8084/billing/purchase/sendEmail",
+    SEND_BILL_SALE_SERVICE: "http://localhost:8084/billing/sale/sendEmail",
 }
 
 export const MODAL_TYPES = {

@@ -74,7 +74,6 @@ const CustomTableBill = ({ isSale }) => {
       const formattedDate = formatDate(pruchaseDate);
       setDateBill(formattedDate);
       setIdBill(purchaseID);
-      console.log(providerDTO);
 
       const subtotalPurchase = subtotal(purchaseRows);
       const taxesPurchase = taxTotal(purchaseRows);
@@ -84,6 +83,7 @@ const CustomTableBill = ({ isSale }) => {
       setInvoiceTaxes(taxesPurchase);
       setInvoiceTotal(subtotalPurchase + taxesPurchase);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSale, location.state]);
 
   return (

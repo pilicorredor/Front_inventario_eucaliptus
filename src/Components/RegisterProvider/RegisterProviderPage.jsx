@@ -145,12 +145,14 @@ const RegisterProvider = ({ providerData }) => {
     if (send) {
       handleService();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [send]);
 
   useEffect(() => {
     if (validationProvider) {
       handleValidateProvider();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validationProvider]);
 
   const handleValidateProvider = async () => {

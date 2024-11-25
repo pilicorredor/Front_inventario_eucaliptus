@@ -90,6 +90,7 @@ const CustomTableBillModal = ({
         setLoading(false); // Marca como listo
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isSale,
     saleDetails,

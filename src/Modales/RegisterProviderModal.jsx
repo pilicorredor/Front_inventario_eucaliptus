@@ -91,6 +91,7 @@ const RegisterProviderModal = ({ isOpen, onClose, handleSubmit }) => {
     if (send) {
       handleService();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [send]);
 
   const handleModalOpen = ({ selectedEntity, selectedAction }) => {
@@ -142,6 +143,7 @@ const RegisterProviderModal = ({ isOpen, onClose, handleSubmit }) => {
     if (validationProvider) {
       handleValidateProvider();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validationProvider]);
 
   const handleValidateProvider = async () => {

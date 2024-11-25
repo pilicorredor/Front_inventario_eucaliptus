@@ -57,6 +57,7 @@ const CustomModal = ({
       modalContent();
       setServiceCheck("");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openModal, action, entity]);
 
   const capitalize = (str) => {
@@ -71,6 +72,7 @@ const CustomModal = ({
     } else if (entity === ENTITIES.PRODUCTO) {
       setUrl(`${SERVICES.DELETE_PRODUCT_SERVICE}/${id}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleService = async () => {

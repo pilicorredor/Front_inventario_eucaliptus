@@ -127,6 +127,7 @@ const Products = ({ role }) => {
 
   useEffect(() => {
     handleUpdateData(categoryProd, selectedUseFilter);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryProd, selectedUseFilter, productsData]);
 
   const handleCategoryChange = (selectedCategory) => {
