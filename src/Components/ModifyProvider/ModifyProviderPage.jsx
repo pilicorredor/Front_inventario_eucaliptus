@@ -165,29 +165,33 @@ const ModifyProvider = () => {
       name === "companyPhoneNumber";
 
     const newValue = isNumericField ? validateNumericInput(value) : value;
+    setProviderSend((prevProvider) => {
+      const personDTO = prevProvider.personDTO || {};
+      const companyDTO = prevProvider.companyDTO || {};
 
-    if (name in providerSend.personDTO) {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        personDTO: {
-          ...prevProvider.personDTO,
+      if (name in personDTO) {
+        return {
+          ...prevProvider,
+          personDTO: {
+            ...personDTO,
+            [name]: newValue,
+          },
+        };
+      } else if (name in companyDTO) {
+        return {
+          ...prevProvider,
+          companyDTO: {
+            ...companyDTO,
+            [name]: newValue,
+          },
+        };
+      } else {
+        return {
+          ...prevProvider,
           [name]: newValue,
-        },
-      }));
-    } else if (name in providerSend.companyDTO) {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        companyDTO: {
-          ...prevProvider.companyDTO,
-          [name]: newValue,
-        },
-      }));
-    } else {
-      setProviderSend((prevProvider) => ({
-        ...prevProvider,
-        [name]: newValue,
-      }));
-    }
+        };
+      }
+    });
   };
 
   const handleInput = (event) => {
