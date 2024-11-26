@@ -59,7 +59,8 @@ const AppContent = () => {
             location.pathname === '/config/login-to-change-password' ||
             location.pathname === '/config/send-email-password' ||
             location.pathname === '/config/check-token-password' ||
-            location.pathname === '/config/recovery-update-password') {
+            location.pathname === '/config/recovery-update-password' ||
+            location.pathname === '/config/update-password') {
             setLogin(false);
         } else {
             setLogin(true);

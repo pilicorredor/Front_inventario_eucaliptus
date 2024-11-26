@@ -112,11 +112,11 @@ const HomePage = ({ username }) => {
         <div className="home-card-data">
           <div className="home-data">
             <p>Ingreso ventas</p>
-            <h2>${totalSalesIncome.toLocaleString("es-ES")}</h2>
+            <h2>${totalSalesIncome?.toLocaleString("es-ES")}</h2>
           </div>
           <div className="home-data">
             <p>Inversión compra productos</p>
-            <h2>${totalPurchaseInvestment.toLocaleString("es-ES")}</h2>
+            <h2>${totalPurchaseInvestment?.toLocaleString("es-ES")}</h2>
           </div>
           <div className="home-data">
             <p>Total ventas realizadas</p>
