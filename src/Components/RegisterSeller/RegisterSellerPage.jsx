@@ -79,7 +79,7 @@ const RegisterSeller = ({ sellerData }) => {
     if (send) {
       handleService();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [send]);
 
   const handleService = async () => {
@@ -344,7 +344,14 @@ const RegisterSeller = ({ sellerData }) => {
                   name="password"
                   value={seller.password}
                   onChange={handleInputChange}
+                  minLength="6"
                   required
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity(
+                      "La contraseña debe tener al menos 6 caracteres."
+                    )
+                  }
+                  onInput={(e) => e.target.setCustomValidity("")}
                 />
               </div>
             </div>

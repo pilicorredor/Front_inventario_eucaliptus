@@ -72,7 +72,7 @@ const LoginFormChangePswd = ({ handleLogin }) => {
         )}
         <form onSubmit={handleSubmit}>
           <img src={logo} alt="Logo de la Empresa" className="logo" />
-          <h1>Porfavor ingresa nuevamente para continuar</h1>
+          <h1>Por favor ingresa nuevamente para continuar</h1>
           <div className="input-box">
             <input
               type="text"
