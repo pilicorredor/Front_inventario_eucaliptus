@@ -443,7 +443,7 @@ const ChooseProductsPurchase = () => {
         </div>
       </div>
       {/* Botón "Terminar compra" solo si isButtonActive es true */}
-      {isButtonActive && (
+      {isButtonActive && sendProducts.length > 0 && (
         <div className="finish-purchase-btn-container">
           <button className="cancel-purchase-btn" onClick={handleClearProducts}>
             Cancelar compra
