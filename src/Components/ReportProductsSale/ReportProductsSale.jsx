@@ -7,8 +7,7 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import "./ReportProductsSale.css";
 import CircularProgress from "@mui/material/CircularProgress";
-import FailModal from "../../Modales/FailModal.jsx"
-
+import FailModal from "../../Modales/FailModal.jsx";
 
 const ReportPage = () => {
   const [periodReport, setPeriodReport] = useState(REPORT_PERIOD.DAILY);
@@ -44,12 +43,12 @@ const ReportPage = () => {
 
   const columnMap = {
     "ID del producto": "idProduct",
-    "Nombre": "productName",
-    "Categoría": "category",
-    "Uso": "use",
-    "Cantidad": "quantity",
+    Nombre: "productName",
+    Categoría: "category",
+    Uso: "use",
+    Cantidad: "quantity",
     "Sub Total": "totalPrice",
-  }
+  };
 
   useEffect(() => {
     handleUpdateData(periodReport, selectedSearchFilter);
@@ -93,7 +92,6 @@ const ReportPage = () => {
   };
 
   const handleSearchRange = async () => {
-    console.log("Buscar:", searchQuery, "Rango:", range);
     setLoading(true);
 
     const requestBody = {
@@ -149,7 +147,6 @@ const ReportPage = () => {
 
   const handleSearch = () => {
     if (!searchQuery || selectedSearchFilter === "Todos") {
-
       setFilteredData(productsData);
       return;
     }
@@ -157,7 +154,9 @@ const ReportPage = () => {
     const selectedColumn = columnMap[selectedSearchFilter];
 
     if (!selectedColumn) {
-      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      console.warn(
+        "No se ha seleccionado una columna válida para la búsqueda."
+      );
       return;
     }
 
@@ -282,7 +281,8 @@ const ReportPage = () => {
           <FailModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            message={messageFail} />
+            message={messageFail}
+          />
           {filteredData.length === 0 && (
             <p className="no-data-message">
               No hay registros en el tiempo seleccionado

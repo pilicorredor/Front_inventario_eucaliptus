@@ -6,6 +6,12 @@
   height: 100vh;
 }
 
+.scrollable-content {
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+  padding-right: 10px;
+}
+
 .products-header {
   display: flex;
   justify-content: flex-start;

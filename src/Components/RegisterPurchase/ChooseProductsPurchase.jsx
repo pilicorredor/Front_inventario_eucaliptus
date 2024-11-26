@@ -50,7 +50,7 @@ const ChooseProductsPurchase = () => {
 
   useEffect(() => {
     fetchProductsData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -168,7 +168,7 @@ const ChooseProductsPurchase = () => {
 
   useEffect(() => {
     handleUpdateData(categoryProd, selectedUseFilter);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryProd, selectedUseFilter, productsData]);
 
   const handleCategoryChange = (selectedCategory) => {
@@ -321,7 +321,7 @@ const ChooseProductsPurchase = () => {
   return (
     <div className="products">
       <Header pageTitle="Registrar Compra" />
-      <div>
+      <div className="scrollable-content">
         <div className="steps-section">
           <div className="stepTwo-title-left">
             <label className="step-by-step">Paso 2 de 3</label>
@@ -456,7 +456,7 @@ const ChooseProductsPurchase = () => {
           </button>
         </div>
       )}
-      {/* Modal de Proveedor */}
+
       <RegisterProductModal
         id={id}
         isOpen={isModalOpen}

@@ -14,11 +14,9 @@ import {
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import DropdownItem from "../DropdownItem/DropdownItem.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
-import FailModal from "../../Modales/FailModal.jsx"
-
+import FailModal from "../../Modales/FailModal.jsx";
 
 const Products = ({ role }) => {
-  console.log(role);
   const navigate = useNavigate();
   const [categoryProd, setCategoryProd] = useState(
     CATEGORY_PRODUCT.ALL_PRODUCTS
@@ -33,8 +31,6 @@ const Products = ({ role }) => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageFail, setMessageFail] = useState("");
-
-
 
   const columnsProducts = [
     "idProduct",
@@ -89,7 +85,6 @@ const Products = ({ role }) => {
       setLoading(false);
       setMessageFail("Error en la solicitud de productos");
       setIsModalOpen(true);
-      
     }
   };
 
@@ -117,17 +112,17 @@ const Products = ({ role }) => {
 
   const columnMap = {
     "ID del producto": "idProduct",
-    "Nombre": "productName",
-    "Marca": "brand",
-    "Categoría": "categoryProduct",
-    "Uso": "useProduct",
-    "Unidad": "unitName",
+    Nombre: "productName",
+    Marca: "brand",
+    Categoría: "categoryProduct",
+    Uso: "useProduct",
+    Unidad: "unitName",
     "Descripción unidad": "unitDescription",
   };
 
   useEffect(() => {
     handleUpdateData(categoryProd, selectedUseFilter);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryProd, selectedUseFilter, productsData]);
 
   const handleCategoryChange = (selectedCategory) => {
@@ -136,7 +131,6 @@ const Products = ({ role }) => {
 
   const handleSearch = () => {
     if (!searchQuery || selectedSearchFilter === "Todos") {
-
       setFilteredData(productsData);
       return;
     }
@@ -144,7 +138,9 @@ const Products = ({ role }) => {
     const selectedColumn = columnMap[selectedSearchFilter];
 
     if (!selectedColumn) {
-      console.warn("No se ha seleccionado una columna válida para la búsqueda.");
+      console.warn(
+        "No se ha seleccionado una columna válida para la búsqueda."
+      );
       return;
     }
 
@@ -308,7 +304,8 @@ const Products = ({ role }) => {
       <FailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        message={messageFail} />
+        message={messageFail}
+      />
     </div>
   );
 };
