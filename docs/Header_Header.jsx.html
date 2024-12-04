@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Header/Header.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Header/Header.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { IoNotificationsSharp } from "react-icons/io5";
+import { IoMdSettings } from "react-icons/io";
+import "./Header.css";
+import logo from "../../Assets/logoInterfaces.png";
+import NotificationModal from "./NotificationModal";
+import { useNavigate } from "react-router-dom";
+import { SERVICES } from "../../Constants/Constants.js";
+import FailModal from "../../Modales/FailModal.jsx";
+
+/**
+ * Componente de encabezado que muestra el título de la página, un ícono de notificaciones y un ícono de configuración.
+ * El componente maneja la visualización de notificaciones, el acceso a la configuración de la aplicación y el manejo de errores.
+ *
+ * @component
+ * @example
+ * &lt;Header pageTitle="Página de inicio" />
+ */
+const Header = ({ pageTitle }) => {
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const [notifications, setNotifications] = useState([]);
+  const [messageFail, setMessageFail] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  /**
+   * Recupera las notificaciones desde el servidor utilizando un token almacenado en el almacenamiento local.
+   * Si la recuperación es exitosa, las notificaciones se almacenan en el estado `notifications`.
+   * En caso de error, se establece un mensaje de error en `messageFail` y se muestra un modal.
+   *
+   * @async
+   */
+  const fetchNotifications = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.GET_SOTCK_NOTIFICATIONS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+      } else {
+        setMessageFail("No fue posible recuperar las notificaciones");
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      setMessageFail(
+        "Error interno del servidor durante la recuperacion de datos"
+      );
+      setIsModalOpen(true);
+    }
+  };
+
+  /**
+   * Elimina una notificación del estado `notifications` con base a su ID.
+   *
+   * @param {number} id - El ID de la notificación a eliminar.
+   * @function
+   */
+  const deleteNotification = (id) => {
+    const updatedNotifications = notifications.filter(
+      (notification) => notification.idNotification !== id
+    );
+    setNotifications(updatedNotifications);
+  };
+
+  const handleNotificationClick = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleSettingsClick = () => {
+    navigate("/config");
+  };
+
+  return (
+    &lt;div className="header">
+      &lt;div className="page-title">{pageTitle}&lt;/div>
+      &lt;ul className="header-options">
+        &lt;li>
+          &lt;IoMdSettings
+            className="header-link"
+            onClick={handleSettingsClick}
+            style={{ cursor: "pointer" }}
+          />
+        &lt;/li>
+        &lt;li>
+          &lt;IoNotificationsSharp
+            className="header-link"
+            onClick={handleNotificationClick}
+            style={{ cursor: "pointer" }}
+          />
+        &lt;/li>
+        &lt;li>
+          &lt;img src={logo} alt="logo" className="header-logo" />
+        &lt;/li>
+      &lt;/ul>
+      {showModal &amp;&amp; (
+        &lt;NotificationModal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          notifications={notifications}
+          deleteNotification={deleteNotification}
+        />
+      )}
+      &lt;FailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={messageFail}
+      />
+    &lt;/div>
+  );
+};
+
+export default Header;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

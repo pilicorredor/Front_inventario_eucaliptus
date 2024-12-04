@@ -4,6 +4,13 @@ import logo from "../../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
 import { DATA_COMPANY } from "../../Constants/Constants";
 
+/**
+ * Componente que genera una factura personalizada, ya sea de ventas o compras.
+ *
+ * @param {Object} props - Propiedades del componente.
+ * @param {boolean} props.isSale - Indica si se trata de una factura de venta (`true`) o de compra (`false`).
+ * @returns {JSX.Element} Tabla personalizada con los detalles de la factura.
+ */
 const CustomTableBill = ({ isSale }) => {
   const location = useLocation();
   const saleDetails = location.state?.saleDetails || [];
@@ -20,21 +27,51 @@ const CustomTableBill = ({ isSale }) => {
   const [invoiceTaxes, setInvoiceTaxes] = useState(0);
   const [invoiceTotal, setInvoiceTotal] = useState(0);
 
+  /**
+   * Calcula el precio total de una fila en base a la cantidad y el precio unitario.
+   * @param {number} qty - Cantidad del producto.
+   * @param {number} unitPrice - Precio unitario del producto.
+   * @returns {number} Precio total.
+   */
   const priceRow = (qty, unitPrice) => qty * unitPrice;
 
+  /**
+   * Calcula el subtotal sumando los subtotales de todos los productos.
+   * @param {Array<Object>} items - Lista de productos con sus detalles.
+   * @returns {number} Subtotal de la factura.
+   */
   const subtotal = (items) =>
     items.map(({ subtotal }) => subtotal).reduce((sum, i) => sum + i, 0);
 
+  /**
+   * Calcula el total de impuestos basado en el porcentaje de IVA de los productos.
+   * @param {Array<Object>} items - Lista de productos con sus detalles.
+   * @returns {number} Total de impuestos.
+   */
   const taxTotal = (items) =>
     items
       .map(({ tax, subtotal }) => subtotal * (tax / 100))
       .reduce((sum, i) => sum + i, 0);
 
+  /**
+   * Crea una fila con los detalles de un producto.
+   * @param {string} name - Nombre del producto.
+   * @param {string} use - Uso del producto.
+   * @param {number} unitPrice - Precio unitario del producto.
+   * @param {number} qty - Cantidad del producto.
+   * @param {number} tax - Porcentaje de impuestos (IVA) aplicado.
+   * @returns {Object} Objeto con los detalles del producto.
+   */
   const createRow = (name, use, unitPrice, qty, tax) => {
     const subtotal = priceRow(qty, unitPrice);
     return { name, use, unitPrice, qty, subtotal, tax };
   };
 
+  /**
+   * Formatea una fecha ISO a formato `DD/MM/YYYY`.
+   * @param {string} isoDate - Fecha en formato ISO (`YYYY-MM-DDTHH:MM:SS`).
+   * @returns {string} Fecha formateada.
+   */
   const formatDate = (isoDate) => {
     const [year, month, day] = isoDate.split("T")[0].split("-");
     return `${day}/${month}/${year}`;

@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ConfigPanel/ConfigPanel.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ConfigPanel/ConfigPanel.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
 import Header from "../Header/Header.jsx";
 import userImg from "../../Assets/person-circle.png";
 import "./ConfigPanel.css";
@@ -22,7 +50,7 @@ import { ROLES } from "../../Constants/Constants";
  * @param {Function} props.handleLogout - Función para cerrar sesión.
  *
  * @example
- * <Config userRol="ADMIN" username="usuario123" handleLogout={logoutFunction} />
+ * &lt;Config userRol="ADMIN" username="usuario123" handleLogout={logoutFunction} />
  */
 const Config = ({ userRol, username, handleLogout }) => {
   const [isNameEditable, setIsNameEditable] = useState(false);
@@ -171,133 +199,156 @@ const Config = ({ userRol, username, handleLogout }) => {
   };
 
   return (
-    <div className="config">
-      <Header pageTitle="Configuración" />
-      <div className="cofig-content">
-        <div className="card-user-info">
-          <img src={userImg} alt="User Icon" />
-          <div className="config-name">
+    &lt;div className="config">
+      &lt;Header pageTitle="Configuración" />
+      &lt;div className="cofig-content">
+        &lt;div className="card-user-info">
+          &lt;img src={userImg} alt="User Icon" />
+          &lt;div className="config-name">
             {personData.firstName} {personData.lastName}
-          </div>
-          <div className="config-userRol">Rol: {roleName}</div>
-        </div>
-        <p className="config-p">
+          &lt;/div>
+          &lt;div className="config-userRol">Rol: {roleName}&lt;/div>
+        &lt;/div>
+        &lt;p className="config-p">
           Actualiza la información de tu perfil en el momento que lo necesites,
           cuando estes satisfecho con tus cambios dale click al botón de
           “Guardar Cambios” y listo!
-        </p>
-        <form className="config-form">
-          {loading && (
-            <div className="loading-container">
-              <CircularProgress className="loading-icon" />
-            </div>
+        &lt;/p>
+        &lt;form className="config-form">
+          {loading &amp;&amp; (
+            &lt;div className="loading-container">
+              &lt;CircularProgress className="loading-icon" />
+            &lt;/div>
           )}
-          <div className="configForm-row">
-            <div className="configForm-item">
-              <label>Nombres</label>
-              <div className="config-input-and-button">
-                <input
+          &lt;div className="configForm-row">
+            &lt;div className="configForm-item">
+              &lt;label>Nombres&lt;/label>
+              &lt;div className="config-input-and-button">
+                &lt;input
                   type="text"
                   name="config-input-name"
                   placeholder={personData.firstName}
                   onChange={handleInputChange}
                   disabled={!isNameEditable}
                 />
-                <button onClick={handleEditName}>
-                  <FaEdit />
-                </button>
-              </div>
-            </div>
-            <div className="configForm-item">
-              <label>Apellidos</label>
-              <div className="config-input-and-button">
-                <input
+                &lt;button onClick={handleEditName}>
+                  &lt;FaEdit />
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="configForm-item">
+              &lt;label>Apellidos&lt;/label>
+              &lt;div className="config-input-and-button">
+                &lt;input
                   type="text"
                   name="config-input-lastname"
                   placeholder={personData.lastName}
                   onChange={handleInputChange}
                   disabled={!isLastNameEditable}
                 />
-                <button onClick={handleEditLastName}>
-                  <FaEdit />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="configForm-row">
-            <div className="configForm-item">
-              <label>Username</label>
-              <div className="config-input-and-button">
-                <input
+                &lt;button onClick={handleEditLastName}>
+                  &lt;FaEdit />
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="configForm-row">
+            &lt;div className="configForm-item">
+              &lt;label>Username&lt;/label>
+              &lt;div className="config-input-and-button">
+                &lt;input
                   type="text"
                   name="config-input-username"
                   placeholder={username}
                   onChange={handleInputChange}
                   disabled={!isUsernameEditable}
                 />
-                <button onClick={handleEditUsername}>
-                  <FaEdit />
-                </button>
-              </div>
-            </div>
-            <div className="configForm-item">
-              <label>Correo</label>
-              <div className="config-input-and-button">
-                <input
+                &lt;button onClick={handleEditUsername}>
+                  &lt;FaEdit />
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="configForm-item">
+              &lt;label>Correo&lt;/label>
+              &lt;div className="config-input-and-button">
+                &lt;input
                   type="text"
                   name="config-input-email"
                   placeholder={personData.email}
                   onChange={handleInputChange}
                   disabled={!isEmailEditable}
                 />
-                <button onClick={handleEditEmail}>
-                  <FaEdit />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="configForm-row">
-            <div className="configForm-item">
-              <label>Contraseña</label>
-              <div className="config-input-and-button">
-                <input
+                &lt;button onClick={handleEditEmail}>
+                  &lt;FaEdit />
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="configForm-row">
+            &lt;div className="configForm-item">
+              &lt;label>Contraseña&lt;/label>
+              &lt;div className="config-input-and-button">
+                &lt;input
                   type="text"
                   name="config-input-password"
                   placeholder="**********"
                   disabled={true}
                 />
-              </div>
-              <a href="/config/login-to-change-password" onClick={handleLogout}>
+              &lt;/div>
+              &lt;a href="/config/login-to-change-password" onClick={handleLogout}>
                 Actualizar contraseña
-              </a>
-            </div>
-          </div>
+              &lt;/a>
+            &lt;/div>
+          &lt;/div>
           {isSuccesful ? (
-            <SuccessModal
+            &lt;SuccessModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               message={messageSuccess}
             />
           ) : (
-            <FailModal
+            &lt;FailModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               message={messageFail}
             />
           )}
-        </form>
-        <div className="config-button-container">
-          <button
+        &lt;/form>
+        &lt;div className="config-button-container">
+          &lt;button
             className="confing-submit-btn"
             type="config-submit"
             onClick={handleSubmitBtn}
           >
             Guardar Cambios
-          </button>
-        </div>
-      </div>
-    </div>
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
   );
 };
 
 export default Config;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

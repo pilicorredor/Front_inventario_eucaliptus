@@ -1,4 +1,32 @@
-import React, { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RegisterSale/RegisterSale.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RegisterSale/RegisterSale.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../Header/Header.jsx";
 import CustomTableSale from "../CustomTableSale/CustomTableSale.jsx";
@@ -18,7 +46,7 @@ import FailModal from "../../Modales/FailModal.jsx";
  *
  * @example
  * // Uso de ejemplo:
- * <RegisterSale />
+ * &lt;RegisterSale />
  *
  * @returns {JSX.Element} Componente para registrar una venta.
  */
@@ -202,7 +230,7 @@ const RegisterSale = () => {
       setConsumerData((prevConsumer) => ({
         ...prevConsumer,
         [name]: processedValue,
-        ...(processedValue === "" && { nameClient: "", email: "" }),
+        ...(processedValue === "" &amp;&amp; { nameClient: "", email: "" }),
       }));
       if (processedValue.length >= 7) {
         handleClientSearch(processedValue);
@@ -229,7 +257,7 @@ const RegisterSale = () => {
     const maxLength = e.target.maxLength;
     const valueLength = e.target.value.length;
 
-    if (valueLength < minLength) {
+    if (valueLength &lt; minLength) {
       e.target.setCustomValidity(
         `El número debe tener entre ${minLength} y ${maxLength} digitos.`
       );
@@ -248,24 +276,24 @@ const RegisterSale = () => {
   };
 
   return (
-    <div className="products-sale">
-      <Header pageTitle="Registrar Venta" />
-      <div>
-        <div className="steps-section-register-sale">
-          <label className="step-by-step-register-sale">Paso 2 de 2</label>
-          <label className="step-information-register-sale">
+    &lt;div className="products-sale">
+      &lt;Header pageTitle="Registrar Venta" />
+      &lt;div>
+        &lt;div className="steps-section-register-sale">
+          &lt;label className="step-by-step-register-sale">Paso 2 de 2&lt;/label>
+          &lt;label className="step-information-register-sale">
             Datos del cliente
-          </label>
-        </div>
-        {loading && (
-          <div className="page-loading-container">
-            <CircularProgress className="page-loading-icon" />
-          </div>
+          &lt;/label>
+        &lt;/div>
+        {loading &amp;&amp; (
+          &lt;div className="page-loading-container">
+            &lt;CircularProgress className="page-loading-icon" />
+          &lt;/div>
         )}
-        <div className="customer-info-row">
-          <div className="customer-info-field">
-            <label>Número de Documento:</label>
-            <input
+        &lt;div className="customer-info-row">
+          &lt;div className="customer-info-field">
+            &lt;label>Número de Documento:&lt;/label>
+            &lt;input
               type="text"
               placeholder="Ingrese el documento"
               name="idClient"
@@ -277,10 +305,10 @@ const RegisterSale = () => {
               onInput={handleInputReset}
               className="customer-input"
             />
-          </div>
-          <div className="customer-info-field">
-            <label>Nombre:</label>
-            <input
+          &lt;/div>
+          &lt;div className="customer-info-field">
+            &lt;label>Nombre:&lt;/label>
+            &lt;input
               type="text"
               placeholder="Ingrese el nombre"
               name="nameClient"
@@ -290,10 +318,10 @@ const RegisterSale = () => {
               disabled={clientFound}
               className="customer-input"
             />
-          </div>
-          <div className="customer-info-field">
-            <label>Correo electrónico:</label>
-            <input
+          &lt;/div>
+          &lt;div className="customer-info-field">
+            &lt;label>Correo electrónico:&lt;/label>
+            &lt;input
               type="email"
               placeholder="Ingrese el correo"
               name="email"
@@ -302,14 +330,14 @@ const RegisterSale = () => {
               disabled={clientFound}
               className="customer-input"
             />
-          </div>
-        </div>
-        <div className="steps-section-register-sale">
-          <label className="step-information-register-sale">
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="steps-section-register-sale">
+          &lt;label className="step-information-register-sale">
             Resumen de venta
-          </label>
-        </div>
-        <CustomTableSale
+          &lt;/label>
+        &lt;/div>
+        &lt;CustomTableSale
           widthTable={"100%"}
           dataProducts={summaryData}
           customColumns={columnsProducts}
@@ -317,29 +345,52 @@ const RegisterSale = () => {
           isNewSale={false}
         />
 
-        <div className="generate-sale-btn-container">
-          <button
+        &lt;div className="generate-sale-btn-container">
+          &lt;button
             className="generate-sale-btn"
             onClick={handleNextSale}
             disabled={summaryData.length === 0}
           >
             Generar Venta
-          </button>
-        </div>
-        <CustomModal
+          &lt;/button>
+        &lt;/div>
+        &lt;CustomModal
           entity={entity}
           action={action}
           openModal={openModal}
           onClose={handleModalClose}
           successfull={false}
         />
-        <FailModal
+        &lt;FailModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           message={messageFail}
         />
-      </div>
-    </div>
+      &lt;/div>
+    &lt;/div>
   );
 };
 export default RegisterSale;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

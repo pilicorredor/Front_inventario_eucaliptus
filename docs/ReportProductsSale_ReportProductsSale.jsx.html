@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ReportProductsSale/ReportProductsSale.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ReportProductsSale/ReportProductsSale.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
 import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import Header from "../Header/Header.jsx";
@@ -17,7 +45,7 @@ import FailModal from "../../Modales/FailModal.jsx";
  * @component
  * @example
  * // Uso del componente en una aplicación React
- * <ReportPage />
+ * &lt;ReportPage />
  *
  * @returns {JSX.Element} Componente que muestra una tabla de productos con filtros
  *                         y opciones para buscar, actualizar el reporte y cambiar de periodo.
@@ -214,118 +242,141 @@ const ReportPage = () => {
   };
 
   return (
-    <div className="reports-page">
-      <Header pageTitle="Reporte Productos Vendidos" />
-      <div>
-        <div className="reports-header">
-          <button
+    &lt;div className="reports-page">
+      &lt;Header pageTitle="Reporte Productos Vendidos" />
+      &lt;div>
+        &lt;div className="reports-header">
+          &lt;button
             onClick={() => handleReportChange(REPORT_PERIOD.DAILY)}
             className={periodReport === REPORT_PERIOD.DAILY ? "selected" : ""}
           >
             Diario
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             onClick={() => handleReportChange(REPORT_PERIOD.WEEKLY)}
             className={periodReport === REPORT_PERIOD.WEEKLY ? "selected" : ""}
           >
             Semanal
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             onClick={() => handleReportChange(REPORT_PERIOD.MONTHLY)}
             className={periodReport === REPORT_PERIOD.MONTHLY ? "selected" : ""}
           >
             Mensual
-          </button>
-        </div>
+          &lt;/button>
+        &lt;/div>
 
-        <div className="calendar-container">
-          <div className="calendar-input-container">
-            <label htmlFor="date-picker">Escoger Fecha Inicial:</label>
-            <input
+        &lt;div className="calendar-container">
+          &lt;div className="calendar-input-container">
+            &lt;label htmlFor="date-picker">Escoger Fecha Inicial:&lt;/label>
+            &lt;input
               type="date"
               name="selectedDate"
               value={selectedDate}
               onChange={handleDateChange}
             />
-          </div>
-          <div>
-            {periodReport === REPORT_PERIOD.DAILY && range.start && (
-              <p>Fecha seleccionada: {formatDate(range.start)}</p>
+          &lt;/div>
+          &lt;div>
+            {periodReport === REPORT_PERIOD.DAILY &amp;&amp; range.start &amp;&amp; (
+              &lt;p>Fecha seleccionada: {formatDate(range.start)}&lt;/p>
             )}
-            {periodReport !== REPORT_PERIOD.DAILY &&
-              range.start &&
-              range.end && (
-                <p>
+            {periodReport !== REPORT_PERIOD.DAILY &amp;&amp;
+              range.start &amp;&amp;
+              range.end &amp;&amp; (
+                &lt;p>
                   Rango seleccionado: {formatDate(range.start)} -{" "}
                   {formatDate(range.end)}
-                </p>
+                &lt;/p>
               )}
-          </div>
-          {selectedDate && (
-            <button className="btn search-btn" onClick={handleSearchRange}>
+          &lt;/div>
+          {selectedDate &amp;&amp; (
+            &lt;button className="btn search-btn" onClick={handleSearchRange}>
               Buscar
-            </button>
+            &lt;/button>
           )}
-        </div>
+        &lt;/div>
 
-        {loading && (
-          <div className="page-loading-container">
-            <CircularProgress className="page-loading-icon" />
-          </div>
+        {loading &amp;&amp; (
+          &lt;div className="page-loading-container">
+            &lt;CircularProgress className="page-loading-icon" />
+          &lt;/div>
         )}
 
-        <div className="search-bar">
-          <div className="search-container">
-            <Dropdown
+        &lt;div className="search-bar">
+          &lt;div className="search-container">
+            &lt;Dropdown
               buttonText={productButtonText}
               content={
-                <>
+                &lt;>
                   {productItems.map((item) => (
-                    <DropdownItem
+                    &lt;DropdownItem
                       key={item}
                       onClick={() => handleSearchFilterSelection(item)}
                     >
                       {`${item}`}
-                    </DropdownItem>
+                    &lt;/DropdownItem>
                   ))}
-                </>
+                &lt;/>
               }
             />
-            <input
+            &lt;input
               type="text"
               placeholder="Ingresa tu búsqueda"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-            <SearchIcon className="search-icon" />
-            <button className="btn search-btn" onClick={handleSearch}>
+            &lt;SearchIcon className="search-icon" />
+            &lt;button className="btn search-btn" onClick={handleSearch}>
               Buscar
-            </button>
-          </div>
-        </div>
+            &lt;/button>
+          &lt;/div>
+        &lt;/div>
 
-        <div className="reports-content">
-          <FailModal
+        &lt;div className="reports-content">
+          &lt;FailModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             message={messageFail}
           />
-          {filteredData.length === 0 && (
-            <p className="no-data-message">
+          {filteredData.length === 0 &amp;&amp; (
+            &lt;p className="no-data-message">
               No hay registros en el tiempo seleccionado
-            </p>
+            &lt;/p>
           )}
-          <CustomTable
+          &lt;CustomTable
             data={filteredData}
             customColumns={columnsProducts}
             handleUpdateData={handleUpdateData}
             context={"report"}
           />
-        </div>
-      </div>
-    </div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
   );
 };
 
 export default ReportPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

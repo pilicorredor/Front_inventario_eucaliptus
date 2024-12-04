@@ -1,4 +1,32 @@
-import React, { useState, useEffect, useContext } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RegisterPurchase/ChooseProductsPurchase.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RegisterPurchase/ChooseProductsPurchase.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable.jsx";
 import SearchIcon from "@mui/icons-material/Search";
@@ -212,14 +240,14 @@ const ChooseProductsPurchase = () => {
     if (categoryProd !== CATEGORY_PRODUCT.ALL_PRODUCTS) {
       filteredProducts = filteredProducts.filter(
         (product) =>
-          (categoryProd === CATEGORY_PRODUCT.PERISHABLE &&
+          (categoryProd === CATEGORY_PRODUCT.PERISHABLE &amp;&amp;
             product.categoryProduct === "PERECEDERO") ||
-          (categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE &&
+          (categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE &amp;&amp;
             product.categoryProduct === "NO_PERECEDERO")
       );
     }
 
-    if (selectedUse && selectedUse !== "TODOS") {
+    if (selectedUse &amp;&amp; selectedUse !== "TODOS") {
       filteredProducts = filteredProducts.filter(
         (product) => product.useProduct === selectedUse
       );
@@ -330,46 +358,46 @@ const ChooseProductsPurchase = () => {
   };
 
   return (
-    <div className="products">
-      <Header pageTitle="Registrar Compra" />
-      <div className="scrollable-content">
-        <div className="steps-section">
-          <div className="stepTwo-title-left">
-            <label className="step-by-step">Paso 2 de 3</label>
-            <label className="step-information-2">
+    &lt;div className="products">
+      &lt;Header pageTitle="Registrar Compra" />
+      &lt;div className="scrollable-content">
+        &lt;div className="steps-section">
+          &lt;div className="stepTwo-title-left">
+            &lt;label className="step-by-step">Paso 2 de 3&lt;/label>
+            &lt;label className="step-information-2">
               Seleccionar producto a agregar
-            </label>
-          </div>
-          <div className="stepTwo-title-right">
-            <label>Proveedor: {provider}</label>
-            {!isButtonActive && (
-              <button
+            &lt;/label>
+          &lt;/div>
+          &lt;div className="stepTwo-title-right">
+            &lt;label>Proveedor: {provider}&lt;/label>
+            {!isButtonActive &amp;&amp; (
+              &lt;button
                 className="change-btn"
                 onClick={() => navigate("/compra/proveedor")}
               >
                 Cambiar
-              </button>
+              &lt;/button>
             )}
-          </div>
-        </div>
-        <div className="products-header">
-          <button
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="products-header">
+          &lt;button
             onClick={() => handleCategoryChange(CATEGORY_PRODUCT.ALL_PRODUCTS)}
             className={
               categoryProd === CATEGORY_PRODUCT.ALL_PRODUCTS ? "selected" : ""
             }
           >
             Todos
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             onClick={() => handleCategoryChange(CATEGORY_PRODUCT.PERISHABLE)}
             className={
               categoryProd === CATEGORY_PRODUCT.PERISHABLE ? "selected" : ""
             }
           >
             Perecederos
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             onClick={() =>
               handleCategoryChange(CATEGORY_PRODUCT.NON_PERISHABLE)
             }
@@ -378,72 +406,72 @@ const ChooseProductsPurchase = () => {
             }
           >
             No Perecederos
-          </button>
-        </div>
+          &lt;/button>
+        &lt;/div>
 
-        <div className="search-bar">
-          <div className="search-container">
-            <Dropdown
+        &lt;div className="search-bar">
+          &lt;div className="search-container">
+            &lt;Dropdown
               buttonText={productButtonText}
               content={
-                <>
+                &lt;>
                   {" "}
                   {productItems.map((item) => (
-                    <DropdownItem
+                    &lt;DropdownItem
                       key={item}
                       onClick={() => handleSearchFilterSelection(item)}
                     >
                       {`${item}`}
-                    </DropdownItem>
+                    &lt;/DropdownItem>
                   ))}{" "}
-                </>
+                &lt;/>
               }
             />
-            <input
+            &lt;input
               type="text"
               placeholder="Ingresa tu búsqueda"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-            <SearchIcon className="search-icon" />
-            <button className="btn search-btn" onClick={handleSearch}>
+            &lt;SearchIcon className="search-icon" />
+            &lt;button className="btn search-btn" onClick={handleSearch}>
               Buscar
-            </button>
-          </div>
-          <button className="btn new-btn" onClick={handleNewButtonClick}>
+            &lt;/button>
+          &lt;/div>
+          &lt;button className="btn new-btn" onClick={handleNewButtonClick}>
             Nuevo
-          </button>
-        </div>
+          &lt;/button>
+        &lt;/div>
 
         {/* Nuevo filtro por uso */}
-        <div className="filter-use">
-          <label>Filtrar por:</label>
-          <Dropdown
+        &lt;div className="filter-use">
+          &lt;label>Filtrar por:&lt;/label>
+          &lt;Dropdown
             buttonText={useButtonText}
             content={
-              <>
+              &lt;>
                 {" "}
                 {availableUses.map((item) => (
-                  <DropdownItem
+                  &lt;DropdownItem
                     key={item}
                     onClick={() => handleUseFilterSelection(item)}
                   >
                     {`${item}`}
-                  </DropdownItem>
+                  &lt;/DropdownItem>
                 ))}{" "}
-              </>
+              &lt;/>
             }
           />
-        </div>
+        &lt;/div>
 
-        <div className="products-content">
-          {loading && (
-            <div className="loading-container">
-              <CircularProgress className="loading-icon" />
-            </div>
+        &lt;div className="products-content">
+          {loading &amp;&amp; (
+            &lt;div className="loading-container">
+              &lt;CircularProgress className="loading-icon" />
+            &lt;/div>
           )}
-          <CustomTable
+          &lt;CustomTable
             data={filteredData}
             customColumns={columnsProducts}
             handleUpdateData={handleUpdateData}
@@ -451,37 +479,60 @@ const ChooseProductsPurchase = () => {
             fetchProductsData={fetchProductsData}
             context={contextTable}
           />
-        </div>
-      </div>
+        &lt;/div>
+      &lt;/div>
       {/* Botón "Terminar compra" solo si isButtonActive es true */}
-      {isButtonActive && sendProducts.length > 0 && (
-        <div className="finish-purchase-btn-container">
-          <button className="cancel-purchase-btn" onClick={handleClearProducts}>
+      {isButtonActive &amp;&amp; sendProducts.length > 0 &amp;&amp; (
+        &lt;div className="finish-purchase-btn-container">
+          &lt;button className="cancel-purchase-btn" onClick={handleClearProducts}>
             Cancelar compra
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             className="finish-purchase-btn"
             onClick={handleFinishPurchase}
           >
             Terminar compra
-          </button>
-        </div>
+          &lt;/button>
+        &lt;/div>
       )}
 
-      <RegisterProductModal
+      &lt;RegisterProductModal
         id={id}
         isOpen={isModalOpen}
         onClose={handleModalClose}
         handleSubmit={handleSubmit}
       />
-      <CalendarModal
+      &lt;CalendarModal
         isOpen={isCalendarOpen}
         onClose={handleCalendarCancel}
         onConfirm={handleCalendarConfirm}
         onLoading={loading}
       />
-    </div>
+    &lt;/div>
   );
 };
 
 export default ChooseProductsPurchase;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

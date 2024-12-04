@@ -1,4 +1,32 @@
-import React, { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CustomTable/CustomTable.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CustomTable/CustomTable.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -24,8 +52,8 @@ import {
  * acciones de edición, eliminación y navegación a otros componentes.
  *
  * @param {Object} props - Propiedades del componente.
- * @param {Array<Object>} props.data - Datos a mostrar en la tabla.
- * @param {Array<string>} props.customColumns - Columnas personalizadas para la tabla.
+ * @param {Array&lt;Object>} props.data - Datos a mostrar en la tabla.
+ * @param {Array&lt;string>} props.customColumns - Columnas personalizadas para la tabla.
  * @param {string} props.role - Rol de la entidad a gestionar (e.g., "proveedor", "producto").
  * @param {Function} props.handleUpdateData - Función para actualizar los datos al cerrar el modal.
  * @param {Function} props.fetchProductsData - Función para recargar la información de productos.
@@ -120,7 +148,7 @@ const CustomTable = ({
 
   /**
    * Etiquetas de las columnas de la tabla para personalización.
-   * @constant {Object<string, string>}
+   * @constant {Object&lt;string, string>}
    */
   const columnNamesLabels = {
     id_modify: "ID",
@@ -155,10 +183,10 @@ const CustomTable = ({
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden", margin: "auto" }}>
-      <div style={{ display: "flex", flexDirection: "column", height: "80%" }}>
-        <TableContainer sx={{ maxHeight: 250 }}>
-          <Table
+    &lt;Paper sx={{ width: "100%", overflow: "hidden", margin: "auto" }}>
+      &lt;div style={{ display: "flex", flexDirection: "column", height: "80%" }}>
+        &lt;TableContainer sx={{ maxHeight: 250 }}>
+          &lt;Table
             stickyHeader
             aria-label="sticky table"
             sx={{
@@ -167,10 +195,10 @@ const CustomTable = ({
               minWidth: 400,
             }}
           >
-            <TableHead>
-              <TableRow>
+            &lt;TableHead>
+              &lt;TableRow>
                 {customColumns.map((column) => (
-                  <TableCell
+                  &lt;TableCell
                     key={column}
                     sx={{
                       backgroundColor: "#F8DEC4",
@@ -183,10 +211,10 @@ const CustomTable = ({
                     }}
                   >
                     {columnNamesLabels[column]}
-                  </TableCell>
+                  &lt;/TableCell>
                 ))}
-                {context !== "report" && personRole !== ROLES.SELLER && (
-                  <TableCell
+                {context !== "report" &amp;&amp; personRole !== ROLES.SELLER &amp;&amp; (
+                  &lt;TableCell
                     sx={{
                       backgroundColor: "#F8DEC4",
                       color: "#000000",
@@ -195,17 +223,17 @@ const CustomTable = ({
                     }}
                   >
                     Operación
-                  </TableCell>
+                  &lt;/TableCell>
                 )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
+              &lt;/TableRow>
+            &lt;/TableHead>
+            &lt;TableBody>
               {data
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <TableRow hover tabIndex={-1} key={row.id}>
+                  &lt;TableRow hover tabIndex={-1} key={row.id}>
                     {customColumns.map((item) => (
-                      <TableCell
+                      &lt;TableCell
                         key={item}
                         sx={{
                           textAlign: "center",
@@ -216,10 +244,10 @@ const CustomTable = ({
                         }}
                       >
                         {row[item]}
-                      </TableCell>
+                      &lt;/TableCell>
                     ))}
-                    {context !== "report" && personRole !== ROLES.SELLER && (
-                      <TableCell
+                    {context !== "report" &amp;&amp; personRole !== ROLES.SELLER &amp;&amp; (
+                      &lt;TableCell
                         sx={{
                           textAlign: "center",
                           borderRight: "1px solid #ddd",
@@ -232,7 +260,7 @@ const CustomTable = ({
                             context === REPORT_TRANSACTION.PURCHASE
                           ) {
                             return (
-                              <button
+                              &lt;button
                                 onClick={() => handleSelect(row.id_modify)}
                                 style={{
                                   backgroundColor: "#227e3c",
@@ -245,7 +273,7 @@ const CustomTable = ({
                                 }}
                               >
                                 Ver Factura
-                              </button>
+                              &lt;/button>
                             );
                           }
 
@@ -257,7 +285,7 @@ const CustomTable = ({
                             ].includes(context)
                           ) {
                             return (
-                              <button
+                              &lt;button
                                 onClick={() => handleSelect(row.id_modify)}
                                 style={{
                                   backgroundColor: "#227e3c",
@@ -270,19 +298,19 @@ const CustomTable = ({
                                 }}
                               >
                                 Seleccionar
-                              </button>
+                              &lt;/button>
                             );
                           }
 
                           return (
-                            <>
-                              <IconButton
+                            &lt;>
+                              &lt;IconButton
                                 aria-label="edit"
                                 onClick={() => handleEdit(row.id_modify)}
                               >
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton
+                                &lt;EditIcon />
+                              &lt;/IconButton>
+                              &lt;IconButton
                                 aria-label="delete"
                                 onClick={() =>
                                   handleModalOpen({
@@ -292,19 +320,19 @@ const CustomTable = ({
                                   })
                                 }
                               >
-                                <DeleteIcon />
-                              </IconButton>
-                            </>
+                                &lt;DeleteIcon />
+                              &lt;/IconButton>
+                            &lt;/>
                           );
                         })()}
-                      </TableCell>
+                      &lt;/TableCell>
                     )}
-                  </TableRow>
+                  &lt;/TableRow>
                 ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
+            &lt;/TableBody>
+          &lt;/Table>
+        &lt;/TableContainer>
+        &lt;TablePagination
           rowsPerPageOptions={[5, 25, 100]}
           component="div"
           count={data.length}
@@ -313,22 +341,45 @@ const CustomTable = ({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        <CustomModal
+        &lt;CustomModal
           entity={entity}
           action={action}
           openModal={openModal}
           onClose={handleModalClose}
           id={selectedId}
         />
-        <CustomModalBill
+        &lt;CustomModalBill
           isOpen={isBillModalOpen}
           billId={selectedBillId}
           onClose={handleModalBillClose}
           typeBill={context}
         />
-      </div>
-    </Paper>
+      &lt;/div>
+    &lt;/Paper>
   );
 };
 
 export default CustomTable;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

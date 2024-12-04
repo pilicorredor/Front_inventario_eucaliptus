@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: HomePage/HomePage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: HomePage/HomePage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import "./HomePage.css";
+import Header from "../Header/Header.jsx";
+import coutionLogo from "../../Assets/danger.png";
+import DataTable from "./DataTable.jsx";
+import { SERVICES } from "../../Constants/Constants.js";
+import CircularProgress from "@mui/material/CircularProgress";
+import FailModal from "../../Modales/FailModal.jsx";
+
+/**
+ * Componente principal de la página de inicio de la aplicación.
+ *
+ * Este componente muestra un resumen de las estadísticas de ventas y compras,
+ * además de una tabla con los productos próximos a vencer.
+ *
+ * @component
+ * @param {Object} props - Props del componente.
+ * @param {string} props.username - El nombre del usuario que se muestra en el mensaje de bienvenida.
+ *
+ * @example
+ * &lt;HomePage username="Evelio" />
+ */
+const HomePage = ({ username }) => {
+  const [productsData, setProductsData] = useState([]);
+  const [totalSalesIncome, setTotalSalesIncome] = useState("");
+  const [totalPurchaseInvestment, setTotalPurchaseInvestment] = useState("");
+  const [totalSalesCount, setTotalSalesCount] = useState("");
+  const [totalPurchasesCount, setTotalPurchasesCount] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageFail, setMessageFail] = useState("");
+
+  useEffect(() => {
+    fetchExpiringProductsData();
+    fetchSummaryData();
+  }, []);
+
+  /**
+   * Obtiene la lista de productos que están próximos a vencer desde el servidor.
+   *
+   * Realiza una solicitud a la API y actualiza el estado `productsData` con los datos obtenidos.
+   * Muestra un mensaje de error en caso de falla.
+   *
+   * @async
+   * @function
+   */
+  const fetchExpiringProductsData = async () => {
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.GET_EXPIRING_PRODUCTS, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setLoading(false);
+        const data = await response.json();
+        const formattedProducts = data.map((product) => ({
+          idProduct: product.idProduct,
+          productName: product.productName,
+          quantity: product.quantity,
+          dueDate: product.dueDate,
+        }));
+        setProductsData(formattedProducts);
+      } else {
+        setLoading(false);
+        setMessageFail("No fue posible recuperar los datos");
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      setMessageFail(
+        "Error interno del servidor durante la recuperacion de datos"
+      );
+      setIsModalOpen(true);
+    }
+  };
+
+   /**
+   * Obtiene el resumen de las estadísticas de ventas y compras desde el servidor.
+   *
+   * Actualiza los estados relacionados con las métricas de ingresos, inversiones y conteos.
+   * Muestra un mensaje de error en caso de falla.
+   *
+   * @async
+   * @function
+   */
+  const fetchSummaryData = async () => {
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(SERVICES.GET_HOMEPAGE_SUMMARY, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setLoading(false);
+        const data = await response.json();
+        setTotalSalesIncome(data.totalSalesIncome);
+        setTotalPurchaseInvestment(data.totalPurchaseInvestment);
+        setTotalSalesCount(data.totalSalesCount);
+        setTotalPurchasesCount(data.totalPurchasesCount);
+      } else {
+        setLoading(false);
+        setMessageFail("No fue posible recuperar los datos");
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      setMessageFail(
+        "Error interno del servidor durante la recuperacion de datos"
+      );
+      setIsModalOpen(true);
+    }
+  };
+
+  return (
+    &lt;div className="homepage-admin">
+      &lt;Header pageTitle="Inicio" />
+      &lt;div className="homepage-admin-content">
+        {loading &amp;&amp; (
+          &lt;div className="loading-container">
+            &lt;CircularProgress className="loading-icon" />
+          &lt;/div>
+        )}
+        &lt;div className="homepage-admin-welcoming-message">
+          &lt;h2>
+            Hola {username}, estos son algunos datos de la operación durante
+            este mes:{" "}
+          &lt;/h2>
+        &lt;/div>
+
+        &lt;div className="home-card-data">
+          &lt;div className="home-data">
+            &lt;p>Ingreso ventas&lt;/p>
+            &lt;h2>${totalSalesIncome?.toLocaleString("es-ES")}&lt;/h2>
+          &lt;/div>
+          &lt;div className="home-data">
+            &lt;p>Inversión compra productos&lt;/p>
+            &lt;h2>${totalPurchaseInvestment?.toLocaleString("es-ES")}&lt;/h2>
+          &lt;/div>
+          &lt;div className="home-data">
+            &lt;p>Total ventas realizadas&lt;/p>
+            &lt;h2> {totalSalesCount} &lt;/h2>
+          &lt;/div>
+          &lt;div className="home-data">
+            &lt;p>Total compras realizadas&lt;/p>
+            &lt;h2> {totalPurchasesCount} &lt;/h2>
+          &lt;/div>
+        &lt;/div>
+
+        &lt;div className="expire-products-label">
+          &lt;img src={coutionLogo} alt="Caution Icon" />
+          &lt;p>Productos a vencer próximamente:&lt;/p>
+        &lt;/div>
+
+        &lt;div className="home-expire-data-table">
+          &lt;DataTable data={productsData} />
+        &lt;/div>
+      &lt;/div>
+      &lt;FailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={messageFail}
+      />
+    &lt;/div>
+  );
+};
+
+export default HomePage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

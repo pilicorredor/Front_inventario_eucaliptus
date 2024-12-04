@@ -3,6 +3,17 @@ import logo from "../../Assets/logoInterfaces.png";
 import "./CustomTableBill.css";
 import { DATA_COMPANY } from "../../Constants/Constants";
 
+/**
+ * Componente que genera y muestra un modal con los detalles de una factura, ya sea de una venta o compra.
+ * Calcula subtotales, impuestos y totales basados en los detalles de productos, y formatea los datos para su visualización.
+ *
+ * @component
+ * @example
+ * const saleDetails = [detalles de la venta ]
+ * const purchaseDetails = [detalles de la compra];
+ * const clientData = {datos del cliente};
+ * const providerData = {datos del proveedor};
+ */
 const CustomTableBillModal = ({
   isSale,
   saleDetails,

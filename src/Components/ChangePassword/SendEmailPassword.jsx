@@ -7,6 +7,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEmail } from "../../Context/EmailContext";
 import FailModal from "../../Modales/FailModal.jsx";
 
+/**
+ * Componente para enviar un correo electrónico de recuperación de contraseña.
+ * Permite a los usuarios ingresar su correo electrónico y recibir un enlace o código para restablecer su contraseña.
+ *
+ * @component
+ *
+ * @example
+ * <SendEmailPassword />
+ */
 const SendEmailPassword = () => {
   const { email, setEmail } = useEmail();
   const navigate = useNavigate();

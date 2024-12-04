@@ -7,6 +7,19 @@ import { useNavigate } from "react-router-dom";
 import { SERVICES } from "../../Constants/Constants";
 import CircularProgress from "@mui/material/CircularProgress";
 
+/**
+ * Componente de formulario de inicio de sesión con la funcionalidad de cambiar contraseña.
+ * Permite al usuario autenticarse en la aplicación y redirigirlo a la página de configuración
+ * para actualizar su contraseña.
+ *
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {function} props.handleLogin - Función que se ejecuta después de un inicio de sesión exitoso,
+ *                                       para manejar el estado de autenticación del usuario.
+ *
+ * @example
+ * <LoginFormChangePswd handleLogin={handleLogin} />
+ */
 const LoginFormChangePswd = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

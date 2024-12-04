@@ -7,6 +7,15 @@ import { SERVICES, ENTITIES } from "../../Constants/Constants";
 import FailModal from "../../Modales/FailModal.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 
+/**
+ * `ChooseProvider` - Componente que permite elegir un proveedor para registrar un producto.
+ * 
+ * Este componente maneja la búsqueda, visualización y selección de proveedores desde una lista,
+ * mostrando los detalles de cada proveedor en una tabla y permitiendo filtrar por nombre o datos
+ * específicos.
+ * 
+ * @component
+ */
 const ChooseProvider = () => {
   const [role] = useState("proveedor");
   const [contextTable] = useState("registerProd");

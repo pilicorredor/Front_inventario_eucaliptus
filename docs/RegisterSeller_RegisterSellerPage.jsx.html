@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RegisterSeller/RegisterSellerPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RegisterSeller/RegisterSellerPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegisterSeller.css";
 import logo from "../../Assets/logo2.png";
@@ -19,7 +47,7 @@ import CircularProgress from "@mui/material/CircularProgress";
  * @component
  * @example
  * const sellerData = { idPerson: "123", firstName: "John", lastName: "Suarez", ... };
- * return <RegisterSeller sellerData={sellerData} />;
+ * return &lt;RegisterSeller sellerData={sellerData} />;
  */
 const RegisterSeller = ({ sellerData }) => {
   const navigate = useNavigate();
@@ -200,7 +228,7 @@ const RegisterSeller = ({ sellerData }) => {
     const maxLength = e.target.maxLength;
     const valueLength = e.target.value.length;
 
-    if (valueLength < minLength) {
+    if (valueLength &lt; minLength) {
       e.target.setCustomValidity(
         `El número debe tener entre ${minLength} y ${maxLength} digitos.`
       );
@@ -214,28 +242,28 @@ const RegisterSeller = ({ sellerData }) => {
   };
 
   return (
-    <div className="seller-section-container">
-      <Header pageTitle="Personal - Vendedor" />
-      <div className="seller-section">
-        {loading && (
-          <div className="page-loading-container">
-            <CircularProgress className="page-loading-icon" />
-          </div>
+    &lt;div className="seller-section-container">
+      &lt;Header pageTitle="Personal - Vendedor" />
+      &lt;div className="seller-section">
+        {loading &amp;&amp; (
+          &lt;div className="page-loading-container">
+            &lt;CircularProgress className="page-loading-icon" />
+          &lt;/div>
         )}
         {update ? (
-          <label className="sellerSection-title">Modificar Vendedor</label>
+          &lt;label className="sellerSection-title">Modificar Vendedor&lt;/label>
         ) : (
-          <label className="sellerSection-title">Agregar Nuevo Vendedor</label>
+          &lt;label className="sellerSection-title">Agregar Nuevo Vendedor&lt;/label>
         )}
-        <form className="sellerForm" onSubmit={handleSubmit}>
-          <div className="sellerForm-section">
-            <h3 className="sellerForm-title">Información básica</h3>
-            <div className="sellerForm-row">
-              <div className="sellerForm-item">
-                <label>
-                  Nombres <span className="red">*</span>
-                </label>
-                <input
+        &lt;form className="sellerForm" onSubmit={handleSubmit}>
+          &lt;div className="sellerForm-section">
+            &lt;h3 className="sellerForm-title">Información básica&lt;/h3>
+            &lt;div className="sellerForm-row">
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Nombres &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="firstName"
                   value={seller.firstName}
@@ -243,12 +271,12 @@ const RegisterSeller = ({ sellerData }) => {
                   onInput={handleInput}
                   required
                 />
-              </div>
-              <div className="sellerForm-item">
-                <label>
-                  Apellidos <span className="red">*</span>
-                </label>
-                <input
+              &lt;/div>
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Apellidos &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="lastName"
                   value={seller.lastName}
@@ -256,14 +284,14 @@ const RegisterSeller = ({ sellerData }) => {
                   onInput={handleInput}
                   required
                 />
-              </div>
-            </div>
-            <div className="sellerForm-row">
-              <div className="sellerForm-item">
-                <label>
-                  Correo electrónico <span className="red">*</span>
-                </label>
-                <input
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="sellerForm-row">
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Correo electrónico &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="email"
                   name="email"
                   placeholder="usuario@example.com"
@@ -271,12 +299,12 @@ const RegisterSeller = ({ sellerData }) => {
                   onChange={handleInputChange}
                   required
                 />
-              </div>
-              <div className="sellerForm-item">
-                <label>
-                  Teléfono <span className="red">*</span>
-                </label>
-                <input
+              &lt;/div>
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Teléfono &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="phoneNumber"
                   value={seller.phoneNumber}
@@ -287,33 +315,33 @@ const RegisterSeller = ({ sellerData }) => {
                   onInvalid={handleValidation}
                   onInput={handleInputReset}
                 />
-              </div>
-            </div>
-            <div className="sellerForm-row">
-              <div className="sellerForm-item">
-                <label>
-                  Tipo de documento <span className="red">*</span>
-                </label>
-                <select
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="sellerForm-row">
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Tipo de documento &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;select
                   name="documentType"
                   value={seller.documentType}
                   onChange={handleInputChange}
                   required
                 >
-                  <option value={DOCUMENT_TYPE.CEDULA}>
+                  &lt;option value={DOCUMENT_TYPE.CEDULA}>
                     Cédula de Ciudadanía
-                  </option>
-                  <option value={DOCUMENT_TYPE.IMMIGRATION_CARD}>
+                  &lt;/option>
+                  &lt;option value={DOCUMENT_TYPE.IMMIGRATION_CARD}>
                     Cédula de Extranjera
-                  </option>
-                  <option value={DOCUMENT_TYPE.PASSPORT}>Pasaporte</option>
-                </select>
-              </div>
-              <div className="sellerForm-item">
-                <label>
-                  Número de documento <span className="red">*</span>
-                </label>
-                <input
+                  &lt;/option>
+                  &lt;option value={DOCUMENT_TYPE.PASSPORT}>Pasaporte&lt;/option>
+                &lt;/select>
+              &lt;/div>
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Número de documento &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="idPerson"
                   value={seller.idPerson}
@@ -324,31 +352,31 @@ const RegisterSeller = ({ sellerData }) => {
                   onInvalid={handleValidation}
                   onInput={handleInputReset}
                 />
-              </div>
-            </div>
-          </div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
 
-          <div className="sellerForm-section">
-            <h3 className="sellerForm-title">Información del Vendedor</h3>
+          &lt;div className="sellerForm-section">
+            &lt;h3 className="sellerForm-title">Información del Vendedor&lt;/h3>
 
-            <div className="sellerForm-row">
-              <div className="sellerForm-item">
-                <label>
-                  Usuario <span className="red">*</span>
-                </label>
-                <input
+            &lt;div className="sellerForm-row">
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Usuario &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="username"
                   value={seller.username}
                   onChange={handleInputChange}
                   required
                 />
-              </div>
-              <div className="sellerForm-item">
-                <label>
-                  Contraseña <span className="red">*</span>
-                </label>
-                <input
+              &lt;/div>
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Contraseña &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="password"
                   value={seller.password}
@@ -362,44 +390,67 @@ const RegisterSeller = ({ sellerData }) => {
                   }
                   onInput={(e) => e.target.setCustomValidity("")}
                 />
-              </div>
-            </div>
-            <div className="sellerForm-row">
-              <div className="sellerForm-item">
-                <label>
-                  Dirección de residencia <span className="red">*</span>
-                </label>
-                <input
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="sellerForm-row">
+              &lt;div className="sellerForm-item">
+                &lt;label>
+                  Dirección de residencia &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   type="text"
                   name="address"
                   value={seller.address}
                   onChange={handleInputChange}
                   required
                 />
-              </div>
-            </div>
-          </div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
 
-          <button type="submit" className="seller-button">
+          &lt;button type="submit" className="seller-button">
             {update
               ? BUTTONS_ACTIONS.MODIFICAR.charAt(0).toUpperCase() +
                 BUTTONS_ACTIONS.MODIFICAR.slice(1)
               : BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
                 BUTTONS_ACTIONS.REGISTRAR.slice(1)}
-          </button>
-          <img src={logo} alt="logo" className="seller-logo" />
+          &lt;/button>
+          &lt;img src={logo} alt="logo" className="seller-logo" />
 
-          <CustomModal
+          &lt;CustomModal
             entity={entity}
             action={action}
             openModal={openModal}
             onClose={handleModalClose}
             successfull={successful}
           />
-        </form>
-      </div>
-    </div>
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
   );
 };
 
 export default RegisterSeller;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Products/Products.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Products/Products.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../CustomTable/CustomTable";
 import SearchIcon from "@mui/icons-material/Search";
@@ -24,7 +52,7 @@ import FailModal from "../../Modales/FailModal.jsx";
  * @component
  * @example
  * return (
- *   <Products role="admin" />
+ *   &lt;Products role="admin" />
  * );
  *
  * @param {Object} props - Props del componente
@@ -190,14 +218,14 @@ const Products = ({ role }) => {
     if (categoryProd !== CATEGORY_PRODUCT.ALL_PRODUCTS) {
       filteredProducts = filteredProducts.filter(
         (product) =>
-          (categoryProd === CATEGORY_PRODUCT.PERISHABLE &&
+          (categoryProd === CATEGORY_PRODUCT.PERISHABLE &amp;&amp;
             product.categoryProduct === "PERECEDERO") ||
-          (categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE &&
+          (categoryProd === CATEGORY_PRODUCT.NON_PERISHABLE &amp;&amp;
             product.categoryProduct === "NO_PERECEDERO")
       );
     }
 
-    if (selectedUse && selectedUse !== "TODOS") {
+    if (selectedUse &amp;&amp; selectedUse !== "TODOS") {
       filteredProducts = filteredProducts.filter(
         (product) => product.useProduct === selectedUse
       );
@@ -231,27 +259,27 @@ const Products = ({ role }) => {
   };
 
   return (
-    <div className="products">
-      <Header pageTitle="Productos" />
-      <div>
-        <div className="products-header">
-          <button
+    &lt;div className="products">
+      &lt;Header pageTitle="Productos" />
+      &lt;div>
+        &lt;div className="products-header">
+          &lt;button
             onClick={() => handleCategoryChange(CATEGORY_PRODUCT.ALL_PRODUCTS)}
             className={
               categoryProd === CATEGORY_PRODUCT.ALL_PRODUCTS ? "selected" : ""
             }
           >
             Todos
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             onClick={() => handleCategoryChange(CATEGORY_PRODUCT.PERISHABLE)}
             className={
               categoryProd === CATEGORY_PRODUCT.PERISHABLE ? "selected" : ""
             }
           >
             Perecederos
-          </button>
-          <button
+          &lt;/button>
+          &lt;button
             onClick={() =>
               handleCategoryChange(CATEGORY_PRODUCT.NON_PERISHABLE)
             }
@@ -260,74 +288,74 @@ const Products = ({ role }) => {
             }
           >
             No Perecederos
-          </button>
-        </div>
+          &lt;/button>
+        &lt;/div>
 
-        <div className="search-bar">
-          <div className="search-container">
-            <Dropdown
+        &lt;div className="search-bar">
+          &lt;div className="search-container">
+            &lt;Dropdown
               buttonText={productButtonText}
               content={
-                <>
+                &lt;>
                   {" "}
                   {productItems.map((item) => (
-                    <DropdownItem
+                    &lt;DropdownItem
                       key={item}
                       onClick={() => handleSearchFilterSelection(item)}
                     >
                       {`${item}`}
-                    </DropdownItem>
+                    &lt;/DropdownItem>
                   ))}{" "}
-                </>
+                &lt;/>
               }
             />
-            <input
+            &lt;input
               type="text"
               placeholder="Ingresa tu búsqueda"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-            <SearchIcon className="search-icon" />
-            <button className="btn search-btn" onClick={handleSearch}>
+            &lt;SearchIcon className="search-icon" />
+            &lt;button className="btn search-btn" onClick={handleSearch}>
               Buscar
-            </button>
-          </div>
-          {role !== ROLES.SELLER && (
-            <button className="btn new-btn" onClick={handleNew}>
+            &lt;/button>
+          &lt;/div>
+          {role !== ROLES.SELLER &amp;&amp; (
+            &lt;button className="btn new-btn" onClick={handleNew}>
               Nuevo
-            </button>
+            &lt;/button>
           )}
-        </div>
+        &lt;/div>
 
         {/* Nuevo filtro por uso */}
-        <div className="filter-use">
-          <label>Filtrar por:</label>
-          <Dropdown
+        &lt;div className="filter-use">
+          &lt;label>Filtrar por:&lt;/label>
+          &lt;Dropdown
             buttonText={useButtonText}
             content={
-              <>
+              &lt;>
                 {" "}
                 {availableUses.map((item) => (
-                  <DropdownItem
+                  &lt;DropdownItem
                     key={item}
                     onClick={() => handleUseFilterSelection(item)}
                   >
                     {`${item}`}
-                  </DropdownItem>
+                  &lt;/DropdownItem>
                 ))}{" "}
-              </>
+              &lt;/>
             }
           />
-        </div>
+        &lt;/div>
 
-        <div className="products-content">
-          {loading && (
-            <div className="loading-container">
-              <CircularProgress className="loading-icon" />
-            </div>
+        &lt;div className="products-content">
+          {loading &amp;&amp; (
+            &lt;div className="loading-container">
+              &lt;CircularProgress className="loading-icon" />
+            &lt;/div>
           )}
-          <CustomTable
+          &lt;CustomTable
             data={filteredData}
             customColumns={columnsProducts}
             handleUpdateData={handleUpdateData}
@@ -335,15 +363,38 @@ const Products = ({ role }) => {
             fetchProductsData={fetchProductsData}
             personRole={role}
           />
-        </div>
-      </div>
-      <FailModal
+        &lt;/div>
+      &lt;/div>
+      &lt;FailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         message={messageFail}
       />
-    </div>
+    &lt;/div>
   );
 };
 
 export default Products;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

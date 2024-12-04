@@ -7,6 +7,19 @@ import { SERVICES } from "../../Constants/Constants.js";
 import CircularProgress from "@mui/material/CircularProgress";
 import FailModal from "../../Modales/FailModal.jsx";
 
+/**
+ * Componente principal de la página de inicio de la aplicación.
+ *
+ * Este componente muestra un resumen de las estadísticas de ventas y compras,
+ * además de una tabla con los productos próximos a vencer.
+ *
+ * @component
+ * @param {Object} props - Props del componente.
+ * @param {string} props.username - El nombre del usuario que se muestra en el mensaje de bienvenida.
+ *
+ * @example
+ * <HomePage username="Evelio" />
+ */
 const HomePage = ({ username }) => {
   const [productsData, setProductsData] = useState([]);
   const [totalSalesIncome, setTotalSalesIncome] = useState("");
@@ -22,6 +35,15 @@ const HomePage = ({ username }) => {
     fetchSummaryData();
   }, []);
 
+  /**
+   * Obtiene la lista de productos que están próximos a vencer desde el servidor.
+   *
+   * Realiza una solicitud a la API y actualiza el estado `productsData` con los datos obtenidos.
+   * Muestra un mensaje de error en caso de falla.
+   *
+   * @async
+   * @function
+   */
   const fetchExpiringProductsData = async () => {
     setLoading(true);
 
@@ -59,6 +81,15 @@ const HomePage = ({ username }) => {
     }
   };
 
+   /**
+   * Obtiene el resumen de las estadísticas de ventas y compras desde el servidor.
+   *
+   * Actualiza los estados relacionados con las métricas de ingresos, inversiones y conteos.
+   * Muestra un mensaje de error en caso de falla.
+   *
+   * @async
+   * @function
+   */
   const fetchSummaryData = async () => {
     setLoading(true);
 

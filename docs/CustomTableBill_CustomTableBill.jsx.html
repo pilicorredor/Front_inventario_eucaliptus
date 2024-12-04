@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CustomTableBill/CustomTableBill.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CustomTableBill/CustomTableBill.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import logo from "../../Assets/logoInterfaces.png";
+import "./CustomTableBill.css";
+import { DATA_COMPANY } from "../../Constants/Constants";
+
+/**
+ * Componente que genera una factura personalizada, ya sea de ventas o compras.
+ *
+ * @param {Object} props - Propiedades del componente.
+ * @param {boolean} props.isSale - Indica si se trata de una factura de venta (`true`) o de compra (`false`).
+ * @returns {JSX.Element} Tabla personalizada con los detalles de la factura.
+ */
+const CustomTableBill = ({ isSale }) => {
+  const location = useLocation();
+  const saleDetails = location.state?.saleDetails || [];
+  const dataSale = location.state?.dataSale || {};
+  const clientData = location.state?.clientData || {};
+  const purchaseID = location.state?.purchaseID || [];
+  const pruchaseDate = location.state?.pruchaseDate || {};
+  const purchaseDetails = location.state?.purchaseDetails || {};
+  const providerDTO = location.state?.providerDTO || {};
+  const [dateBill, setDateBill] = useState("");
+  const [idBill, setIdBill] = useState("");
+  const [rows, setRows] = useState([]);
+  const [invoiceSubtotal, setInvoiceSubtotal] = useState(0);
+  const [invoiceTaxes, setInvoiceTaxes] = useState(0);
+  const [invoiceTotal, setInvoiceTotal] = useState(0);
+
+  /**
+   * Calcula el precio total de una fila en base a la cantidad y el precio unitario.
+   * @param {number} qty - Cantidad del producto.
+   * @param {number} unitPrice - Precio unitario del producto.
+   * @returns {number} Precio total.
+   */
+  const priceRow = (qty, unitPrice) => qty * unitPrice;
+
+  /**
+   * Calcula el subtotal sumando los subtotales de todos los productos.
+   * @param {Array&lt;Object>} items - Lista de productos con sus detalles.
+   * @returns {number} Subtotal de la factura.
+   */
+  const subtotal = (items) =>
+    items.map(({ subtotal }) => subtotal).reduce((sum, i) => sum + i, 0);
+
+  /**
+   * Calcula el total de impuestos basado en el porcentaje de IVA de los productos.
+   * @param {Array&lt;Object>} items - Lista de productos con sus detalles.
+   * @returns {number} Total de impuestos.
+   */
+  const taxTotal = (items) =>
+    items
+      .map(({ tax, subtotal }) => subtotal * (tax / 100))
+      .reduce((sum, i) => sum + i, 0);
+
+  /**
+   * Crea una fila con los detalles de un producto.
+   * @param {string} name - Nombre del producto.
+   * @param {string} use - Uso del producto.
+   * @param {number} unitPrice - Precio unitario del producto.
+   * @param {number} qty - Cantidad del producto.
+   * @param {number} tax - Porcentaje de impuestos (IVA) aplicado.
+   * @returns {Object} Objeto con los detalles del producto.
+   */
+  const createRow = (name, use, unitPrice, qty, tax) => {
+    const subtotal = priceRow(qty, unitPrice);
+    return { name, use, unitPrice, qty, subtotal, tax };
+  };
+
+  /**
+   * Formatea una fecha ISO a formato `DD/MM/YYYY`.
+   * @param {string} isoDate - Fecha en formato ISO (`YYYY-MM-DDTHH:MM:SS`).
+   * @returns {string} Fecha formateada.
+   */
+  const formatDate = (isoDate) => {
+    const [year, month, day] = isoDate.split("T")[0].split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  useEffect(() => {
+    if (isSale) {
+      const saleRows = saleDetails.map((product) => {
+        return createRow(
+          product.productDTO.productName,
+          product.productDTO.use,
+          product.salePriceWithoutIva,
+          product.quantitySold,
+          product.iva || 0
+        );
+      });
+      const subtotalSale = subtotal(saleRows);
+      const taxesSale = taxTotal(saleRows);
+
+      setRows(saleRows);
+      setInvoiceSubtotal(subtotalSale);
+      setInvoiceTaxes(taxesSale);
+      setInvoiceTotal(subtotalSale + taxesSale);
+      setIdBill(dataSale.idSale);
+      const formattedDate = formatDate(dataSale.dateSale);
+      setDateBill(formattedDate);
+    } else {
+      const purchaseRows = purchaseDetails.map((product) => {
+        return createRow(
+          product.productDTO.productName,
+          product.productDTO.use,
+          product.purchasePriceWithoutIva,
+          product.quantityPurchased,
+          product.iva
+        );
+      });
+      const formattedDate = formatDate(pruchaseDate);
+      setDateBill(formattedDate);
+      setIdBill(purchaseID);
+
+      const subtotalPurchase = subtotal(purchaseRows);
+      const taxesPurchase = taxTotal(purchaseRows);
+
+      setRows(purchaseRows);
+      setInvoiceSubtotal(subtotalPurchase);
+      setInvoiceTaxes(taxesPurchase);
+      setInvoiceTotal(subtotalPurchase + taxesPurchase);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSale, location.state]);
+
+  return (
+    &lt;div className="paper-bill">
+      &lt;div className="container-bill">
+        &lt;div className="header-bill">
+          &lt;div className="company-info">
+            &lt;img src={logo} alt="Logo Empresa" className="company-logo" />
+            &lt;div>
+              &lt;h3>{DATA_COMPANY.NAME}&lt;/h3>
+              &lt;p>NIT: {DATA_COMPANY.NIT}&lt;/p>
+              &lt;p>Dirección: {DATA_COMPANY.ADDRESS}&lt;/p>
+              &lt;p>Celular: {DATA_COMPANY.PHONE}&lt;/p>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="invoice-info">
+            &lt;h3>Información de la Factura&lt;/h3>
+            &lt;p>Número de Factura: {idBill}&lt;/p>
+            &lt;p>Fecha de Emisión: {dateBill}&lt;/p>
+          &lt;/div>
+        &lt;/div>
+
+        &lt;div className="bill-info">
+          {isSale ? (
+            &lt;>
+              &lt;div>
+                &lt;h3>Datos del Cliente&lt;/h3>
+                &lt;p>Documento: {clientData?.idClient || "N/A"}&lt;/p>
+                &lt;p>Nombre: {clientData?.nameClient || "N/A"}&lt;/p>
+                &lt;p>Correo: {clientData?.email || "N/A"}&lt;/p>
+              &lt;/div>
+              &lt;div>
+                &lt;h3>Datos del Vendedor&lt;/h3>
+                &lt;p>ID Vendedor: {dataSale?.idSeller || "N/A"}&lt;/p>
+              &lt;/div>
+            &lt;/>
+          ) : (
+            &lt;>
+              &lt;div className="provider-columns-bill">
+                &lt;div>
+                  &lt;h3>Datos del Proveedor&lt;/h3>
+                  &lt;p>
+                    Nombre:{" "}
+                    {`${providerDTO?.personDTO?.firstName || "N/A"} ${
+                      providerDTO?.personDTO?.lastName || "N/A"
+                    }`}
+                  &lt;/p>
+                  &lt;p>
+                    Documento:{" "}
+                    {providerDTO?.companyDTO?.nit ||
+                      providerDTO?.personDTO?.idPerson ||
+                      "N/A"}
+                  &lt;/p>
+                  &lt;p>
+                    Correo electrónico:{" "}
+                    {providerDTO?.companyDTO?.companyEmail ||
+                      providerDTO?.personDTO?.email ||
+                      "N/A"}
+                  &lt;/p>
+                &lt;/div>
+                &lt;div>
+                  &lt;p>
+                    Télefono:{" "}
+                    {providerDTO?.companyDTO?.companyPhoneNumber ||
+                      providerDTO?.personDTO?.phoneNumber ||
+                      "N/A"}
+                  &lt;/p>
+                  &lt;p>
+                    Empresa: {providerDTO?.companyDTO?.companyName || "N/A"}
+                  &lt;/p>
+                &lt;/div>
+              &lt;/div>
+            &lt;/>
+          )}
+        &lt;/div>
+
+        &lt;div className="table-container">
+          &lt;table className="product-table">
+            &lt;thead>
+              &lt;tr>
+                &lt;th>Nombre&lt;/th>
+                &lt;th>Uso&lt;/th>
+                &lt;th>Precio Unitario&lt;/th>
+                &lt;th>Cantidad&lt;/th>
+                &lt;th>Subtotal&lt;/th>
+              &lt;/tr>
+            &lt;/thead>
+            &lt;tbody>
+              {rows.map((row, index) => (
+                &lt;tr key={index}>
+                  &lt;td>{row.name}&lt;/td>
+                  &lt;td>{row.use}&lt;/td>
+                  &lt;td>
+                    {row.unitPrice.toLocaleString("es-CO", {
+                      style: "currency",
+                      currency: "COP",
+                    })}
+                  &lt;/td>
+                  &lt;td>{row.qty}&lt;/td>
+                  &lt;td>
+                    {row.subtotal.toLocaleString("es-CO", {
+                      style: "currency",
+                      currency: "COP",
+                    })}
+                  &lt;/td>
+                &lt;/tr>
+              ))}
+              &lt;tr>
+                &lt;td colSpan="3" className="align-right">
+                  Subtotal
+                &lt;/td>
+                &lt;td colSpan="2" align="right">
+                  {invoiceSubtotal.toLocaleString("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                  })}
+                &lt;/td>
+              &lt;/tr>
+              &lt;tr>
+                &lt;td colSpan="3" className="align-right">
+                  IVA
+                &lt;/td>
+                &lt;td colSpan="2" align="right">
+                  {invoiceTaxes.toLocaleString("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                  })}
+                &lt;/td>
+              &lt;/tr>
+              &lt;tr>
+                &lt;td colSpan="3" className="align-right">
+                  Total
+                &lt;/td>
+                &lt;td colSpan="2" align="right">
+                  {invoiceTotal.toLocaleString("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                  })}
+                &lt;/td>
+              &lt;/tr>
+            &lt;/tbody>
+          &lt;/table>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+};
+
+export default CustomTableBill;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

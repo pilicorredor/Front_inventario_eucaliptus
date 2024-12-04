@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RegisterProducts/FormRegisterProduct.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RegisterProducts/FormRegisterProduct.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from "../../Assets/logo2.png";
 import Header from "../Header/Header";
@@ -27,7 +55,7 @@ import Tooltip from "@mui/material/Tooltip";
  * @component
  * @example
  * // Uso del componente
- * <RegisterProduct />
+ * &lt;RegisterProduct />
  */
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -329,177 +357,177 @@ const RegisterProduct = () => {
   };
 
   return (
-    <div className="product-section-container">
-      <Header pageTitle="Productos - Registrar" />
-      <div>
-        <div className="product-section">
-          <label className="product-section-title">
+    &lt;div className="product-section-container">
+      &lt;Header pageTitle="Productos - Registrar" />
+      &lt;div>
+        &lt;div className="product-section">
+          &lt;label className="product-section-title">
             Agregar Nuevo Producto
-          </label>
-        </div>
-        <div className="steps-section">
-          <div className="stepTwo-title-left">
-            <label className="step-by-step">Paso 2 de 2</label>
-            <label className="step-information-2">
+          &lt;/label>
+        &lt;/div>
+        &lt;div className="steps-section">
+          &lt;div className="stepTwo-title-left">
+            &lt;label className="step-by-step">Paso 2 de 2&lt;/label>
+            &lt;label className="step-information-2">
               Información del producto
-            </label>
-            {loading && (
-              <div className="page-loading-container">
-                <CircularProgress className="page-loading-icon" />
-              </div>
+            &lt;/label>
+            {loading &amp;&amp; (
+              &lt;div className="page-loading-container">
+                &lt;CircularProgress className="page-loading-icon" />
+              &lt;/div>
             )}
-          </div>
-          <div className="stepTwo-title-right">
-            <label>Proveedor: {provider}</label>
-            <button
+          &lt;/div>
+          &lt;div className="stepTwo-title-right">
+            &lt;label>Proveedor: {provider}&lt;/label>
+            &lt;button
               className="change-btn"
               onClick={() => navigate("/productos/escoger-proveedor")}
             >
               Cambiar
-            </button>
-          </div>
-        </div>
-      </div>
-      <form className="productForm" onSubmit={handleSubmit}>
-        <div className="productForm-section">
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Identificador <span className="red">*</span>
-              </label>
-              <input
+            &lt;/button>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+      &lt;form className="productForm" onSubmit={handleSubmit}>
+        &lt;div className="productForm-section">
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Identificador &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="text"
                 name="idProduct"
                 value={product.idProduct}
                 onChange={handleInputChange}
                 required
               />
-            </div>
-            <div className="productForm-item">
-              <label>
-                Nombre <span className="red">*</span>
-              </label>
-              <input
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Nombre &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="text"
                 name="productName"
                 value={product.productName}
                 onChange={handleInputChange}
                 required
               />
-            </div>
-          </div>
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Categoría <span className="red">*</span>
-              </label>
-              <select
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Categoría &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;select
                 name="category"
                 value={product.category}
                 onChange={handleInputChange}
                 required
               >
-                <option value={CATEGORY_PRODUCT.PERISHABLE}>Perecedero</option>
-                <option value={CATEGORY_PRODUCT.NON_PERISHABLE}>
+                &lt;option value={CATEGORY_PRODUCT.PERISHABLE}>Perecedero&lt;/option>
+                &lt;option value={CATEGORY_PRODUCT.NON_PERISHABLE}>
                   No Perecedero
-                </option>
-              </select>
-            </div>
-            <div className="productForm-item">
-              <label>
-                Uso <span className="red">*</span>
-              </label>
-              <select
+                &lt;/option>
+              &lt;/select>
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Uso &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;select
                 name="use"
                 value={product.use}
                 onChange={handleInputChange}
                 required
               >
-                <option value={USE_PRODUCTS.SUPPLEMENTS}>Suplementos</option>
-                <option value={USE_PRODUCTS.HOMEOPATHIC}>Homeopáticos</option>
-                <option value={USE_PRODUCTS.PHYTOTHERAPEUTIC}>
+                &lt;option value={USE_PRODUCTS.SUPPLEMENTS}>Suplementos&lt;/option>
+                &lt;option value={USE_PRODUCTS.HOMEOPATHIC}>Homeopáticos&lt;/option>
+                &lt;option value={USE_PRODUCTS.PHYTOTHERAPEUTIC}>
                   Fitoterapéuticos
-                </option>
-                <option value={USE_PRODUCTS.SPICES}>Especias</option>
-                <option value={USE_PRODUCTS.ESOTERIC}>Esotéricos</option>
-                <option value={USE_PRODUCTS.PERSONAL_CARE}>
+                &lt;/option>
+                &lt;option value={USE_PRODUCTS.SPICES}>Especias&lt;/option>
+                &lt;option value={USE_PRODUCTS.ESOTERIC}>Esotéricos&lt;/option>
+                &lt;option value={USE_PRODUCTS.PERSONAL_CARE}>
                   Cuidado Personal
-                </option>
-                <option value={USE_PRODUCTS.OTHER}>Otros</option>
-              </select>
-            </div>
-          </div>
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Unidad <span className="red">*</span>
-              </label>
-              <div className="unit-container">
-                <select
+                &lt;/option>
+                &lt;option value={USE_PRODUCTS.OTHER}>Otros&lt;/option>
+              &lt;/select>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Unidad &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;div className="unit-container">
+                &lt;select
                   name="unitName"
                   value={product.unitName}
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="" disabled hidden>
+                  &lt;option value="" disabled hidden>
                     Seleccione una unidad
-                  </option>
+                  &lt;/option>
                   {unit.map((u, index) => (
-                    <option key={index} value={u}>
+                    &lt;option key={index} value={u}>
                       {u}
-                    </option>
+                    &lt;/option>
                   ))}
-                </select>
-                <button
+                &lt;/select>
+                &lt;button
                   type="button"
                   className="add-unit-btn"
                   onClick={handleAddUnit}
                 >
                   +
-                </button>
-              </div>
-            </div>
-            <div className="productForm-item">
-              <label>
-                Descripción de la unidad <span className="red">*</span>
-              </label>
-              <div className="unit-container">
-                <select
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Descripción de la unidad &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;div className="unit-container">
+                &lt;select
                   name="descriptionUnit"
                   value={product.descriptionUnit}
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="" disabled hidden>
+                  &lt;option value="" disabled hidden>
                     Seleccione una descripción
-                  </option>
+                  &lt;/option>
                   {descriptions.map((desc, index) => (
-                    <option key={index} value={desc}>
+                    &lt;option key={index} value={desc}>
                       {desc}
-                    </option>
+                    &lt;/option>
                   ))}
-                </select>
-                <button
+                &lt;/select>
+                &lt;button
                   type="button"
                   className="add-unit-btn"
                   onClick={handleAddDescription}
                 >
                   +
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Cantidad mínima del producto <span className="red">*</span>
-              </label>
-              <Tooltip
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Cantidad mínima del producto &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;Tooltip
                 open={tooltipOpen}
                 title="La cantidad mínima debe ser menor que la cantidad máxima"
                 arrow
               >
-                <input
+                &lt;input
                   type="number"
                   name="minimumProductAmount"
                   value={product.minimumProductAmount}
@@ -507,18 +535,18 @@ const RegisterProduct = () => {
                   min="0"
                   required
                 />
-              </Tooltip>
-            </div>
-            <div className="productForm-item">
-              <label>
-                Cantidad máxima del producto <span className="red">*</span>
-              </label>
-              <Tooltip
+              &lt;/Tooltip>
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Cantidad máxima del producto &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;Tooltip
                 open={tooltipOpen}
                 title="La cantidad máxima debe ser mayor que la cantidad mínima"
                 arrow
               >
-                <input
+                &lt;input
                   type="number"
                   name="maximumProductAmount"
                   value={product.maximumProductAmount}
@@ -526,25 +554,25 @@ const RegisterProduct = () => {
                   min="1"
                   required
                 />
-              </Tooltip>
-            </div>
-          </div>
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Marca <span className="red">*</span>
-              </label>
-              <input
+              &lt;/Tooltip>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Marca &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="text"
                 name="brand"
                 value={product.brand}
                 onChange={handleInputChange}
                 required
               />
-            </div>
-            <div className="productForm-item">
-              <label>Detalles del producto</label>
-              <textarea
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>Detalles del producto&lt;/label>
+              &lt;textarea
                 className="custom-textarea"
                 name="description"
                 value={product.description}
@@ -552,35 +580,58 @@ const RegisterProduct = () => {
                 cols="40"
                 onChange={handleInputChange}
               />
-            </div>
-          </div>
-        </div>
-        <button
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+        &lt;button
           type="submit"
           disabled={tooltipOpen}
           className="provider-button"
         >
           {BUTTONS_ACTIONS.REGISTRAR.charAt(0).toUpperCase() +
             BUTTONS_ACTIONS.REGISTRAR.slice(1)}
-        </button>
-        <img src={logo} alt="logo" className="product-logo" />
+        &lt;/button>
+        &lt;img src={logo} alt="logo" className="product-logo" />
         {/* Componente del modal */}
-        <CustomModal
+        &lt;CustomModal
           entity={entity}
           action={action}
           openModal={openModal}
           onClose={handleModalClose}
         />
-        <UnitModal
+        &lt;UnitModal
           isOpen={openModalUnit}
           onClose={() => setOpenModalUnit(false)}
           unitName={product.unitName}
           onSave={handleSaveUnitData}
           mode={modalUnitMode}
         />
-      </form>
-    </div>
+      &lt;/form>
+    &lt;/div>
   );
 };
 
 export default RegisterProduct;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

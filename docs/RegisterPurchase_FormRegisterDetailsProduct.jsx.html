@@ -1,4 +1,32 @@
-import React, { useState, useEffect, useContext } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RegisterPurchase/FormRegisterDetailsProduct.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RegisterPurchase/FormRegisterDetailsProduct.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from "../../Assets/logo2.png";
 import Header from "../Header/Header";
@@ -20,7 +48,7 @@ import { ProductContext } from "../../Context/ProductContext";
  *
  * @component
  * @example
- * return <RegisterProduct />;
+ * return &lt;RegisterProduct />;
  */
 const RegisterProduct = () => {
   const { id } = useParams();
@@ -256,23 +284,23 @@ const RegisterProduct = () => {
   };
 
   return (
-    <div className="product-section-container">
-      <Header pageTitle="Registrar Compra" />
-      <div className="steps-section">
-        <div className="stepTwo-title-left">
-          <label className="step-by-step">Paso 3 de 3</label>
-          <label className="step-information-2">Información de la compra</label>
-          <label>Proveedor: {provider}</label>
-        </div>
-      </div>
-      <form className="productForm" onSubmit={handleSubmit}>
-        <div className="productForm-section">
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Identificador del producto <span className="red">*</span>
-              </label>
-              <input
+    &lt;div className="product-section-container">
+      &lt;Header pageTitle="Registrar Compra" />
+      &lt;div className="steps-section">
+        &lt;div className="stepTwo-title-left">
+          &lt;label className="step-by-step">Paso 3 de 3&lt;/label>
+          &lt;label className="step-information-2">Información de la compra&lt;/label>
+          &lt;label>Proveedor: {provider}&lt;/label>
+        &lt;/div>
+      &lt;/div>
+      &lt;form className="productForm" onSubmit={handleSubmit}>
+        &lt;div className="productForm-section">
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Identificador del producto &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="text"
                 name="idProduct"
                 value={sendProduct.idProduct}
@@ -280,12 +308,12 @@ const RegisterProduct = () => {
                 disabled
                 required
               />
-            </div>
-            <div className="productForm-item">
-              <label>
-                Nombre del producto <span className="red">*</span>
-              </label>
-              <input
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Nombre del producto &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="text"
                 name="productName"
                 value={product.productName}
@@ -293,14 +321,14 @@ const RegisterProduct = () => {
                 disabled
                 required
               />
-            </div>
-          </div>
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label htmlFor="date-picker">
-                Lote (fecha) <span className="red">*</span>
-              </label>
-              <input
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label htmlFor="date-picker">
+                Lote (fecha) &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 className="calenar-input-form-product"
                 type="date"
                 name="batchPurchase"
@@ -308,12 +336,12 @@ const RegisterProduct = () => {
                 onChange={handleInputChange}
                 required
               />
-            </div>
-            <div className="productForm-item">
-              <label>
-                Cantidad <span className="red">*</span>
-              </label>
-              <input
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Cantidad &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="number"
                 name="quantityPurchased"
                 value={sendProduct.quantityPurchased}
@@ -321,14 +349,14 @@ const RegisterProduct = () => {
                 min="1"
                 required
               />
-            </div>
-          </div>
-          <div className="productForm-row">
-            <div className="productForm-item">
-              <label>
-                Precio Unitario de entrada <span className="red">*</span>
-              </label>
-              <input
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            &lt;div className="productForm-item">
+              &lt;label>
+                Precio Unitario de entrada &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="number"
                 name="purchasePrice"
                 value={sendProduct.purchasePrice}
@@ -336,12 +364,12 @@ const RegisterProduct = () => {
                 min="1"
                 required
               />
-            </div>
-            <div className="productForm-item">
-              <label>
-                Precio Unitario de salida <span className="red">*</span>
-              </label>
-              <input
+            &lt;/div>
+            &lt;div className="productForm-item">
+              &lt;label>
+                Precio Unitario de salida &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="number"
                 name="salePrice"
                 value={sendProduct.salePrice}
@@ -349,15 +377,15 @@ const RegisterProduct = () => {
                 min="1"
                 required
               />
-            </div>
-          </div>
-          <div className="productForm-row">
-            {product.category !== CATEGORY_PRODUCT.NON_PERISHABLE && (
-              <div className="productForm-item">
-                <label htmlFor="date-picker">
-                  Fecha de vencimiento <span className="red">*</span>
-                </label>
-                <input
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="productForm-row">
+            {product.category !== CATEGORY_PRODUCT.NON_PERISHABLE &amp;&amp; (
+              &lt;div className="productForm-item">
+                &lt;label htmlFor="date-picker">
+                  Fecha de vencimiento &lt;span className="red">*&lt;/span>
+                &lt;/label>
+                &lt;input
                   className="calenar-input-form-product"
                   type="date"
                   name="purchaseDueDate"
@@ -370,13 +398,13 @@ const RegisterProduct = () => {
                   }
                   required
                 />
-              </div>
+              &lt;/div>
             )}
-            <div className="productForm-item">
-              <label>
-                Porcentaje del IVA <span className="red">*</span>
-              </label>
-              <input
+            &lt;div className="productForm-item">
+              &lt;label>
+                Porcentaje del IVA &lt;span className="red">*&lt;/span>
+              &lt;/label>
+              &lt;input
                 type="number"
                 name="iva"
                 value={sendProduct.iva}
@@ -384,36 +412,59 @@ const RegisterProduct = () => {
                 min="1"
                 required
               />
-            </div>
-          </div>
-        </div>
-        <button type="submit" className="provider-button">
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+        &lt;button type="submit" className="provider-button">
           {BUTTONS_ACTIONS.ANADIR.charAt(0).toUpperCase() +
             BUTTONS_ACTIONS.ANADIR.slice(1)}
-        </button>
-        <img src={logo} alt="logo" className="product-logo" />
+        &lt;/button>
+        &lt;img src={logo} alt="logo" className="product-logo" />
         {/* Componente del modal */}
-        <PurchaseModal
+        &lt;PurchaseModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSelectDate={handleSelectDate}
           onAddAnother={handleAddAnother}
         />
-        <VerifyPurchaseModal
+        &lt;VerifyPurchaseModal
           isOpen={isDuplicateModalOpen}
           onClose={() => setIsModalOpen(false)}
           message={messageModal}
           onNavigate={handleAddAnother}
         />
-        <CalendarModal
+        &lt;CalendarModal
           isOpen={isCalendarOpen}
           onClose={handleCalendarCancel}
           onConfirm={handleCalendarConfirm}
           onLoading={loading}
         />
-      </form>
-    </div>
+      &lt;/form>
+    &lt;/div>
   );
 };
 
 export default RegisterProduct;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

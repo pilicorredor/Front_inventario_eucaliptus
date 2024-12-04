@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: LoginForm/LoginForm.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: LoginForm/LoginForm.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
 import "./LoginForm.css";
 import { FaEye, FaUser } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
@@ -13,7 +41,7 @@ import CircularProgress from "@mui/material/CircularProgress";
  *
  * @component
  * @example
- * <LoginForm handleLogin={handleLogin} />
+ * &lt;LoginForm handleLogin={handleLogin} />
  *
  * @param {Object} props - Las propiedades del componente.
  * @param {Function} props.handleLogin - Función para manejar el inicio de sesión con los datos del usuario.
@@ -111,28 +139,28 @@ const LoginForm = ({ handleLogin }) => {
   };
 
   return (
-    <div className="login-section">
-      <div className="wrapper">
-        {loading && (
-          <div className="loading-container">
-            <CircularProgress className="loading-icon" />
-          </div>
+    &lt;div className="login-section">
+      &lt;div className="wrapper">
+        {loading &amp;&amp; (
+          &lt;div className="loading-container">
+            &lt;CircularProgress className="loading-icon" />
+          &lt;/div>
         )}
-        <form onSubmit={handleSubmit}>
-          <img src={logo} alt="Logo de la Empresa" className="logo" />
-          <h1>¡Bienvenido!</h1>
-          <div className="input-box">
-            <input
+        &lt;form onSubmit={handleSubmit}>
+          &lt;img src={logo} alt="Logo de la Empresa" className="logo" />
+          &lt;h1>¡Bienvenido!&lt;/h1>
+          &lt;div className="input-box">
+            &lt;input
               type="text"
               placeholder="Nombre de Usuario"
               value={username}
               onChange={handleInputChange(setUsername)}
               required
             />
-            <FaUser className="icon" />
-          </div>
-          <div className="input-box">
-            <input
+            &lt;FaUser className="icon" />
+          &lt;/div>
+          &lt;div className="input-box">
+            &lt;input
               type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}
@@ -140,34 +168,57 @@ const LoginForm = ({ handleLogin }) => {
               required
             />
             {showPassword ? (
-              <FaEye className="icon" onClick={togglePasswordVisibility} />
+              &lt;FaEye className="icon" onClick={togglePasswordVisibility} />
             ) : (
-              <FaEyeSlash className="icon" onClick={togglePasswordVisibility} />
+              &lt;FaEyeSlash className="icon" onClick={togglePasswordVisibility} />
             )}
-          </div>
-          {error && (
-            <div className="error-message">
+          &lt;/div>
+          {error &amp;&amp; (
+            &lt;div className="error-message">
               Nombre de usuario o contraseña incorrecta
-            </div>
+            &lt;/div>
           )}
-          <div className="remember-forgot">
-            <label>
-              <input
+          &lt;div className="remember-forgot">
+            &lt;label>
+              &lt;input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={handleRememberMeChange}
               />
               Recuerdame
-            </label>
-            <a href="/config/send-email-password">¿Olvidaste tu contraseña?</a>
-          </div>
-          <div className="button-container">
-            <button type="submit">Entrar</button>
-          </div>
-        </form>
-      </div>
-    </div>
+            &lt;/label>
+            &lt;a href="/config/send-email-password">¿Olvidaste tu contraseña?&lt;/a>
+          &lt;/div>
+          &lt;div className="button-container">
+            &lt;button type="submit">Entrar&lt;/button>
+          &lt;/div>
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
   );
 };
 
 export default LoginForm;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddProductSale">AddProductSale</a></li><li><a href="global.html#CheckPswdToken">CheckPswdToken</a></li><li><a href="global.html#ChooseProductsPurchase">ChooseProductsPurchase</a></li><li><a href="global.html#ChooseProvider">ChooseProvider</a></li><li><a href="global.html#ChooseProviderPurchase">ChooseProviderPurchase</a></li><li><a href="global.html#Config">Config</a></li><li><a href="global.html#CustomTable">CustomTable</a></li><li><a href="global.html#CustomTableBill">CustomTableBill</a></li><li><a href="global.html#CustomTableBillModal">CustomTableBillModal</a></li><li><a href="global.html#CustomTableSale">CustomTableSale</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginFormChangePswd">LoginFormChangePswd</a></li><li><a href="global.html#ModidyProducts">ModidyProducts</a></li><li><a href="global.html#ModifyProvider">ModifyProvider</a></li><li><a href="global.html#ModifySeller">ModifySeller</a></li><li><a href="global.html#Personal">Personal</a></li><li><a href="global.html#Products">Products</a></li><li><a href="global.html#RecoveryUpdatePassword">RecoveryUpdatePassword</a></li><li><a href="global.html#RegisterProduct">RegisterProduct</a></li><li><a href="global.html#RegisterProvider">RegisterProvider</a></li><li><a href="global.html#RegisterSale">RegisterSale</a></li><li><a href="global.html#RegisterSeller">RegisterSeller</a></li><li><a href="global.html#ReportPage">ReportPage</a></li><li><a href="global.html#ReportTransactions">ReportTransactions</a></li><li><a href="global.html#SendEmailPassword">SendEmailPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 03 2024 19:17:23 GMT-0500 (hora estándar de Colombia)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
